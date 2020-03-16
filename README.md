@@ -1,6 +1,13 @@
 # Meme-Indexer
 Generate a txt/Index of all Memes in the given directory and its subdirs
 
+## Ongoing: Dataset
+  - [x] Collected my 2012 memes from 9gag(800) and pinterest(4000)
+    > Pinterest consistent format all jpg but random names. 9gag memes vary in format but filename relate to title.
+  - [ ] Preprocess all Pinterest files to 299x299
+  - [ ] Process 9gag files
+    > gifs, frame by frame. Rest all cv will take care of
+
 ### Current Plan:
   - [ ] **Dataset:**
     - Separate memes from regular pics in all my devices to get a random dataset
