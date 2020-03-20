@@ -4,7 +4,7 @@ Generate a txt/Index of all Memes in the given directory and its subdirs
 ## Ongoing: Analysis
   - [x] Feature extraction with inceptionV3
     > Pins first
-  - [ ] Try clustering
+  - [x] Try clustering
     > Pins only
   - [ ] NLP with feature extraction
     > 9gag memes
