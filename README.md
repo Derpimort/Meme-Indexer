@@ -2,7 +2,7 @@
 Generate a txt/Index of all Memes in the given directory and its subdirs
 
 ## Ongoing: Analysis
-  - [ ] Feature extraction with inceptionV3
+  - [x] Feature extraction with inceptionV3
     > Pins first
   - [ ] Try clustering
     > Pins only
