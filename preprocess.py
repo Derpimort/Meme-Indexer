@@ -9,6 +9,7 @@ import argparse
 import os
 import cv2
 import sys
+from PIL import Image, ImageSequence
 
 
 
@@ -49,6 +50,28 @@ def printData(src_dir, dst_dir,ext_dict):
 	
 	print()
 
+def save_gif_selective(fname,save_dir):
+	im = Image.open(fname)
+	fname=fname.split("/")[-1][:-4]
+	save_dir=os.path.join(save_dir,fname)
+	im_len=sum(1 for _ in ImageSequence.Iterator(im))
+	req_frames=[0,im_len//2,im_len-1]
+	index=0
+	for frame in ImageSequence.Iterator(im):
+		if index in req_frames:
+			frame.save(save_dir+"_%04d.png" % index)
+		index += 1
+
+def save_gif_all(fname,save_dir):
+	im = Image.open(fname)
+	fname=fname.split("/")[-1][:-4]
+	save_dir=os.path.join(save_dir,fname)
+	checkDir(save_dir)
+	index = 1
+	for frame in ImageSequence.Iterator(im):
+		frame.save(save_dir+"/%04d.png" % index)
+		index += 1
+
 def preProcess(src_dir, dst_dir, target_size=(224,224), ext_dict=None):
 	
 	if ext_dict is None:
@@ -60,17 +83,20 @@ def preProcess(src_dir, dst_dir, target_size=(224,224), ext_dict=None):
 	for dirname, _, filenames in os.walk(src_dir):
 		for filename in filenames:
 			try:
-				im=cv2.imread(os.path.join(dirname, filename))
-				im=cv2.resize(im, target_size, interpolation=cv2.INTER_CUBIC)
-				cv2.imwrite(os.path.join(dst_dir, filename),im)
+				if (filename.endswith("gif")):
+					save_gif_selective(os.path.join(dirname, filename), dst_dir)
+				else:
+					im=cv2.imread(os.path.join(dirname, filename))
+					im=cv2.resize(im, target_size, interpolation=cv2.INTER_CUBIC)
+					cv2.imwrite(os.path.join(dst_dir, filename),im)
 				progress.increment()
-			except:
-				failed+=[os.path.join(dirname,filename)]
+			except Exception as e:
+				failed.append((os.path.join(dirname,filename),e))
 				
 	print("\nSuccessfully resize %d files"%progress.curr_counter)
 	print("%d Failed "%len(failed))
-	for i in failed:
-		print(i)
+	for i,e in failed:
+		print(i,e)
 
 
 if __name__ == "__main__":
@@ -100,7 +126,7 @@ if __name__ == "__main__":
 	if args.dst is not None:
 		destination_dir=os.path.abspath(args.dst)
 	destination_dir=os.path.join(destination_dir,"Preprocessed_imgs")
-	checkDir(destination_dir)
+	
 	
 	total_files=getNumberOfFiles(source_dir)
 	printData(source_dir, destination_dir, total_files)
@@ -110,6 +136,7 @@ if __name__ == "__main__":
 	proceed=input("Proceed [y]/n:").lower()
 	
 	if proceed in yes:
+		checkDir(destination_dir)
 		preProcess(source_dir, destination_dir, target_size,total_files)
 	else:
 		print("Aborted")
