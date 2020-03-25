@@ -80,7 +80,6 @@ def save_gif_all(fname,save_dir):
 		index += 1
 
 def preProcess(src_dir, dst_dir, target_size=(224,224), ext_dict=None, output_suffix=".jpg"):
-	
 	if ext_dict is None:
 		ext_dict=getNumberOfFiles(src_dir)
 		printData(src_dir, dst_dir, ext_dict, output_suffix)
