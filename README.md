@@ -1,10 +1,14 @@
 # Meme-Indexer
 Generate a txt/Index of all Memes in the given directory and its subdirs
-
-## Ongoing: Analysis
+## Ongoing 1: OCR
+  - [ ] Find production level balanced technique for OCR.
+  - [ ] Sub image separation and retrieval.
+  - [ ] Caption/describe each image (like insta).
+  
+## Ongoing 2: Analysis
   - [x] Feature extraction with inceptionV3
     > Pins first
-  - [x] Try clustering
+  - [x] ~~Try clustering~~ is useless. Better use image similarity with the knowyourmeme database.
     > Pins only
   - [ ] NLP with feature extraction
     > 9gag memes
