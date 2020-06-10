@@ -2,14 +2,17 @@ package com.legendbois.memeindexer.ui.main
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
 import com.legendbois.memeindexer.R
 import kotlinx.android.synthetic.main.test_imageview.*
 
@@ -40,8 +43,29 @@ class SelectorTestFragment: Fragment(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if((resultCode == Activity.RESULT_OK) and (requestCode == IMAGE_REQUEST_CODE)){
-            test_image_imageView.setImageURI(data?.data)
+        if ((resultCode == Activity.RESULT_OK) and (requestCode == IMAGE_REQUEST_CODE)) {
+            val image_uri = data?.data
+            if (image_uri != null){
+                test_image_imageView.setImageURI(image_uri)
+                getImageText(image_uri)
+            }
         }
     }
+
+    private fun getImageText(imageUri: Uri) {
+        val image: InputImage = InputImage.fromFilePath(activity!!.applicationContext, imageUri)
+
+        val model = TextRecognition.getClient()
+        model.process(image)
+            .addOnSuccessListener { visionText ->
+                test_image_text.text= visionText.text
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT).show()
+            }
+
+    }
 }
+
+
+
