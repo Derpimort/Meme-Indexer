@@ -5,13 +5,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.label.ImageLabeling
+import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import com.google.mlkit.vision.text.TextRecognition
 import com.legendbois.memeindexer.R
 import kotlinx.android.synthetic.main.test_imageview.*
@@ -54,8 +58,8 @@ class SelectorTestFragment: Fragment(), View.OnClickListener {
 
     private fun getImageText(imageUri: Uri) {
         val image: InputImage = InputImage.fromFilePath(activity!!.applicationContext, imageUri)
-
         val model = TextRecognition.getClient()
+        val labeler = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS)
         model.process(image)
             .addOnSuccessListener { visionText ->
                 test_image_text.text= visionText.text
@@ -63,7 +67,19 @@ class SelectorTestFragment: Fragment(), View.OnClickListener {
             .addOnFailureListener { e ->
                 Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT).show()
             }
-
+        labeler.process(image)
+            .addOnSuccessListener { labels ->
+                val texts = mutableListOf<String>()
+                for (label in labels){
+                    texts.add("${label.index}. ${label.text}\nConfidence: ${label.confidence}")
+                    Log.d("MemeIndexer","${label.index}. ${label.text}\nConfidence: ${label.confidence}")
+                }
+                val adapter = ArrayAdapter(activity!!.applicationContext, R.layout.simple_list, texts.toList())
+                test_image_describe_list.adapter=adapter
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT).show()
+            }
     }
 }
 
