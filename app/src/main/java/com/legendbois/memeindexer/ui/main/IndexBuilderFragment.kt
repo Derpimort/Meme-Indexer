@@ -16,14 +16,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.google.android.gms.common.internal.FallbackServiceBroker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
+import com.legendbois.memeindexer.database.MemeFileDao
 import com.legendbois.memeindexer.database.MemeFilesDatabase
+import kotlinx.android.synthetic.main.indexbuilder_frag.*
 import kotlinx.android.synthetic.main.test_imageview.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.Closeable
 import java.util.*
@@ -61,12 +66,14 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             if (data != null) {
                 if (requestCode == DIRECTORY_REQUEST_CODE) {
                     if (this.context != null) {
+                        toggleButtonState(false)
                         val parentUri = data.data
-                        val db = MemeFilesDatabase.getDatabase(this.context!!)
-                        lifecycleScope.launch {
-                            traverseDirectoryEntries(parentUri, db)
-                        }
+                        val db = MemeFilesDatabase.getDatabase(context!!).memeFileDao
 
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            traverseDirectoryEntries(parentUri, db)
+                            toggleButtonState(true)
+                        }
                         Log.d(TAG, data.data.toString())
                     }
                 }
@@ -76,7 +83,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     }
 
     //Thanks to https://stackoverflow.com/questions/41096332/issues-traversing-through-directory-hierarchy-with-android-storage-access-framew
-    suspend fun traverseDirectoryEntries(rootUri: Uri?, db: MemeFilesDatabase){
+    suspend fun traverseDirectoryEntries(rootUri: Uri?, db: MemeFileDao){
         val contentResolver = activity!!.contentResolver
         var childrenUri: Uri = try {
             //for childs and sub child dirs
@@ -126,20 +133,27 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                     }
                 }
             } finally {
-                closeQuietly(c, db)
+                closeQuietly(c)
             }
         }
-        for (f in db.memeFileDao.getAll()){
+        //Room funcs testing
+        /*for (f in db.getAll()){
             Log.d(TAG, "TestingAll ${f.rowid}, ${f.filename}, ${f.fileuri}")
         }
 
-        for (f in db.memeFileDao.loadTopByFilename("%3000d80%")){
+        for (f in db.loadTopByFilename("%3000d80%")){
             Log.d(TAG, "TestingFilename ${f.rowid}, ${f.filename}, ${f.fileuri}")
         }
 
-        for (f in db.memeFileDao.loadTopByText("%maroon 5%")){
+        for (f in db.loadTopByText("%maroon 5%")){
             Log.d(TAG, "TestingText ${f.rowid}, ${f.filename}, ${f.fileuri}")
-        }
+        }*/
+
+    }
+
+    private fun toggleButtonState(value: Boolean){
+        indexbuilder_button.isEnabled=value
+        indexbuilder_button.isClickable=value
     }
 
     // Util method to check if the mime type is a directory
@@ -147,11 +161,10 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         return DocumentsContract.Document.MIME_TYPE_DIR == mimeType
     }
     // Util method to close a closeable
-    private fun closeQuietly(closeable: Closeable?, db: MemeFilesDatabase) {
+    private fun closeQuietly(closeable: Closeable?) {
         if (closeable != null) {
             try {
                 closeable.close()
-                //db.close()
             } catch (re: RuntimeException) {
                 throw re
             } catch (ignore: Exception) {
@@ -160,7 +173,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         }
     }
 
-    private fun getImageText(imageUri: Uri, name: String, db: MemeFilesDatabase){
+    private fun getImageText(imageUri: Uri, name: String, db: MemeFileDao){
         val image: InputImage = InputImage.fromFilePath(activity!!.applicationContext, imageUri)
         val model = TextRecognition.getClient()
         model.process(image)
@@ -168,16 +181,35 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                 /*Log.d(
                     TAG,
                     "docId: $id, name: $name, text: ${visionText.text}, uri: $imageUri"
-                )
+                )*/
+                val fileuri = imageUri.toString()
+
                 if(visionText.text.isNotBlank()) {
-                    db.memeFileDao.insert(
-                        MemeFile(
-                            filename = name,
-                            fileuri = imageUri.toString(),
-                            ocrtext = visionText.text.toLowerCase()
+                    val duplicates = db.findUri(fileuri)
+                    if(duplicates.isEmpty()){
+                        db.insert(
+                            MemeFile(
+                                filename = name,
+                                fileuri = imageUri.toString(),
+                                ocrtext = visionText.text.toLowerCase()
+                            )
                         )
-                    )
-                }*/
+                    }
+                    else{
+                        for(duplicate in duplicates){
+                            db.update(
+                                MemeFile(
+                                    duplicate.rowid,
+                                    duplicate.fileuri,
+                                    name,
+                                    visionText.text.toLowerCase()
+                                )
+                            )
+                        }
+                    }
+
+                }
+
             }
             .addOnFailureListener { e ->
                 Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT).show()

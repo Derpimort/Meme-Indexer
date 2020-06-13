@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = arrayOf(MemeFile::class), version = 1)
+@Database(entities = [MemeFile::class], version = 2)
 abstract class MemeFilesDatabase: RoomDatabase() {
     abstract val memeFileDao: MemeFileDao
 
