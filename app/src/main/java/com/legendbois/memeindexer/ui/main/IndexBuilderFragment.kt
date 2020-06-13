@@ -11,8 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.legendbois.memeindexer.R
+import kotlinx.coroutines.launch
 import java.io.Closeable
 import java.util.*
 
@@ -49,7 +51,10 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             if (data != null) {
                 if (requestCode == DIRECTORY_REQUEST_CODE) {
                     val parentUri = data.data
-                    traverseDirectoryEntries(parentUri)
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        traverseDirectoryEntries(parentUri)
+                    }
+                    
                     Log.d(TAG, data.data.toString())
                 }
 
