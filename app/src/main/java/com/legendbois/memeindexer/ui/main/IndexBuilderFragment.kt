@@ -1,6 +1,7 @@
 package com.legendbois.memeindexer.ui.main
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
@@ -13,11 +14,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.legendbois.memeindexer.R
+import com.legendbois.memeindexer.database.MemeFile
+import com.legendbois.memeindexer.database.MemeFilesDatabase
 import kotlinx.android.synthetic.main.test_imageview.*
 import kotlinx.coroutines.launch
 import java.io.Closeable
@@ -55,12 +60,15 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         if (resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 if (requestCode == DIRECTORY_REQUEST_CODE) {
-                    val parentUri = data.data
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        traverseDirectoryEntries(parentUri)
-                    }
+                    if (this.context != null) {
+                        val parentUri = data.data
+                        val db = MemeFilesDatabase.getDatabase(this.context!!)
+                        lifecycleScope.launch {
+                            traverseDirectoryEntries(parentUri, db)
+                        }
 
-                    Log.d(TAG, data.data.toString())
+                        Log.d(TAG, data.data.toString())
+                    }
                 }
 
             }
@@ -68,7 +76,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     }
 
     //Thanks to https://stackoverflow.com/questions/41096332/issues-traversing-through-directory-hierarchy-with-android-storage-access-framew
-    fun traverseDirectoryEntries(rootUri: Uri?){
+    suspend fun traverseDirectoryEntries(rootUri: Uri?, db: MemeFilesDatabase){
         val contentResolver = activity!!.contentResolver
         var childrenUri: Uri = try {
             //for childs and sub child dirs
@@ -108,7 +116,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         val name: String = c.getString(1)
                         val mime: String = c.getString(2)
                         if (imagesRegex.matches(mime)){
-                            getImageText(DocumentsContract.buildDocumentUriUsingTree(rootUri, docId), docId, name)
+                            getImageText(DocumentsContract.buildDocumentUriUsingTree(rootUri, docId), name, db)
                         }
                         if (isDirectory(mime)) {
                             val newNode: Uri =
@@ -118,8 +126,19 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                     }
                 }
             } finally {
-                closeQuietly(c)
+                closeQuietly(c, db)
             }
+        }
+        for (f in db.memeFileDao.getAll()){
+            Log.d(TAG, "TestingAll ${f.rowid}, ${f.filename}, ${f.fileuri}")
+        }
+
+        for (f in db.memeFileDao.loadTopByFilename("%3000d80%")){
+            Log.d(TAG, "TestingFilename ${f.rowid}, ${f.filename}, ${f.fileuri}")
+        }
+
+        for (f in db.memeFileDao.loadTopByText("%maroon 5%")){
+            Log.d(TAG, "TestingText ${f.rowid}, ${f.filename}, ${f.fileuri}")
         }
     }
 
@@ -128,10 +147,11 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         return DocumentsContract.Document.MIME_TYPE_DIR == mimeType
     }
     // Util method to close a closeable
-    private fun closeQuietly(closeable: Closeable?) {
+    private fun closeQuietly(closeable: Closeable?, db: MemeFilesDatabase) {
         if (closeable != null) {
             try {
                 closeable.close()
+                //db.close()
             } catch (re: RuntimeException) {
                 throw re
             } catch (ignore: Exception) {
@@ -140,15 +160,24 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         }
     }
 
-    private fun getImageText(imageUri: Uri, docId: String, name: String){
+    private fun getImageText(imageUri: Uri, name: String, db: MemeFilesDatabase){
         val image: InputImage = InputImage.fromFilePath(activity!!.applicationContext, imageUri)
         val model = TextRecognition.getClient()
         model.process(image)
             .addOnSuccessListener { visionText ->
-                Log.d(
+                /*Log.d(
                     TAG,
-                    "docId: $id, name: $name, text: ${visionText.text}"
+                    "docId: $id, name: $name, text: ${visionText.text}, uri: $imageUri"
                 )
+                if(visionText.text.isNotBlank()) {
+                    db.memeFileDao.insert(
+                        MemeFile(
+                            filename = name,
+                            fileuri = imageUri.toString(),
+                            ocrtext = visionText.text.toLowerCase()
+                        )
+                    )
+                }*/
             }
             .addOnFailureListener { e ->
                 Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT).show()
