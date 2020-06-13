@@ -10,10 +10,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.Text
+import com.google.mlkit.vision.text.TextRecognition
 import com.legendbois.memeindexer.R
+import kotlinx.android.synthetic.main.test_imageview.*
 import kotlinx.coroutines.launch
 import java.io.Closeable
 import java.util.*
@@ -23,7 +28,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     companion object{
         const val TAG="IndexBuilderFragment"
         const val DIRECTORY_REQUEST_CODE=2
-
+        val imagesRegex="image/.*".toRegex()
         fun newInstance(): IndexBuilderFragment{
             return IndexBuilderFragment()
         }
@@ -54,7 +59,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                     viewLifecycleOwner.lifecycleScope.launch {
                         traverseDirectoryEntries(parentUri)
                     }
-                    
+
                     Log.d(TAG, data.data.toString())
                 }
 
@@ -102,10 +107,9 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         val docId: String = c.getString(0)
                         val name: String = c.getString(1)
                         val mime: String = c.getString(2)
-                        Log.d(
-                            TAG,
-                            "docId: $id, name: $name, mime: $mime"
-                        )
+                        if (imagesRegex.matches(mime)){
+                            getImageText(DocumentsContract.buildDocumentUriUsingTree(rootUri, docId), docId, name)
+                        }
                         if (isDirectory(mime)) {
                             val newNode: Uri =
                                 DocumentsContract.buildChildDocumentsUriUsingTree(rootUri, docId)
@@ -123,7 +127,6 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private fun isDirectory(mimeType: String): Boolean {
         return DocumentsContract.Document.MIME_TYPE_DIR == mimeType
     }
-
     // Util method to close a closeable
     private fun closeQuietly(closeable: Closeable?) {
         if (closeable != null) {
@@ -135,5 +138,20 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                 // ignore exception
             }
         }
+    }
+
+    private fun getImageText(imageUri: Uri, docId: String, name: String){
+        val image: InputImage = InputImage.fromFilePath(activity!!.applicationContext, imageUri)
+        val model = TextRecognition.getClient()
+        model.process(image)
+            .addOnSuccessListener { visionText ->
+                Log.d(
+                    TAG,
+                    "docId: $id, name: $name, text: ${visionText.text}"
+                )
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT).show()
+            }
     }
 }
