@@ -73,10 +73,6 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         updateProgressText()
                         viewLifecycleOwner.lifecycleScope.launch {
                             traverseDirectoryEntries(parentUri, db)
-                            for (i in 0..4){
-                                delay(1000)
-                                updateProgressText()
-                            }
                             toggleButtonState(true)
                         }
                         Log.d(TAG, data.data.toString())
@@ -171,7 +167,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
     private fun updateProgressText(){
         progressNumber+=1
-        indexbuilder_progressText.text="$progressNumber files\n processed"
+        indexbuilder_progressText.text="$progressNumber"
     }
 
     // Util method to check if the mime type is a directory

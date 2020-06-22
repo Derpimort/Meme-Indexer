@@ -6,4 +6,6 @@
     <string name="test_test">Test</string>
     <string name="test_selected_image_displayed">Selected image displayed</string>
     <string name="tab_text_3">Tab 3</string>
+    <string name="_0">0</string>
+    <string name="files_processed">Files processed</string>
 </resources>
