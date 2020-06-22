@@ -17,4 +17,11 @@
         app:fabSize="normal"
         app:maxImageSize="100dp"
         app:srcCompat="?attr/actionModeSelectAllDrawable" />
+
+    <ProgressBar
+        android:id="@+id/indexbuilder_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </LinearLayout>

@@ -72,6 +72,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
                         viewLifecycleOwner.lifecycleScope.launch {
                             traverseDirectoryEntries(parentUri, db)
+                            delay(5000)
                             toggleButtonState(true)
                         }
                         Log.d(TAG, data.data.toString())
@@ -152,6 +153,14 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     }
 
     private fun toggleButtonState(value: Boolean){
+        if(value){
+            indexbuilder_progressBar.visibility=View.GONE
+            indexbuilder_button.visibility=View.VISIBLE
+        }
+        else{
+            indexbuilder_button.visibility=View.GONE
+            indexbuilder_progressBar.visibility=View.VISIBLE
+        }
         indexbuilder_button.isEnabled=value
         indexbuilder_button.isClickable=value
     }
