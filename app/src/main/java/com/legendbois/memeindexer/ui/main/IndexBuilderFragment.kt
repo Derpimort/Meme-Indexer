@@ -35,6 +35,7 @@ import java.util.*
 
 
 class IndexBuilderFragment: Fragment(), View.OnClickListener {
+    private var progressNumber: Int = -1
     companion object{
         const val TAG="IndexBuilderFragment"
         const val DIRECTORY_REQUEST_CODE=2
@@ -69,10 +70,13 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         toggleButtonState(false)
                         val parentUri = data.data
                         val db = MemeFilesDatabase.getDatabase(context!!).memeFileDao
-
+                        updateProgressText()
                         viewLifecycleOwner.lifecycleScope.launch {
                             traverseDirectoryEntries(parentUri, db)
-                            delay(5000)
+                            for (i in 0..4){
+                                delay(1000)
+                                updateProgressText()
+                            }
                             toggleButtonState(true)
                         }
                         Log.d(TAG, data.data.toString())
@@ -154,15 +158,20 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
     private fun toggleButtonState(value: Boolean){
         if(value){
-            indexbuilder_progressBar.visibility=View.GONE
+            indexbuilder_progress.visibility=View.GONE
             indexbuilder_button.visibility=View.VISIBLE
         }
         else{
             indexbuilder_button.visibility=View.GONE
-            indexbuilder_progressBar.visibility=View.VISIBLE
+            indexbuilder_progress.visibility=View.VISIBLE
         }
         indexbuilder_button.isEnabled=value
         indexbuilder_button.isClickable=value
+    }
+
+    private fun updateProgressText(){
+        progressNumber+=1
+        indexbuilder_progressText.text="$progressNumber files\n processed"
     }
 
     // Util method to check if the mime type is a directory
@@ -192,7 +201,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                     "docId: $id, name: $name, text: ${visionText.text}, uri: $imageUri"
                 )*/
                 val fileuri = imageUri.toString()
-
+                updateProgressText()
                 if(visionText.text.isNotBlank()) {
                     val duplicates = db.findUri(fileuri)
                     if(duplicates.isEmpty()){

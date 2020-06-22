@@ -18,10 +18,34 @@
         app:maxImageSize="100dp"
         app:srcCompat="?attr/actionModeSelectAllDrawable" />
 
-    <ProgressBar
-        android:id="@+id/indexbuilder_progressBar"
-        style="?android:attr/progressBarStyle"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/indexbuilder_progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/indexbuilder_progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/indexbuilder_progressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/test_test"
+            android:textColor="#009688"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/indexbuilder_progressBar"
+            app:layout_constraintStart_toStartOf="@+id/indexbuilder_progressBar"
+            app:layout_constraintTop_toTopOf="@+id/indexbuilder_progressBar" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </LinearLayout>
