@@ -192,7 +192,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         val model = TextRecognition.getClient()
         model.process(image)
             .addOnSuccessListener { visionText ->
-                /*Log.d(
+                /*Log.v(
                     TAG,
                     "docId: $id, name: $name, text: ${visionText.text}, uri: $imageUri"
                 )*/
@@ -213,10 +213,10 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         for(duplicate in duplicates){
                             db.update(
                                 MemeFile(
-                                    duplicate.rowid,
-                                    duplicate.fileuri,
-                                    name,
-                                    visionText.text.toLowerCase()
+                                    rowid = duplicate.rowid,
+                                    fileuri = duplicate.fileuri,
+                                    filename = name,
+                                    ocrtext = visionText.text.toLowerCase()
                                 )
                             )
                         }
