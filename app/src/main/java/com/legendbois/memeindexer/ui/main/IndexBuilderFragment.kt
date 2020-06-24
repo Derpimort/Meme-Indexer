@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenStarted
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.google.android.gms.common.internal.FallbackServiceBroker
@@ -27,9 +28,7 @@ import com.legendbois.memeindexer.database.MemeFileDao
 import com.legendbois.memeindexer.database.MemeFilesDatabase
 import kotlinx.android.synthetic.main.indexbuilder_frag.*
 import kotlinx.android.synthetic.main.test_imageview.*
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.Closeable
 import java.util.*
 
@@ -69,13 +68,12 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                     if (this.context != null) {
                         toggleButtonState(false)
                         val parentUri = data.data
-                        val db = MemeFilesDatabase.getDatabase(context!!).memeFileDao
-                        updateProgressText()
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            traverseDirectoryEntries(parentUri, db)
+                        lifecycleScope.launch {
+                            whenStarted {
+                                val complete = processData(parentUri!!)
+                            }
                             toggleButtonState(true)
                         }
-                        Log.d(TAG, data.data.toString())
                     }
                 }
 
@@ -83,8 +81,18 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         }
     }
 
+    suspend fun processData(parentUri: Uri): Boolean{
+        withContext(Dispatchers.Default){
+            val db = MemeFilesDatabase.getDatabase(context!!).memeFileDao
+            updateProgressText()
+            traverseDirectoryEntries(parentUri, db)
+            Log.v(TAG, parentUri.toString())
+        }
+        return true
+    }
+
     //Thanks to https://stackoverflow.com/questions/41096332/issues-traversing-through-directory-hierarchy-with-android-storage-access-framew
-    suspend fun traverseDirectoryEntries(rootUri: Uri?, db: MemeFileDao){
+    fun traverseDirectoryEntries(rootUri: Uri?, db: MemeFileDao){
         val contentResolver = activity!!.contentResolver
         var childrenUri: Uri = try {
             //for childs and sub child dirs
@@ -167,7 +175,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
     private fun updateProgressText(){
         progressNumber+=1
-        indexbuilder_progressText.text="$progressNumber"
+        indexbuilder_progressText?.text="$progressNumber"
     }
 
     // Util method to check if the mime type is a directory
@@ -228,5 +236,6 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             .addOnFailureListener { e ->
                 Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT).show()
             }
+
     }
 }
