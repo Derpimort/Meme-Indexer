@@ -3,6 +3,9 @@
 /Data/
 /Git/
 
+# Memory profile logs
+*.hprof
+
 # Built application files
 *.apk
 *.ap_

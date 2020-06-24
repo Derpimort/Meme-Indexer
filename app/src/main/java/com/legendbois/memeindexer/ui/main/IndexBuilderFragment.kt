@@ -251,5 +251,6 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             inpimage?.bitmapInternal?.recycle()
             Log.e(TAG, e.localizedMessage)
         }
+        System.gc()
     }
 }
