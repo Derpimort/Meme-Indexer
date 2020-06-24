@@ -30,6 +30,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         val root = inflater.inflate(R.layout.searchmemes_frag, container, false)
         val search: SearchView = root.findViewById(R.id.searchmemes_search)
         search.isIconifiedByDefault = false
+        search.clearFocus()
         search.setOnQueryTextListener(this)
         return root
     }

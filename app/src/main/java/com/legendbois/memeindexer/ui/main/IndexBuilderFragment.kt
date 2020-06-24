@@ -22,6 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.TextRecognizer
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.MemeFileDao
@@ -35,6 +36,7 @@ import java.util.*
 
 class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private var progressNumber: Int = -1
+    private lateinit var model : TextRecognizer
     companion object{
         const val TAG="IndexBuilderFragment"
         const val DIRECTORY_REQUEST_CODE=2
@@ -68,6 +70,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                     if (this.context != null) {
                         toggleButtonState(false)
                         val parentUri = data.data
+                        model = TextRecognition.getClient()
                         lifecycleScope.launch {
                             whenStarted {
                                 val complete = processData(parentUri!!)
@@ -88,6 +91,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             traverseDirectoryEntries(parentUri, db)
             Log.v(TAG, parentUri.toString())
         }
+        model.close()
         return true
     }
 
@@ -132,6 +136,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         val name: String = c.getString(1)
                         val mime: String = c.getString(2)
                         if (imagesRegex.matches(mime)){
+                            //Log.v(TAG, "$docId, $name, $mime")
                             getImageText(DocumentsContract.buildDocumentUriUsingTree(rootUri, docId), name, db)
                         }
                         if (isDirectory(mime)) {
@@ -196,46 +201,55 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     }
 
     private fun getImageText(imageUri: Uri, name: String, db: MemeFileDao){
-        val image: InputImage = InputImage.fromFilePath(activity!!.applicationContext, imageUri)
-        val model = TextRecognition.getClient()
-        model.process(image)
-            .addOnSuccessListener { visionText ->
-                /*Log.v(
-                    TAG,
-                    "docId: $id, name: $name, text: ${visionText.text}, uri: $imageUri"
-                )*/
-                val fileuri = imageUri.toString()
-                updateProgressText()
-                if(visionText.text.isNotBlank()) {
-                    val duplicates = db.findUri(fileuri)
-                    if(duplicates.isEmpty()){
-                        db.insert(
-                            MemeFile(
-                                filename = name,
-                                fileuri = imageUri.toString(),
-                                ocrtext = visionText.text.toLowerCase()
-                            )
-                        )
-                    }
-                    else{
-                        for(duplicate in duplicates){
-                            db.update(
+        var inpimage : InputImage? = null
+        try {
+            inpimage = InputImage.fromFilePath(activity!!.applicationContext, imageUri)
+
+            model.process(inpimage)
+                .addOnSuccessListener { visionText ->
+                    /*Log.v(
+                        TAG,
+                        "docId: $id, name: $name, text: ${visionText.text}, uri: $imageUri"
+                    )*/
+                    val fileuri = imageUri.toString()
+                    updateProgressText()
+                    if(visionText.text.isNotBlank()) {
+                        val duplicates = db.findUri(fileuri)
+                        if(duplicates.isEmpty()){
+                            db.insert(
                                 MemeFile(
-                                    rowid = duplicate.rowid,
-                                    fileuri = duplicate.fileuri,
                                     filename = name,
+                                    fileuri = imageUri.toString(),
                                     ocrtext = visionText.text.toLowerCase()
                                 )
                             )
                         }
+                        else{
+                            for(duplicate in duplicates){
+                                db.update(
+                                    MemeFile(
+                                        rowid = duplicate.rowid,
+                                        fileuri = duplicate.fileuri,
+                                        filename = name,
+                                        ocrtext = visionText.text.toLowerCase()
+                                    )
+                                )
+                            }
+                        }
+
                     }
 
                 }
-
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT).show()
-            }
-
+                .addOnFailureListener { e ->
+                    Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT).show()
+                }
+                .addOnCompleteListener {
+                    inpimage.bitmapInternal?.recycle()
+                }
+        }
+        catch (e: java.lang.Exception){
+            inpimage?.bitmapInternal?.recycle()
+            Log.e(TAG, e.localizedMessage)
+        }
     }
 }
