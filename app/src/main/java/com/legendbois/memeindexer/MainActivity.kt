@@ -10,8 +10,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CoroutineScope {
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Default + SupervisorJob()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,5 +56,10 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+        coroutineContext.cancelChildren()
     }
 }

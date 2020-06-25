@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.test_imageview.*
 import kotlinx.coroutines.*
 import java.io.Closeable
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 
 
 class IndexBuilderFragment: Fragment(), View.OnClickListener {
@@ -244,13 +245,14 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                     Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT).show()
                 }
                 .addOnCompleteListener {
-                    inpimage.bitmapInternal?.recycle()
+                    inpimage!!.bitmapInternal?.recycle()
+                    inpimage = null
                 }
         }
         catch (e: java.lang.Exception){
             inpimage?.bitmapInternal?.recycle()
+            inpimage = null
             Log.e(TAG, e.localizedMessage)
         }
-        System.gc()
     }
 }
