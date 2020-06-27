@@ -32,7 +32,7 @@
             android:layout_toEndOf="@+id/item_image"
             android:layout_toRightOf="@+id/item_image"
             android:layout_alignParentTop="true"
-            android:textSize="30sp"
+            android:textSize="16sp"
             android:textColor="@android:color/background_light"/>
 
         <TextView
@@ -41,6 +41,9 @@
             android:id="@+id/item_detail"
             android:layout_toEndOf="@+id/item_image"
             android:layout_toRightOf="@+id/item_image"
+            android:maxLines="3"
+            android:maxLength="100"
+            android:ellipsize="end"
             android:textColor="@android:color/background_light"
             android:layout_below="@+id/item_title"/>
 

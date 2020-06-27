@@ -35,8 +35,8 @@ class SearchRVAdapter internal constructor(
     override fun onBindViewHolder(holder: SearchRViewHolder, position: Int) {
         val current = memes[position]
         holder.filename.text = current.filename
-        holder.summary.text = current.ocrtext!!.substring(0, 20) +"..."
-        //holder.image.setImageURI(Uri.parse(current.fileuri))
+        holder.summary.text = current.ocrtext
+        holder.image.setImageURI(Uri.parse(current.fileuri))
 
     }
 
