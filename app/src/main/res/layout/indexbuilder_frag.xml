@@ -39,13 +39,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/test_test"
+            android:text="@string/_0"
             android:textColor="#009688"
-            android:textSize="24sp"
+            android:textSize="36sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/indexbuilder_progressBar"
             app:layout_constraintStart_toStartOf="@+id/indexbuilder_progressBar"
             app:layout_constraintTop_toTopOf="@+id/indexbuilder_progressBar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/files_processed"
+            app:layout_constraintBottom_toBottomOf="@+id/indexbuilder_progressBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/indexbuilder_progressText"
+            app:layout_constraintVertical_bias="0.186" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
