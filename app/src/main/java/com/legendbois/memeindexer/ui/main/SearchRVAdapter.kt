@@ -2,6 +2,7 @@ package com.legendbois.memeindexer.ui.main
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,8 +35,8 @@ class SearchRVAdapter internal constructor(
     override fun onBindViewHolder(holder: SearchRViewHolder, position: Int) {
         val current = memes[position]
         holder.filename.text = current.filename
-        holder.summary.text = current.ocrtext!!.substring(0, 200) +"..."
-        holder.image.setImageURI(Uri.parse(current.fileuri))
+        holder.summary.text = current.ocrtext!!.substring(0, 20) +"..."
+        //holder.image.setImageURI(Uri.parse(current.fileuri))
 
     }
 
