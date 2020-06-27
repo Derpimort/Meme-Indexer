@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFileDao
@@ -34,6 +36,10 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         val root = inflater.inflate(R.layout.searchmemes_frag, container, false)
         val search: SearchView = root.findViewById(R.id.searchmemes_search)
         val application = requireNotNull(this.activity).application
+        val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_recyclerview)
+        val adapter = SearchRVAdapter(application)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(application)
         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
         search.isIconifiedByDefault = false
         search.clearFocus()
