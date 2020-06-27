@@ -1,5 +1,6 @@
 package com.legendbois.memeindexer.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -15,6 +16,9 @@ interface MemeFileDao {
 
     @Query("Select rowid, fileuri, filename from meme_file_table where ocrtext LIKE :text OR filename LIKE :fname LIMIT :topn")
     suspend fun loadTopByText(text: String, fname: String, topn:Int =5): List<MemeFile>
+
+    @Query("Select rowid, fileuri, filename, ocrtext from meme_file_table where ocrtext LIKE :text")
+    fun findByText(text: String): LiveData<List<MemeFile>>
 
     @Query("Select rowid, fileuri, filename, ocrtext from meme_file_table where fileuri LIKE :searchuri")
     fun findUri(searchuri: String): List<MemeFile>

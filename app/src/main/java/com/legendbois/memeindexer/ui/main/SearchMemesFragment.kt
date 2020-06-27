@@ -7,14 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFileDao
 import com.legendbois.memeindexer.database.MemeFilesDatabase
+import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
 import kotlinx.coroutines.launch
 
 class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
+    private lateinit var memeFileViewModel: MemeFileViewModel
     companion object{
         const val TAG = "SearchMemesFragment"
         fun newInstance(): SearchMemesFragment{
@@ -29,6 +33,8 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
 
         val root = inflater.inflate(R.layout.searchmemes_frag, container, false)
         val search: SearchView = root.findViewById(R.id.searchmemes_search)
+        val application = requireNotNull(this.activity).application
+        memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
         search.isIconifiedByDefault = false
         search.clearFocus()
         search.setOnQueryTextListener(this)
@@ -36,24 +42,17 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        val db = MemeFilesDatabase.getDatabase(context!!).memeFileDao
-        lifecycleScope.launch {
-            searchText(query, db)
+        if (query != null) {
+            memeFileViewModel.searchMemes("%$query%").observe(this, Observer { memes ->
+                for (meme in memes){
+                    Log.d(TAG, "${meme.fileuri}, ${meme.filename}, ${meme.ocrtext}")
+                }
+            })
         }
         return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
         return false
-    }
-
-    suspend fun searchText(text: String?, db: MemeFileDao){
-        if (text != null) {
-            val results = db.loadTopByText("%$text%")
-            for (result in results){
-                Log.v(TAG, "${result.rowid}, ${result.filename}, ${result.fileuri}")
-            }
-        }
-
     }
 }
