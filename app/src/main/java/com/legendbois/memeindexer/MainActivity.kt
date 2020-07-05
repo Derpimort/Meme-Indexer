@@ -1,13 +1,12 @@
 package com.legendbois.memeindexer
 
 import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import androidx.viewpager.widget.ViewPager
-import androidx.appcompat.app.AppCompatActivity
-import android.widget.Toast
-import com.legendbois.memeindexer.database.MemeFilesDatabase
 import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
 
 class MainActivity : AppCompatActivity() {

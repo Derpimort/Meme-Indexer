@@ -1,7 +1,6 @@
 package com.legendbois.memeindexer.ui.main
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
@@ -16,21 +15,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import com.google.android.gms.common.internal.FallbackServiceBroker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
-import com.legendbois.memeindexer.database.MemeFileDao
-import com.legendbois.memeindexer.database.MemeFilesDatabase
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
 import kotlinx.android.synthetic.main.indexbuilder_frag.*
-import kotlinx.android.synthetic.main.test_imageview.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.Closeable
 import java.util.*
 
