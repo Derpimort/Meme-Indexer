@@ -21,10 +21,15 @@ class MemeFileViewModel(application: Application): AndroidViewModel(application)
         return database.findUri(uri)
     }
 
-    fun insert(meme: MemeFile){
-        database.insert(meme)
+    suspend fun insert(meme: MemeFile) {
+        withContext(Dispatchers.IO) {
+            database.insert(meme)
+        }
     }
-    fun update(meme: MemeFile){
-        database.update(meme)
+
+    suspend fun update(meme: MemeFile) {
+        withContext(Dispatchers.IO) {
+            database.update(meme)
+        }
     }
 }
