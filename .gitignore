@@ -1,8 +1,8 @@
 .ipynb_checkpoints/
 .spyproject/
 /Data/
-/Git/
-
+Git/
+__pycache__/
 # Memory profile logs
 *.hprof
 

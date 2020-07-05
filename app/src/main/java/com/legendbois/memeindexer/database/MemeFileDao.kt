@@ -20,7 +20,7 @@ interface MemeFileDao {
     @Query("Select rowid, fileuri, filename, ocrtext from meme_file_table where ocrtext LIKE :text")
     fun findByText(text: String): LiveData<List<MemeFile>>
 
-    @Query("Select rowid, fileuri, filename, ocrtext from meme_file_table where fileuri LIKE :searchuri")
+    @Query("Select rowid, fileuri, filename from meme_file_table where fileuri LIKE :searchuri")
     fun findUri(searchuri: String): List<MemeFile>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

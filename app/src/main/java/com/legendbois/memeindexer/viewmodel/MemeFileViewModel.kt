@@ -17,9 +17,14 @@ class MemeFileViewModel(application: Application): AndroidViewModel(application)
         return database.findByText(text)
     }
 
-    suspend fun insert(meme: MemeFile){
-        withContext(Dispatchers.IO){
-            database.insert(meme)
-        }
+    fun searchUri(uri: String):List<MemeFile>{
+        return database.findUri(uri)
+    }
+
+    fun insert(meme: MemeFile){
+        database.insert(meme)
+    }
+    fun update(meme: MemeFile){
+        database.update(meme)
     }
 }

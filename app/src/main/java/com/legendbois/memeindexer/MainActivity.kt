@@ -14,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
@@ -22,21 +23,24 @@ import com.legendbois.memeindexer.database.MemeFileDao
 import com.legendbois.memeindexer.database.MemeFilesDatabase
 import com.legendbois.memeindexer.ui.main.IndexBuilderFragment
 import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
+import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
+import kotlinx.android.synthetic.main.indexbuilder_frag.*
 import kotlinx.coroutines.*
 import java.io.Closeable
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity(), CoroutineScope, IndexBuilderFragment.DataProcessor {
+class MainActivity : AppCompatActivity(), IndexBuilderFragment.DataProcessor {
     private lateinit var model : TextRecognizer
+    private lateinit var memeFileViewModel: MemeFileViewModel
 
     // From https://discuss.kotlinlang.org/t/unavoidable-memory-leak-when-using-coroutines/11603/9
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + Job()
+//    override val coroutineContext: CoroutineContext
+//        get() = Dispatchers.Main + Job()
 
     companion object{
         const val TAG = "MainActivity"
-        val imagesRegex="image/.*".toRegex()
+        val imagesRegex="image/[^g].*".toRegex()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,10 +80,10 @@ class MainActivity : AppCompatActivity(), CoroutineScope, IndexBuilderFragment.D
 
     }
 
-    override fun onStop() {
-        super.onStop()
-        coroutineContext.cancelChildren()
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        coroutineContext.cancelChildren()
+//    }
 
     override fun onAttachFragment(fragment: Fragment){
         if(fragment is IndexBuilderFragment){
@@ -89,21 +93,18 @@ class MainActivity : AppCompatActivity(), CoroutineScope, IndexBuilderFragment.D
 
     override fun processData(parentUri: Uri): Boolean {
         model = TextRecognition.getClient()
-        launch{
-            val db = MemeFilesDatabase.getDatabase(applicationContext).memeFileDao
-            //updateProgressText()
-            withContext(Dispatchers.IO){
-                traverseDirectoryEntries(parentUri, db)
-            }
-            Log.v(TAG, parentUri.toString())
-            model.close()
-        }
+        memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
+        traverseDirectoryEntries(parentUri)
+        Log.v(TAG, parentUri.toString())
+        model.close()
+
 
         return true
     }
 
     //Thanks to https://stackoverflow.com/questions/41096332/issues-traversing-through-directory-hierarchy-with-android-storage-access-framew
-    fun traverseDirectoryEntries(rootUri: Uri?, db: MemeFileDao){
+    fun traverseDirectoryEntries(rootUri: Uri?){
+        var progressNumber=0
         val contentResolver = contentResolver
         var childrenUri: Uri = try {
             //for childs and sub child dirs
@@ -144,7 +145,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope, IndexBuilderFragment.D
                         val mime: String = c.getString(2)
                         if (imagesRegex.matches(mime)){
                             Log.v(TAG, "$docId, $name, $mime")
-                            getImageText(DocumentsContract.buildDocumentUriUsingTree(rootUri, docId), name, db)
+                            getImageText(DocumentsContract.buildDocumentUriUsingTree(rootUri, docId), name)
+                            runOnUiThread{
+                                indexbuilder_progressText.text="$progressNumber"
+                            }
+                            progressNumber+=1
                         }
                         if (isDirectory(mime)) {
                             val newNode: Uri =
@@ -189,7 +194,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope, IndexBuilderFragment.D
         }
     }
 
-    private fun getImageText(imageUri: Uri, name: String, db: MemeFileDao){
+    private fun getImageText(imageUri: Uri, name: String){
         var inpimage : InputImage? = null
         try {
             inpimage = InputImage.fromFilePath(applicationContext, imageUri)
@@ -203,26 +208,27 @@ class MainActivity : AppCompatActivity(), CoroutineScope, IndexBuilderFragment.D
                     val fileuri = imageUri.toString()
                     //updateProgressText()
                     if(visionText.text.isNotBlank()) {
-                        val duplicates = db.findUri(fileuri)
+                        val duplicates = memeFileViewModel.searchUri(fileuri)
                         if(duplicates.isEmpty()){
-                            db.insert(
+                            memeFileViewModel.insert(
                                 MemeFile(
                                     filename = name,
                                     fileuri = imageUri.toString(),
-                                    ocrtext = visionText.text.toLowerCase()
+                                    ocrtext = visionText.text.toLowerCase(Locale.ROOT)
                                 )
                             )
+
                         }
                         else{
                             for(duplicate in duplicates){
-                                db.update(
-                                    MemeFile(
-                                        rowid = duplicate.rowid,
-                                        fileuri = duplicate.fileuri,
-                                        filename = name,
-                                        ocrtext = visionText.text.toLowerCase()
+                                    memeFileViewModel.update(
+                                        MemeFile(
+                                            rowid = duplicate.rowid,
+                                            fileuri = duplicate.fileuri,
+                                            filename = name,
+                                            ocrtext = visionText.text.toLowerCase(Locale.ROOT)
+                                        )
                                     )
-                                )
                             }
                         }
 

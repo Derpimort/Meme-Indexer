@@ -81,15 +81,12 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         toggleButtonState(false)
                         val parentUri = data.data
                         //model = TextRecognition.getClient()
-                        lifecycleScope.launch {
-                            whenStarted {
-                                val complete = callback.processData(parentUri!!)
-                            }
+                        Thread{
+                            val complete = callback.processData(parentUri!!)
                             toggleButtonState(true)
-                        }
+                        }.start()
                     }
                 }
-
             }
         }
     }
