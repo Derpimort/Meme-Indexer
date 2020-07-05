@@ -1,38 +1,40 @@
 package com.legendbois.memeindexer
 
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
+import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import androidx.viewpager.widget.ViewPager
-import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.legendbois.memeindexer.database.MemeFile
-import com.legendbois.memeindexer.database.MemeFileDao
-import com.legendbois.memeindexer.database.MemeFilesDatabase
 import com.legendbois.memeindexer.ui.main.IndexBuilderFragment
 import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
 import kotlinx.android.synthetic.main.indexbuilder_frag.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.delay
 import java.io.Closeable
+import java.io.FileDescriptor
+import java.io.IOException
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity(), IndexBuilderFragment.DataProcessor {
     private lateinit var model : TextRecognizer
     private lateinit var memeFileViewModel: MemeFileViewModel
+    private var concurrentImages = 0
 
     // From https://discuss.kotlinlang.org/t/unavoidable-memory-leak-when-using-coroutines/11603/9
 //    override val coroutineContext: CoroutineContext
@@ -146,6 +148,9 @@ class MainActivity : AppCompatActivity(), IndexBuilderFragment.DataProcessor {
                         if (imagesRegex.matches(mime)){
                             Log.v(TAG, "$docId, $name, $mime")
                             getImageText(DocumentsContract.buildDocumentUriUsingTree(rootUri, docId), name)
+                            while(concurrentImages>4){
+                                Thread.sleep(1000)
+                            }
                             runOnUiThread{
                                 indexbuilder_progressText.text="$progressNumber"
                             }
@@ -194,11 +199,25 @@ class MainActivity : AppCompatActivity(), IndexBuilderFragment.DataProcessor {
         }
     }
 
+
+    private fun uriToBitmap(selectedFileUri: Uri): Bitmap {
+        val parcelFileDescriptor: ParcelFileDescriptor? =
+            contentResolver.openFileDescriptor(selectedFileUri, "r")
+        val fileDescriptor: FileDescriptor? = parcelFileDescriptor?.fileDescriptor
+        val image: Bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+
+        parcelFileDescriptor?.close()
+        return image
+
+    }
+
+
     private fun getImageText(imageUri: Uri, name: String){
         var inpimage : InputImage? = null
         try {
-            inpimage = InputImage.fromFilePath(applicationContext, imageUri)
-
+            //inpimage = InputImage.fromFilePath(applicationContext, imageUri)
+            concurrentImages+=1
+            inpimage = InputImage.fromBitmap(uriToBitmap(imageUri), 0)
             model.process(inpimage)
                 .addOnSuccessListener { visionText ->
                     Log.v(
@@ -231,7 +250,6 @@ class MainActivity : AppCompatActivity(), IndexBuilderFragment.DataProcessor {
                                     )
                             }
                         }
-
                     }
 
                 }
@@ -241,6 +259,7 @@ class MainActivity : AppCompatActivity(), IndexBuilderFragment.DataProcessor {
                 .addOnCompleteListener {
                     inpimage!!.bitmapInternal?.recycle()
                     inpimage = null
+                    concurrentImages-=1
                 }
         }
         catch (e: java.lang.Exception){
