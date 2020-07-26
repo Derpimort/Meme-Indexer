@@ -8,10 +8,12 @@ import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
+
 
 class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     private lateinit var memeFileViewModel: MemeFileViewModel
@@ -33,6 +35,11 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         val application = requireNotNull(this.activity).application
         val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_recyclerview)
         adapter = SearchRVAdapter(application.applicationContext)
+        val mDividerItemDecoration = DividerItemDecoration(
+            recyclerView.getContext(),
+            DividerItemDecoration.VERTICAL
+        )
+        recyclerView.addItemDecoration(mDividerItemDecoration)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(application)
         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
