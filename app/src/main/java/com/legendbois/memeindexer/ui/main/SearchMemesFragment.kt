@@ -37,7 +37,6 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val root = inflater.inflate(R.layout.searchmemes_frag, container, false)
         val search: SearchView = root.findViewById(R.id.searchmemes_search)
         val application = requireNotNull(this.activity).application
@@ -47,19 +46,6 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         adapter = SearchRVAdapter(application.applicationContext){ item ->
             imagePopup(item.fileuri)
         }
-        val vDivider = DividerItemDecoration(
-            recyclerView.getContext(),
-            DividerItemDecoration.VERTICAL
-        )
-        val hDivider = DividerItemDecoration(
-            recyclerView.getContext(),
-            DividerItemDecoration.HORIZONTAL
-        )
-        val divider=ResourcesCompat.getDrawable(resources, R.drawable.divider, null)
-        hDivider.setDrawable(divider!!)
-        vDivider.setDrawable(divider)
-        recyclerView.addItemDecoration(hDivider)
-        recyclerView.addItemDecoration(vDivider)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context, 2)
         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
@@ -83,6 +69,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         return false
     }
 
+    // TODO: Make the Share button work
     fun imagePopup(fileuri: String){
         //Toast.makeText(context, "Item clicked $fileuri", Toast.LENGTH_LONG).show()
         val imageDialog = AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Dialog_Alert)

@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 import java.io.Closeable
 import java.util.*
 
-
+// TODO: Foreground service for uninterrupted large scans
 class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private var progressNumber: Int = 0
     private var concurrentImages: Int = 0

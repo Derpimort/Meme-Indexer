@@ -17,10 +17,12 @@ private val TAB_TITLES = arrayOf(
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
+// TODO: Change to FragmentStatePagerAdapter
 class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
     : FragmentPagerAdapter(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment = when(position) {
+        // TODO: Eliminate useless fragments or find a use for them
             0 -> SearchMemesFragment.newInstance()
             1 -> IndexBuilderFragment.newInstance()
             2 -> SelectorTestFragment.newInstance()

@@ -31,9 +31,9 @@
             android:layout_height="50dp"
             android:layout_below="@+id/recycler_item_image"
             android:layout_alignParentStart="true"
-            android:background="@color/transparent"
-            android:src="@android:drawable/ic_menu_share"
-            android:tint="@color/colorSecondaryLight"
+            android:background="@drawable/bottom_selected"
+            android:src="@drawable/ic_share_black"
+            android:tint="@color/colorSecondary"
             app:srcCompat="?attr/actionModeShareDrawable"
             tools:srcCompat="?attr/actionModeShareDrawable" />
 
