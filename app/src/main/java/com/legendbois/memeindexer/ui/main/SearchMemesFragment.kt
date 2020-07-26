@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -34,7 +35,9 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         val search: SearchView = root.findViewById(R.id.searchmemes_search)
         val application = requireNotNull(this.activity).application
         val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_recyclerview)
-        adapter = SearchRVAdapter(application.applicationContext)
+        adapter = SearchRVAdapter(application.applicationContext){ item ->
+            imagePopup(item.fileuri)
+        }
         val mDividerItemDecoration = DividerItemDecoration(
             recyclerView.getContext(),
             DividerItemDecoration.VERTICAL
@@ -60,5 +63,9 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextChange(newText: String?): Boolean {
         return false
+    }
+
+    fun imagePopup(fileuri: String){
+        Toast.makeText(context, "Item clicked $fileuri", Toast.LENGTH_LONG).show()
     }
 }

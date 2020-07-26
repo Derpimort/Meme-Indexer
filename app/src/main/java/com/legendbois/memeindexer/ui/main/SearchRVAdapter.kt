@@ -1,18 +1,24 @@
 package com.legendbois.memeindexer.ui.main
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 
 class SearchRVAdapter internal constructor(
-    context: Context
+    private val context: Context,
+    private val listener: (MemeFile) -> Unit
 ): RecyclerView.Adapter<SearchRVAdapter.SearchRViewHolder>(){
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -33,8 +39,19 @@ class SearchRVAdapter internal constructor(
         val current = memes[position]
         holder.filename.text = current.filename
         holder.summary.text = current.ocrtext
-        holder.image.setImageURI(Uri.parse(current.fileuri))
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            holder.image.setImageBitmap(context.contentResolver.loadThumbnail(
+                Uri.parse(current.fileuri),
+                Size(100, 100),
+                null
+            )
+            )
+        }
+        else{
+            holder.image.setImageURI(Uri.parse(current.fileuri))
+        }
+        holder.itemView.setOnClickListener { listener(current) }
     }
 
     internal fun setMemes(memes: List<MemeFile>){
@@ -43,5 +60,7 @@ class SearchRVAdapter internal constructor(
     }
 
     override fun getItemCount() = memes.size
+
+
 
 }

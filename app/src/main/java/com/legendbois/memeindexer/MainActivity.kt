@@ -20,16 +20,18 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
-        val fab: FloatingActionButton = findViewById(R.id.fab)
+
         if (!PermissionHelper.hasPermissions(this)) {
             //Log.d("APSIT","Permission checker")
             PermissionHelper.getPermissions(this)
 
         }
+        /*
+        val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
-        }
+        }*/
 
     }
 
@@ -40,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         if (requestCode == PermissionHelper.PERMISSION_CODE) {
             if (!PermissionHelper.hasPermissions(this)) {
-                Toast.makeText(this, "App needs camera and storage permissions", Toast.LENGTH_LONG) .show()
+                Toast.makeText(this, "App needs storage permissions", Toast.LENGTH_LONG) .show()
                 finish()
             }
         } else {
