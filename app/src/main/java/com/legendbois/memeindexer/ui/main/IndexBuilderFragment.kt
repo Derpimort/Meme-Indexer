@@ -3,6 +3,7 @@ package com.legendbois.memeindexer.ui.main
 import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.DocumentsContract
@@ -11,11 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.legendbois.memeindexer.R
@@ -29,9 +32,11 @@ import java.util.*
 
 
 class IndexBuilderFragment: Fragment(), View.OnClickListener {
-    private var progressNumber: Int = -1
+    private var progressNumber: Int = 0
     private var concurrentImages: Int = 0
     private lateinit var memeFileViewModel: MemeFileViewModel
+    private var updateDuplicates: Boolean = false
+    private lateinit var rootView: View
 
     companion object{
         const val TAG="IndexBuilderFragment"
@@ -46,11 +51,11 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.indexbuilder_frag, container, false)
-        val button: FloatingActionButton = root.findViewById(R.id.indexbuilder_button)
+        rootView = inflater.inflate(R.layout.indexbuilder_frag, container, false)
+        val button: FloatingActionButton = rootView.findViewById(R.id.indexbuilder_button)
         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
         button.setOnClickListener(this)
-        return root
+        return rootView
     }
 
     override fun onClick(v: View?) {
@@ -76,10 +81,11 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         }
                     }
                 }
-
             }
+
         }
     }
+
 
 
     //Thanks to https://stackoverflow.com/questions/41096332/issues-traversing-through-directory-hierarchy-with-android-storage-access-framew
@@ -123,7 +129,12 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         val name: String = c.getString(1)
                         val mime: String = c.getString(2)
                         if (imagesRegex.matches(mime)){
-                            getImageText(DocumentsContract.buildDocumentUriUsingTree(rootUri, docId), name)
+                            val fileuri = DocumentsContract.buildDocumentUriUsingTree(rootUri, docId)
+                            val duplicates = memeFileViewModel.searchUri(fileuri.toString())
+                            if (duplicates.isEmpty() || updateDuplicates) {
+                                Log.d(TAG, "Empty $fileuri $duplicates")
+                                getImageText(fileuri, name, duplicates)
+                            }
                             while(concurrentImages>4){
                                 delay(1000)
                             }
@@ -158,18 +169,29 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         if(value){
             indexbuilder_progress.visibility=View.GONE
             indexbuilder_button.visibility=View.VISIBLE
+            val snackbar = Snackbar.make(
+                rootView,
+                "Succesfully indexed $progressNumber files",
+                Snackbar.LENGTH_INDEFINITE
+            )
+            snackbar.setAction("DISMISS") {
+                snackbar.dismiss()
+            }
+            snackbar.setActionTextColor(Color.parseColor("#fe9a00"))
+            snackbar.show()
         }
         else{
             indexbuilder_button.visibility=View.GONE
             indexbuilder_progress.visibility=View.VISIBLE
         }
+
         indexbuilder_button.isEnabled=value
         indexbuilder_button.isClickable=value
     }
 
     private fun updateProgressText(){
         progressNumber+=1
-        indexbuilder_progressText.text="$progressNumber"
+        indexbuilder_progressText?.text="$progressNumber"
     }
 
     // Util method to check if the mime type is a directory
@@ -189,21 +211,21 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         }
     }
 
-    private fun getImageText(imageUri: Uri, name: String){
+    private fun getImageText(imageUri: Uri, name: String, duplicates: List<MemeFile>){
         try {
             concurrentImages += 1
             val image: InputImage = InputImage.fromFilePath(activity!!.applicationContext, imageUri)
             val model = TextRecognition.getClient()
             model.process(image)
                 .addOnSuccessListener { visionText ->
-                    /*Log.v(
+                    Log.v(
                     TAG,
                     "docId: $id, name: $name, text: ${visionText.text}, uri: $imageUri"
-                )*/
+                )
                     val fileuri = imageUri.toString()
-                    updateProgressText()
+
                     if (visionText.text.isNotBlank()) {
-                        val duplicates = memeFileViewModel.searchUri(fileuri)
+                        updateProgressText()
                         if (duplicates.isEmpty()) {
                             lifecycleScope.launch {
                                 memeFileViewModel.insert(

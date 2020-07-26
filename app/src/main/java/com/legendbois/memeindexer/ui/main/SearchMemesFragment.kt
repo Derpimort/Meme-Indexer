@@ -52,6 +52,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(application)
         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
+        search.isFocusable=false
         search.isIconifiedByDefault = false
         search.clearFocus()
         search.setOnQueryTextListener(this)
@@ -73,7 +74,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
 
     fun imagePopup(fileuri: String){
         //Toast.makeText(context, "Item clicked $fileuri", Toast.LENGTH_LONG).show()
-        val imageDialog = AlertDialog.Builder(context)
+        val imageDialog = AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Dialog_Alert)
         val inflater = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val layout = inflater.inflate(R.layout.popup_image, null)
         val image = layout.findViewById<ImageView>(R.id.popup_image_meme)
