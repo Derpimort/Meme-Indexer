@@ -9,4 +9,5 @@
     <string name="test_selected_image_displayed">Selected image displayed</string>
     <string name="_0">0</string>
     <string name="files_processed">Files processed</string>
+    <string name="meme_file_popup">Meme file popup image</string>
 </resources>

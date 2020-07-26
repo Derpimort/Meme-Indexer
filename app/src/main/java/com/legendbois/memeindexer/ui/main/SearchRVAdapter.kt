@@ -28,6 +28,23 @@ class SearchRVAdapter internal constructor(
         val filename: TextView = itemView.findViewById(R.id.item_title)
         val summary: TextView = itemView.findViewById(R.id.item_detail)
         val image: ImageView = itemView.findViewById(R.id.item_image)
+
+        fun bind(memefile: MemeFile){
+            filename.text = memefile.filename
+            summary.text = memefile.ocrtext
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                image.setImageBitmap(context.contentResolver.loadThumbnail(
+                    Uri.parse(memefile.fileuri),
+                    Size(100, 100),
+                    null
+                )
+                )
+            }
+            else{
+                image.setImageURI(Uri.parse(memefile.fileuri))
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchRViewHolder {
@@ -37,20 +54,7 @@ class SearchRVAdapter internal constructor(
 
     override fun onBindViewHolder(holder: SearchRViewHolder, position: Int) {
         val current = memes[position]
-        holder.filename.text = current.filename
-        holder.summary.text = current.ocrtext
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            holder.image.setImageBitmap(context.contentResolver.loadThumbnail(
-                Uri.parse(current.fileuri),
-                Size(100, 100),
-                null
-            )
-            )
-        }
-        else{
-            holder.image.setImageURI(Uri.parse(current.fileuri))
-        }
+        holder.bind(current)
         holder.itemView.setOnClickListener { listener(current) }
     }
 

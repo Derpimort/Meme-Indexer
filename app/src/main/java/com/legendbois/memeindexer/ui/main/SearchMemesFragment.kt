@@ -1,11 +1,14 @@
 package com.legendbois.memeindexer.ui.main
 
+import android.app.AlertDialog
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
+import kotlinx.android.synthetic.main.popup_image.*
 
 
 class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
@@ -35,6 +39,8 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         val search: SearchView = root.findViewById(R.id.searchmemes_search)
         val application = requireNotNull(this.activity).application
         val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_recyclerview)
+
+        //Thanks to https://antonioleiva.com/recyclerview-listener/
         adapter = SearchRVAdapter(application.applicationContext){ item ->
             imagePopup(item.fileuri)
         }
@@ -66,6 +72,20 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     }
 
     fun imagePopup(fileuri: String){
-        Toast.makeText(context, "Item clicked $fileuri", Toast.LENGTH_LONG).show()
+        //Toast.makeText(context, "Item clicked $fileuri", Toast.LENGTH_LONG).show()
+        val imageDialog = AlertDialog.Builder(context)
+        val inflater = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val layout = inflater.inflate(R.layout.popup_image, null)
+        val image = layout.findViewById<ImageView>(R.id.popup_image_meme)
+        image.setImageURI(Uri.parse(fileuri))
+        imageDialog.setView(layout)
+        imageDialog.setPositiveButton(
+            "Return"
+        ) { dialog, which ->
+            dialog.dismiss()
+        }
+        imageDialog.create()
+        imageDialog.show()
+
     }
 }
