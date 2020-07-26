@@ -2,6 +2,7 @@ package com.legendbois.memeindexer.ui.main
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.legendbois.memeindexer.R
@@ -44,13 +47,21 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         adapter = SearchRVAdapter(application.applicationContext){ item ->
             imagePopup(item.fileuri)
         }
-        val mDividerItemDecoration = DividerItemDecoration(
+        val vDivider = DividerItemDecoration(
             recyclerView.getContext(),
             DividerItemDecoration.VERTICAL
         )
-        recyclerView.addItemDecoration(mDividerItemDecoration)
+        val hDivider = DividerItemDecoration(
+            recyclerView.getContext(),
+            DividerItemDecoration.HORIZONTAL
+        )
+        val divider=ResourcesCompat.getDrawable(resources, R.drawable.divider, null)
+        hDivider.setDrawable(divider!!)
+        vDivider.setDrawable(divider)
+        recyclerView.addItemDecoration(hDivider)
+        recyclerView.addItemDecoration(vDivider)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(application)
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
         search.isFocusable=false
         search.isIconifiedByDefault = false
