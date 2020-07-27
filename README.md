@@ -32,7 +32,8 @@ Indexing    |   Searching
 
 ## Testing
 
-I'll start releasing signed apks on github as soon as i'm done with the basic features. If you wanna test before that or develop... just clone this repo, point Android studio to the directory and let it do it's magic.
+ - I'll start releasing signed apks on github as soon as i'm done with the basic features. 
+ - If you wanna test before that or develop... just clone this repo, point Android studio to the directory and let it do it's magic.
 
 
 
