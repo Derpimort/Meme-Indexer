@@ -1,43 +1,40 @@
-# Meme-Indexer
-Generate a txt/Index of all Memes in the given directory and its subdirs
-## Ongoing 1: OCR
-  - [ ] Find production level balanced technique for OCR.
-  - [ ] Sub image separation and retrieval.
-  - [ ] Caption/describe each image (like insta).
-  
-## Ongoing 2: Analysis
-  - [x] Feature extraction with inceptionV3
-    > Pins first
-  - [x] ~~Try clustering~~ is useless. Better use image similarity with the knowyourmeme database.
-    > Pins only
-  - [ ] NLP with feature extraction
-    > 9gag memes
-  - [ ] OCR on pinterest memes
-    > If nlp is successful on 9gag
-  - [ ] Finalize pipeline
-    > OCR-->299x299 PP-->Feature extraction-->Clustering? NLP?
+# Meme Indexer
 
-### Current Plan:
-  - [x] **Dataset:**
-    - Separate memes from regular pics in all my devices to get a random dataset
-    - Or...... make a knowyourmeme scrapper
-  
-  - [ ] **Analytics:**
-    - Will clustering work? Try to get results and group together similar memes
-    - Separate clear text field memes and shit ones
-    - OOOOORRRRR.... Textboxes and preprocess the shit outta them?? May save some time? idk
-  - [ ] **Index:**
-    - Based on text
-    - Based on template
-  - [ ] **Deploy:**
-    - Python module
-    - Android app
-  
-## DONE!: Dataset
-  - [x] Collected my 2012 memes from 9gag(800) and pinterest(4000)
-    > Pinterest memes have consistent format: all jpg... but random names. 9gag memes vary in format but filename relate to title.
-  - [x] Preprocess all Pinterest files to 299x299
-  - [x] Process 9gag files
-    > gifs, frame by frame. Rest all cv will take care of
-  - [x] All frames of gif or selected intervals?
-    > first, mid, last frames saved as jpg
+Android app to ocr and index all the memes inside specified folder for later easier search and retrieval.
+
+## What works - Basic features
+
+- [x] Select folder and scan all memes inside it.
+- [x] Search a given text and display matching memes.
+- [ ] Share searched meme from app.
+- [x] Display searched memes in full size.
+- [ ] Display ocr'ed text and functionality to edit it.
+- [ ] Searchable meme tags
+- [ ] Favourites
+- [ ] Meme history
+- [ ] Use foreground service, to prevent interruptions during indexing.
+- [ ] Better app icons.
+- [ ] Take user feedback
+
+## Screenshots
+
+Indexing    |   Searching
+:----------:|:-----------:
+![Screenshot00](Screenshots/1.png "Index Home") | ![Screenshot10](Screenshots/2.png "Search Home")
+![Screenshot01](Screenshots/3.png "Indexing")| ![Screenshot11](Screenshots/4.png "Searched meme preview")
+
+## Plans
+
+ - [ ] Improve the ocr model, currently using google's base default. Plan to use EAST with PyTorch, CRAFT gives better results but is much slower.
+ - [ ] Just a thought... Read aloud the text from memes, like on request from the google assistant or something idk.
+ - [ ] Switch between Black/White themes.
+ - [ ] Deploy on cake day ez downloads and karma.
+
+## Testing
+
+I'll start releasing signed apks on github as soon as i'm done with the basic features. If you wanna test before that or develop... just clone this repo, point Android studio to the directory and let it do it's magic.
+
+
+
+
+
