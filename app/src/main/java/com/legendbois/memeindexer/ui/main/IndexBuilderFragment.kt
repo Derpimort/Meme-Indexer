@@ -111,7 +111,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         dirNodes.add(childrenUri)
         while (dirNodes.isNotEmpty()) {
             childrenUri = dirNodes.removeAt(0) // get the item from top
-            Log.d(TAG, "node uri:  $childrenUri")
+            //Log.d(TAG, "node uri:  $childrenUri")
             val c: Cursor? = contentResolver.query(
                 childrenUri,
                 arrayOf(
@@ -141,10 +141,10 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                             else{
                                 filepath = storages[1].absolutePath.split("Android/")[0] + filepath
                             }
-                            Log.d(TAG, "FilePath $filepath")
+                            //Log.d(TAG, "FilePath $filepath")
                             val duplicates = memeFileViewModel.searchPath(filepath)
                             if (duplicates.isEmpty() || updateDuplicates) {
-                                Log.d(TAG, "Empty $filepath $duplicates")
+                                //Log.d(TAG, "Empty $filepath $duplicates")
                                 getImageText(filepath, name, duplicates)
 
                             }
@@ -232,10 +232,9 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             val model = TextRecognition.getClient()
             model.process(image)
                 .addOnSuccessListener { visionText ->
-                    Log.v(
+                    /*Log.v(
                     TAG,
-                    "docId: $id, name: $name, text: ${visionText.text}, uri: $imagePath"
-                )
+                    "docId: $id, name: $name, text: ${visionText.text}, uri: $imagePath")*/
 
                     if (visionText.text.isNotBlank()) {
                         updateProgressText()

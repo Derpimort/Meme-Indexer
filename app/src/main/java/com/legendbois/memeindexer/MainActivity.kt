@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         tabs.setupWithViewPager(viewPager)
 
         if (!PermissionHelper.hasPermissions(this)) {
-            //Log.d("APSIT","Permission checker")
             PermissionHelper.getPermissions(this)
 
         }

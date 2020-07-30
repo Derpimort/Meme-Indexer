@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
+import java.util.*
 
 
 class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
@@ -60,7 +61,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) {
-            memeFileViewModel.searchMemes("%$query%").observe(this, Observer { memes ->
+            memeFileViewModel.searchMemes("%${query.toLowerCase(Locale.ROOT)}%").observe(this, Observer { memes ->
                 adapter.setMemes(memes)
             })
         }

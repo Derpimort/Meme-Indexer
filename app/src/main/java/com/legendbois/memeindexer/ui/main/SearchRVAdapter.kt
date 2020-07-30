@@ -2,9 +2,6 @@ package com.legendbois.memeindexer.ui.main
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.Build
-import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +12,7 @@ import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 
 class SearchRVAdapter internal constructor(
-    private val context: Context,
+    context: Context,
     private val listener: (MemeFile, Boolean) -> Unit
 ): RecyclerView.Adapter<SearchRVAdapter.SearchRViewHolder>(){
 
