@@ -3,16 +3,19 @@ package com.legendbois.memeindexer.ui.main
 import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.DocumentsContract
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +31,7 @@ import kotlinx.android.synthetic.main.indexbuilder_frag.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.Closeable
+import java.io.File
 import java.util.*
 
 // TODO: Foreground service for uninterrupted large scans
@@ -85,9 +89,6 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
         }
     }
-
-
-
     //Thanks to https://stackoverflow.com/questions/41096332/issues-traversing-through-directory-hierarchy-with-android-storage-access-framew
     suspend fun traverseDirectoryEntries(rootUri: Uri?){
         val contentResolver = activity!!.contentResolver
@@ -110,7 +111,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         dirNodes.add(childrenUri)
         while (dirNodes.isNotEmpty()) {
             childrenUri = dirNodes.removeAt(0) // get the item from top
-            Log.d(TAG, "node uri:  $childrenUri")
+            //Log.d(TAG, "node uri:  $childrenUri")
             val c: Cursor? = contentResolver.query(
                 childrenUri,
                 arrayOf(
@@ -128,12 +129,24 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         val docId: String = c.getString(0)
                         val name: String = c.getString(1)
                         val mime: String = c.getString(2)
+                        //Log.d(TAG, "New File $docId, $name, ${c.getString(3)}")
                         if (imagesRegex.matches(mime)){
-                            val fileuri = DocumentsContract.buildDocumentUriUsingTree(rootUri, docId)
-                            val duplicates = memeFileViewModel.searchUri(fileuri.toString())
+                            // Tested (on <9.0) Workaround to get filepath, bad practice probably but android devs forced my hand... "Security reasons"
+                            val docSplit = docId.split(":")
+                            val storages: Array<out File> = context!!.getExternalFilesDirs(null)
+                            var filepath = docSplit[1]
+                            if("primary".equals(docSplit[0])) {
+                                filepath = storages[0].absolutePath.split("Android/")[0] + filepath
+                            }
+                            else{
+                                filepath = storages[1].absolutePath.split("Android/")[0] + filepath
+                            }
+                            //Log.d(TAG, "FilePath $filepath")
+                            val duplicates = memeFileViewModel.searchPath(filepath)
                             if (duplicates.isEmpty() || updateDuplicates) {
-                                Log.d(TAG, "Empty $fileuri $duplicates")
-                                getImageText(fileuri, name, duplicates)
+                                //Log.d(TAG, "Empty $filepath $duplicates")
+                                getImageText(filepath, name, duplicates)
+
                             }
                             while(concurrentImages>4){
                                 delay(1000)
@@ -211,18 +224,17 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         }
     }
 
-    private fun getImageText(imageUri: Uri, name: String, duplicates: List<MemeFile>){
+    private fun getImageText(imagePath: String, name: String, duplicates: List<MemeFile>){
         try {
             concurrentImages += 1
-            val image: InputImage = InputImage.fromFilePath(activity!!.applicationContext, imageUri)
+            val imageBitmap = BitmapFactory.decodeFile(imagePath)
+            val image: InputImage = InputImage.fromBitmap(imageBitmap, 0)
             val model = TextRecognition.getClient()
             model.process(image)
                 .addOnSuccessListener { visionText ->
-                    Log.v(
+                    /*Log.v(
                     TAG,
-                    "docId: $id, name: $name, text: ${visionText.text}, uri: $imageUri"
-                )
-                    val fileuri = imageUri.toString()
+                    "docId: $id, name: $name, text: ${visionText.text}, uri: $imagePath")*/
 
                     if (visionText.text.isNotBlank()) {
                         updateProgressText()
@@ -231,7 +243,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                                 memeFileViewModel.insert(
                                     MemeFile(
                                         filename = name,
-                                        fileuri = imageUri.toString(),
+                                        filepath = imagePath,
                                         ocrtext = visionText.text.toLowerCase(Locale.ROOT)
                                     )
                                 )
@@ -243,7 +255,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                                     memeFileViewModel.update(
                                         MemeFile(
                                             rowid = duplicate.rowid,
-                                            fileuri = duplicate.fileuri,
+                                            filepath = duplicate.filepath,
                                             filename = name,
                                             ocrtext = visionText.text.toLowerCase(Locale.ROOT)
                                         )
