@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.legendbois.memeindexer.database.MemeFilesDatabase
 import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +34,11 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }*/
+
+        // uncomment to nuke database
+        val db = MemeFilesDatabase.getDatabase(applicationContext)
+        db.clearAllTables()
+
 
     }
 

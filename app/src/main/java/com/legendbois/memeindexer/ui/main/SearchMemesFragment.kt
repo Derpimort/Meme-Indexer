@@ -2,7 +2,7 @@ package com.legendbois.memeindexer.ui.main
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.res.Resources
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,17 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SearchView
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
-import kotlinx.android.synthetic.main.popup_image.*
 
 
 class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
@@ -44,7 +40,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
 
         //Thanks to https://antonioleiva.com/recyclerview-listener/
         adapter = SearchRVAdapter(application.applicationContext){ item ->
-            imagePopup(item.fileuri)
+            imagePopup(item.filepath)
         }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context, 2)
@@ -70,13 +66,13 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     }
 
     // TODO: Make the Share button work
-    fun imagePopup(fileuri: String){
+    fun imagePopup(filepath: String){
         //Toast.makeText(context, "Item clicked $fileuri", Toast.LENGTH_LONG).show()
         val imageDialog = AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Dialog_Alert)
         val inflater = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val layout = inflater.inflate(R.layout.popup_image, null)
         val image = layout.findViewById<ImageView>(R.id.popup_image_meme)
-        image.setImageURI(Uri.parse(fileuri))
+        image.setImageBitmap(BitmapFactory.decodeFile(filepath))
         imageDialog.setView(layout)
         imageDialog.setPositiveButton(
             "Return"

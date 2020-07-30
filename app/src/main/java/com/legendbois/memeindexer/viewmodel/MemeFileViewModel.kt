@@ -17,8 +17,8 @@ class MemeFileViewModel(application: Application): AndroidViewModel(application)
         return database.findByText(text)
     }
 
-    fun searchUri(uri: String):List<MemeFile>{
-        return database.findUri(uri)
+    fun searchPath(path: String):List<MemeFile>{
+        return database.findPath(path)
     }
 
     suspend fun insert(meme: MemeFile) {
