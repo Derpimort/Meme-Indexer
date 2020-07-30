@@ -131,7 +131,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         val mime: String = c.getString(2)
                         //Log.d(TAG, "New File $docId, $name, ${c.getString(3)}")
                         if (imagesRegex.matches(mime)){
-                            // Untested Workaround to get filepath, bad practice probably but android devs forced my hand... "Security reasons"
+                            // Tested (on <9.0) Workaround to get filepath, bad practice probably but android devs forced my hand... "Security reasons"
                             val docSplit = docId.split(":")
                             val storages: Array<out File> = context!!.getExternalFilesDirs(null)
                             var filepath = docSplit[1]
@@ -236,7 +236,6 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                     TAG,
                     "docId: $id, name: $name, text: ${visionText.text}, uri: $imagePath"
                 )
-                    val fileuri = imagePath.toString()
 
                     if (visionText.text.isNotBlank()) {
                         updateProgressText()
@@ -245,7 +244,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                                 memeFileViewModel.insert(
                                     MemeFile(
                                         filename = name,
-                                        filepath = imagePath.toString(),
+                                        filepath = imagePath,
                                         ocrtext = visionText.text.toLowerCase(Locale.ROOT)
                                     )
                                 )

@@ -16,7 +16,7 @@ import com.legendbois.memeindexer.database.MemeFile
 
 class SearchRVAdapter internal constructor(
     private val context: Context,
-    private val listener: (MemeFile) -> Unit
+    private val listener: (MemeFile, Boolean) -> Unit
 ): RecyclerView.Adapter<SearchRVAdapter.SearchRViewHolder>(){
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -28,8 +28,10 @@ class SearchRVAdapter internal constructor(
         val button: ImageButton = itemView.findViewById(R.id.recycler_item_button)
 
         fun bind(memefile: MemeFile){
-            // TODO: Scaled down version and not on main thread
+            // TODO: Scaled down version and not on main thread, try Picasso?
             image.setImageBitmap(BitmapFactory.decodeFile(memefile.filepath))
+            image.setOnClickListener { listener(memefile, false) }
+            button.setOnClickListener { listener(memefile, true) }
         }
     }
 
@@ -41,7 +43,7 @@ class SearchRVAdapter internal constructor(
     override fun onBindViewHolder(holder: SearchRViewHolder, position: Int) {
         val current = memes[position]
         holder.bind(current)
-        holder.itemView.setOnClickListener { listener(current) }
+
     }
 
     internal fun setMemes(memes: List<MemeFile>){

@@ -2,6 +2,7 @@ package com.legendbois.memeindexer.ui.main
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -39,8 +40,13 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_recyclerview)
 
         //Thanks to https://antonioleiva.com/recyclerview-listener/
-        adapter = SearchRVAdapter(application.applicationContext){ item ->
-            imagePopup(item.filepath)
+        adapter = SearchRVAdapter(application.applicationContext){ item, share ->
+            if (share){
+                shareImage(item.filepath)
+            }
+            else {
+                imagePopup(item.filepath)
+            }
         }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context, 2)
@@ -65,6 +71,15 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         return false
     }
 
+    fun shareImage(filepath: String){
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://$filepath"))
+        shareIntent.type = "image/*"
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        startActivity(Intent.createChooser(shareIntent, "Share Meme"))
+    }
+
     // TODO: Make the Share button work
     fun imagePopup(filepath: String){
         //Toast.makeText(context, "Item clicked $fileuri", Toast.LENGTH_LONG).show()
@@ -75,6 +90,12 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         image.setImageBitmap(BitmapFactory.decodeFile(filepath))
         imageDialog.setView(layout)
         imageDialog.setPositiveButton(
+            "Share"
+        ){ dialog, i ->
+            shareImage(filepath)
+        }
+
+        imageDialog.setNegativeButton(
             "Return"
         ) { dialog, which ->
             dialog.dismiss()

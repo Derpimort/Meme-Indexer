@@ -36,8 +36,8 @@ class MainActivity : AppCompatActivity() {
         }*/
 
         // uncomment to nuke database
-        val db = MemeFilesDatabase.getDatabase(applicationContext)
-        db.clearAllTables()
+        /*val db = MemeFilesDatabase.getDatabase(applicationContext)
+        db.clearAllTables()*/
 
 
     }
