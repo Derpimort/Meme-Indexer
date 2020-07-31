@@ -1,7 +1,10 @@
 package com.legendbois.memeindexer
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -65,5 +68,28 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.feedback_menuitem ->{
+                sendFeedback()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    fun sendFeedback(){
+        val i = Intent(Intent.ACTION_SENDTO)
+        i.data= Uri.parse("mailto:")
+        i.putExtra(Intent.EXTRA_EMAIL, arrayOf("jatinsaini580@gmail.com"))
+        i.putExtra(Intent.EXTRA_SUBJECT,"Feedback for Meme Indexer")
+        try{
+            startActivity(Intent.createChooser(i,"Send Mail..."))
+        }
+        catch ( ex : android.content.ActivityNotFoundException){
+            Toast.makeText(applicationContext,"There are no email clients installed",Toast.LENGTH_SHORT).show()
+        }
     }
 }
