@@ -61,6 +61,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) {
+            view!!.findViewById<SearchView>(R.id.searchmemes_search).clearFocus()
             memeFileViewModel.searchMemes("%${query.toLowerCase(Locale.ROOT)}%").observe(this, Observer { memes ->
                 adapter.setMemes(memes)
             })
