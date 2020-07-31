@@ -40,9 +40,7 @@
         <item name="android:fontFamily">@font/megrim</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
-
     </style>
-
 
     <string name="search_hint">Text to search</string>
 </resources>
