@@ -84,7 +84,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     // TODO: Make the Share button work
     fun imagePopup(filepath: String){
         //Toast.makeText(context, "Item clicked $fileuri", Toast.LENGTH_LONG).show()
-        val imageDialog = AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+        val imageDialog = AlertDialog.Builder(context, R.style.AlertDialogBase)
         val inflater = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val layout = inflater.inflate(R.layout.popup_image, null)
         val image = layout.findViewById<ImageView>(R.id.popup_image_meme)

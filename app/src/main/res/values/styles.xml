@@ -41,6 +41,12 @@
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+    
+    <style name="AlertDialogBase" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:windowBackground">@color/colorBackgroundLight</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 
     <string name="search_hint">Text to search</string>
 </resources>

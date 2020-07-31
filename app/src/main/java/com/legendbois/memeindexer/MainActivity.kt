@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sendFeedback(){
-        val alertDialog = AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+        val alertDialog = AlertDialog.Builder(this, R.style.AlertDialogBase)
         val dialogView = layoutInflater.inflate(R.layout.popup_feedback, null)
         alertDialog.setTitle("Send Feedback")
         // Created a layout just in case
