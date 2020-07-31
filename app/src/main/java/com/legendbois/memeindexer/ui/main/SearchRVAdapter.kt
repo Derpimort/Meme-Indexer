@@ -2,6 +2,7 @@ package com.legendbois.memeindexer.ui.main
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
+import com.squareup.picasso.Picasso
+import java.io.File
 
 class SearchRVAdapter internal constructor(
     context: Context,
@@ -25,10 +28,13 @@ class SearchRVAdapter internal constructor(
         val button: ImageButton = itemView.findViewById(R.id.recycler_item_button)
 
         fun bind(memefile: MemeFile){
-            // TODO: Scaled down version and not on main thread, try Picasso?
-            image.setImageBitmap(BitmapFactory.decodeFile(memefile.filepath))
+            // TODO: Add placeholder and error image, preferably open source or will have to create
+            // DAYUM picasso made the searching smooth af
+            Picasso.get().load(File(memefile.filepath)).fit().centerCrop(Gravity.TOP).into(image)
+            //image.setImageBitmap(BitmapFactory.decodeFile())
             image.setOnClickListener { listener(memefile, false) }
             button.setOnClickListener { listener(memefile, true) }
+
         }
     }
 
