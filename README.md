@@ -8,13 +8,14 @@ Android app to ocr and index all the memes inside specified folder for later eas
 - [x] Search a given text and display matching memes.
 - [x] Share searched meme from app.
 - [x] Display searched memes in full size.
-- [ ] Display ocr'ed text and functionality to edit it.
+- [x] Display ocr'ed text
+- [ ] functionality to edit ocr'ed text.
 - [ ] Searchable meme tags
 - [ ] Favourites
 - [ ] Meme history
 - [ ] Use foreground service, to prevent interruptions during indexing.
 - [ ] Better app icons.
-- [ ] Take user feedback
+- [x] Take user feedback.
 
 ## Screenshots
 
