@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageButton
@@ -58,7 +59,9 @@ class MemeInfoDialogFragment : DialogFragment() {
                 layout.findViewById<ImageView>(R.id.memeinfo_title_image).setImageBitmap(BitmapFactory.decodeFile(filepath))
                 layout.findViewById<TextView>(R.id.memeinfo_title_filename).text = filename
                 layout.findViewById<TextView>(R.id.memeinfo_filepath).text = filepath
-                layout.findViewById<TextView>(R.id.memeinfo_ocrtext).text = ocrtext
+                val ocrtextView = layout.findViewById<TextView>(R.id.memeinfo_ocrtext)
+                ocrtextView.text = ocrtext
+                ocrtextView.movementMethod = ScrollingMovementMethod()
                 layout.findViewById<ImageButton>(R.id.memeinfo_title_close).setOnClickListener {
                     dismiss()
                 }

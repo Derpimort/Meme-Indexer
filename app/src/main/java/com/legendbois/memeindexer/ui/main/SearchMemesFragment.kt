@@ -47,8 +47,8 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         //Thanks to https://antonioleiva.com/recyclerview-listener/
         adapter = SearchRVAdapter(application.applicationContext){ item, share ->
             when(share){
-                0-> shareImage(item.filepath)
-                1-> imagePopup(item.filepath)
+                0-> imagePopup(item.filepath)
+                1-> shareImage(item.filepath)
                 else -> infoPopup(item)
             }
         }
