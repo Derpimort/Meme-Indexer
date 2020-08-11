@@ -3,6 +3,7 @@ package com.legendbois.memeindexer
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.legendbois.memeindexer.database.MemeFilesDatabase
 import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -43,6 +45,9 @@ class MainActivity : AppCompatActivity() {
         /*val db = MemeFilesDatabase.getDatabase(applicationContext)
         db.clearAllTables()*/
 
+        // uncomment to log total number of memes in db
+        /*val db = MemeFilesDatabase.getDatabase(applicationContext)
+        Log.d("MainActivity", "Memes in db: ${db.memeFileDao.getRowCount()}")*/
 
     }
 

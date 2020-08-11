@@ -24,7 +24,6 @@ class SearchRVAdapter internal constructor(
 
     inner class SearchRViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val image: ImageView = itemView.findViewById(R.id.recycler_item_image)
-        // TODO: Make the share button work
         val button: ImageButton = itemView.findViewById(R.id.recycler_item_button)
 
         fun bind(memefile: MemeFile){

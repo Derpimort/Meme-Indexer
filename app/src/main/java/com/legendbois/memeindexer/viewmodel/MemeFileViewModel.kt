@@ -21,6 +21,10 @@ class MemeFileViewModel(application: Application): AndroidViewModel(application)
         return database.findPath(path)
     }
 
+    fun getMemesCount(): Int{
+        return database.getRowCount()
+    }
+
     suspend fun insert(meme: MemeFile) {
         withContext(Dispatchers.IO) {
             database.insert(meme)
