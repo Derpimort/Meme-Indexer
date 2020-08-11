@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.legendbois.memeindexer.R
+import com.legendbois.memeindexer.database.MemeFile
+import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
 import java.util.*
 
@@ -26,6 +28,8 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     private lateinit var adapter: SearchRVAdapter
     companion object{
         const val TAG = "SearchMemesFragment"
+
+        @JvmStatic
         fun newInstance(): SearchMemesFragment{
             return SearchMemesFragment()
         }
@@ -42,11 +46,10 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
 
         //Thanks to https://antonioleiva.com/recyclerview-listener/
         adapter = SearchRVAdapter(application.applicationContext){ item, share ->
-            if (share){
-                shareImage(item.filepath)
-            }
-            else {
-                imagePopup(item.filepath)
+            when(share){
+                0-> shareImage(item.filepath)
+                1-> imagePopup(item.filepath)
+                else -> infoPopup(item)
             }
         }
         recyclerView.adapter = adapter
@@ -82,7 +85,6 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         startActivity(Intent.createChooser(shareIntent, "Share Meme"))
     }
 
-    // TODO: Make the Share button work
     fun imagePopup(filepath: String){
         //Toast.makeText(context, "Item clicked $fileuri", Toast.LENGTH_LONG).show()
         val imageDialog = AlertDialog.Builder(context, R.style.AlertDialogBase)
@@ -98,12 +100,17 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         }
 
         imageDialog.setNegativeButton(
-            "Return"
+            R.string.return_button
         ) { dialog, which ->
             dialog.dismiss()
         }
         imageDialog.create()
         imageDialog.show()
 
+    }
+
+    fun infoPopup(memefile: MemeFile){
+        val dialog = MemeInfoDialogFragment.newInstance(memefile)
+        dialog.show(parentFragmentManager, "meme_info")
     }
 }

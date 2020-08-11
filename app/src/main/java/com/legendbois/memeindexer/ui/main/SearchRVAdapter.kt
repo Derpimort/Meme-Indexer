@@ -16,7 +16,7 @@ import java.io.File
 
 class SearchRVAdapter internal constructor(
     context: Context,
-    private val listener: (MemeFile, Boolean) -> Unit
+    private val listener: (MemeFile, Int) -> Unit
 ): RecyclerView.Adapter<SearchRVAdapter.SearchRViewHolder>(){
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -25,15 +25,16 @@ class SearchRVAdapter internal constructor(
     inner class SearchRViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val image: ImageView = itemView.findViewById(R.id.recycler_item_image)
         val button: ImageButton = itemView.findViewById(R.id.recycler_item_button)
+        val infoButton: ImageButton = itemView.findViewById(R.id.recycler_item_info)
 
         fun bind(memefile: MemeFile){
             // TODO: Add placeholder and error image, preferably open source or will have to create
             // DAYUM picasso made the searching smooth af
             Picasso.get().load(File(memefile.filepath)).fit().centerCrop(Gravity.TOP).into(image)
             //image.setImageBitmap(BitmapFactory.decodeFile())
-            image.setOnClickListener { listener(memefile, false) }
-            button.setOnClickListener { listener(memefile, true) }
-
+            image.setOnClickListener { listener(memefile, 0) }
+            button.setOnClickListener { listener(memefile, 1) }
+            infoButton.setOnClickListener { listener(memefile, 2) }
         }
     }
 

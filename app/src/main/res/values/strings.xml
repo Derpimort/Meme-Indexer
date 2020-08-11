@@ -13,4 +13,5 @@
     <string name="feedback">Feedback</string>
     <string name="send_feedback">Send Feedback</string>
     <string name="feedback_hint"><font size="16">What could be implemented or improved</font></string>
+    <string name="return_button">Return</string>
 </resources>

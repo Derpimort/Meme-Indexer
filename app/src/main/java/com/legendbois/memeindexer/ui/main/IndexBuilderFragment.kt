@@ -46,6 +46,8 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         const val TAG="IndexBuilderFragment"
         const val DIRECTORY_REQUEST_CODE=2
         val imagesRegex="image/.*".toRegex()
+
+        @JvmStatic
         fun newInstance(): IndexBuilderFragment{
             return IndexBuilderFragment()
         }
