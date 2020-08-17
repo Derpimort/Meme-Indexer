@@ -2,7 +2,7 @@
     <string name="app_name">Meme Indexer</string>
     <string name="tab_text_1">Search Memes</string>
     <string name="tab_text_2">Scan Memes</string>
-    <string name="tab_text_3">Individual results</string>
+    <string name="tab_text_3">History</string>
     <string name="tab_text_4">Tab Test</string>
     <string name="test_hello">Hello</string>
     <string name="test_test">Test</string>
