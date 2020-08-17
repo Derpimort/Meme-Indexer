@@ -24,17 +24,17 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
     override fun getItem(position: Int): Fragment = when(position) {
         // TODO: Eliminate useless fragments or find a use for them
             0 -> SearchMemesFragment.newInstance()
+            1 -> IndexBuilderFragment.newInstance()
             //1 -> PlaceholderFragment.newInstance(position + 1)
             //2 -> SelectorTestFragment.newInstance()
             else -> IndexBuilderFragment.newInstance()
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        return context.resources.getString(TAB_TITLES[position])
-    }
+//    override fun getPageTitle(position: Int): CharSequence? {
+//        return context.resources.getString(TAB_TITLES[position])
+//    }
 
     override fun getCount(): Int {
-        // Show 2 total pages.
-        return 2
+        return 3
     }
 }

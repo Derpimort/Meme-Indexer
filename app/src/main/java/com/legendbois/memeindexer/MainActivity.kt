@@ -3,7 +3,6 @@ package com.legendbois.memeindexer
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
@@ -12,11 +11,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import com.legendbois.memeindexer.database.MemeFilesDatabase
 import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var tabs: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +27,9 @@ class MainActivity : AppCompatActivity() {
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         val viewPager: ViewPager = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
-        val tabs: TabLayout = findViewById(R.id.tabs)
+        tabs = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
+        setupTabIcons()
 
         if (!PermissionHelper.hasPermissions(this)) {
             PermissionHelper.getPermissions(this)
@@ -81,6 +82,12 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    fun setupTabIcons(){
+        tabs.getTabAt(0)!!.setIcon(R.drawable.ic_image_search_24px)
+        tabs.getTabAt(1)!!.setIcon(R.drawable.ic_image_scan_24px)
+        tabs.getTabAt(2)!!.setIcon(R.drawable.ic_history_24px)
     }
 
     fun sendFeedback(){
