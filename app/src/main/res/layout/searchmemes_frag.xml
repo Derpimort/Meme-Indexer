@@ -12,7 +12,7 @@
         android:layout_height="36dp"
         android:gravity="center"
         android:text="@string/tab_text_1"
-        android:textSize=" " />
+        android:textSize="18sp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:tools="http://schemas.android.com/tools"

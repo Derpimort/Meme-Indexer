@@ -18,4 +18,6 @@
     <string name="memeinfo_path">Path:</string>
     <string name="placeholder">Placeholder</string>
     <string name="memeinfo_ocrtext">Text:</string>
+    <string name="scan">Scan</string>
+    <string name="path">Path</string>
 </resources>

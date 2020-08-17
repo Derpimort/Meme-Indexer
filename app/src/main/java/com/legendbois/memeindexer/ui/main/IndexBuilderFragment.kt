@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
@@ -58,7 +59,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.indexbuilder_frag, container, false)
-        val button: FloatingActionButton = rootView.findViewById(R.id.indexbuilder_button)
+        val button: Button = rootView.findViewById(R.id.indexbuilder_button)
         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
         button.setOnClickListener(this)
         return rootView
