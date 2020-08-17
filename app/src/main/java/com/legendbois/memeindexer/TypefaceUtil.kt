@@ -22,7 +22,7 @@ object TypefaceUtil {
             Typeface.createFromAsset(context.assets, customFontFileNameInAssets)
         val newMap: MutableMap<String, Typeface> =
             HashMap()
-        newMap["serif"] = customFontTypeface
+        newMap["sans"] = customFontTypeface
         try {
             val staticField: Field = Typeface::class.java
                 .getDeclaredField("sSystemFontMap")

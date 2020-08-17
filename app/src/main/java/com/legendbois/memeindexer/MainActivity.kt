@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // TODO: Finalize a good font
-        TypefaceUtil.overrideFont(applicationContext,"fonts/arvo.ttf")
+        TypefaceUtil.overrideFont(applicationContext,"fonts/noto_sans_light.ttf")
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
