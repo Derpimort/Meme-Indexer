@@ -7,21 +7,17 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.DocumentsContract
-import android.provider.MediaStore
-import android.util.Log
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
@@ -66,6 +62,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        // TODO: Add check for path in editext. Simple function, makes sense.
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
         intent.addCategory(Intent.CATEGORY_DEFAULT)
         startActivityForResult(Intent.createChooser(intent, "Choose directory"), DIRECTORY_REQUEST_CODE)
@@ -77,8 +74,8 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             if (data != null) {
                 if (requestCode == DIRECTORY_REQUEST_CODE) {
                     if (this.context != null) {
-                        toggleButtonState(false)
                         val parentUri = data.data
+                        toggleButtonState(false, data.data!!.path)
                         lifecycleScope.launch {
                             whenStarted {
                                 traverseDirectoryEntries(parentUri)
@@ -181,10 +178,9 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
     }
 
-    private fun toggleButtonState(value: Boolean){
+    private fun toggleButtonState(value: Boolean, path: String? = ""){
         if(value){
-            indexbuilder_progress.visibility=View.GONE
-            indexbuilder_button.visibility=View.VISIBLE
+            indexbuilder_progressbar.visibility=View.GONE
             val snackbar = Snackbar.make(
                 rootView,
                 "Succesfully indexed $progressNumber files",
@@ -192,22 +188,28 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             )
             snackbar.setAction("DISMISS") {
                 snackbar.dismiss()
+                indexbuilder_button.text = getString(R.string.scan)
             }
             snackbar.setActionTextColor(Color.parseColor("#fe9a00"))
             snackbar.show()
+
         }
         else{
-            indexbuilder_button.visibility=View.GONE
-            indexbuilder_progress.visibility=View.VISIBLE
+            indexbuilder_progressbar.visibility=View.VISIBLE
+            indexbuilder_button.text = "$progressNumber"
         }
 
-        indexbuilder_button.isEnabled=value
-        indexbuilder_button.isClickable=value
+        indexbuilder_button.isEnabled = value
+        indexbuilder_button.isClickable = value
+        indexbuilder_path.setText(path)
+        indexbuilder_path.isFocusableInTouchMode = value
+        indexbuilder_path.isFocusable = value
+
     }
 
     private fun updateProgressText(){
         progressNumber+=1
-        indexbuilder_progressText?.text="$progressNumber"
+        indexbuilder_button.text="$progressNumber"
     }
 
     // Util method to check if the mime type is a directory

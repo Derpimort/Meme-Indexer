@@ -55,54 +55,20 @@
         android:layout_marginTop="72dp"
         android:background="@drawable/ring"
         android:text="@string/scan"
+        style="@style/AppFontStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/indexbuilder_path_container" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/indexbuilder_progress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ProgressBar
+        android:id="@+id/indexbuilder_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ProgressBar
-            android:id="@+id/indexbuilder_progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/indexbuilder_progressText"
-            style="@style/AppFontStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/_0"
-            android:textSize="36sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/indexbuilder_progressBar"
-            app:layout_constraintStart_toStartOf="@+id/indexbuilder_progressBar"
-            app:layout_constraintTop_toTopOf="@+id/indexbuilder_progressBar" />
-
-        <TextView
-            style="@style/AppFontStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/files_processed"
-            app:layout_constraintBottom_toBottomOf="@+id/indexbuilder_progressBar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/indexbuilder_progressText"
-            app:layout_constraintVertical_bias="0.186" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintBottom_toBottomOf="@+id/indexbuilder_button"
+        app:layout_constraintEnd_toEndOf="@+id/indexbuilder_button"
+        app:layout_constraintStart_toStartOf="@+id/indexbuilder_button"
+        app:layout_constraintTop_toTopOf="@+id/indexbuilder_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

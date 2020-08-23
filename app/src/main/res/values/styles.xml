@@ -27,7 +27,7 @@
 
     <style name="AppFontStyle">
         <item name="android:fontFamily">@font/capriola</item>
-        <item name="android:textColor">@color/colorSecondaryDark</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
     </style>
 
     <style name="AppTextViewStyle" parent="android:Widget.TextView">
