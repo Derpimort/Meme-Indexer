@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/colorPrimary">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -17,6 +18,15 @@
             android:minHeight="?actionBarSize"
             app:titleTextAppearance="@style/ToolbarTitleText">
         </androidx.appcompat.widget.Toolbar>
+
+        <TextView
+            android:id="@+id/toolbar_fragment_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="@string/tab_text_1"
+            android:textSize="18sp" />
 
 
     </com.google.android.material.appbar.AppBarLayout>
