@@ -23,7 +23,10 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
+import com.legendbois.memeindexer.database.UsageHistory
+import com.legendbois.memeindexer.database.UsageHistoryDatabase
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
+import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 import kotlinx.android.synthetic.main.indexbuilder_frag.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -36,6 +39,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private var progressNumber: Int = 0
     private var concurrentImages: Int = 0
     private lateinit var memeFileViewModel: MemeFileViewModel
+    private lateinit var usageHistoryViewModel: UsageHistoryViewModel
     private var updateDuplicates: Boolean = false
     private lateinit var rootView: View
 
@@ -56,7 +60,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     ): View? {
         rootView = inflater.inflate(R.layout.indexbuilder_frag, container, false)
         val button: Button = rootView.findViewById(R.id.indexbuilder_button)
-        memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
+
         button.setOnClickListener(this)
         return rootView
     }
@@ -74,14 +78,17 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             if (data != null) {
                 if (requestCode == DIRECTORY_REQUEST_CODE) {
                     if (this.context != null) {
-                        val parentUri = data.data
-                        toggleButtonState(false, data.data!!.path)
+                        val parentUri = data.data!!
+                        memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
+                        usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
+                        toggleButtonState(false, parentUri.path)
                         lifecycleScope.launch {
                             whenStarted {
                                 traverseDirectoryEntries(parentUri)
                             }
                             toggleButtonState(true)
                             concurrentImages = 0
+                            writeToHistory(parentUri.path, progressNumber.toString())
                         }
                     }
                 }
@@ -92,6 +99,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     //Thanks to https://stackoverflow.com/questions/41096332/issues-traversing-through-directory-hierarchy-with-android-storage-access-framew
     suspend fun traverseDirectoryEntries(rootUri: Uri?){
         val contentResolver = activity!!.contentResolver
+        val storages: Array<out File> = context!!.getExternalFilesDirs(null)
         var childrenUri: Uri = try {
             //for childs and sub child dirs
             DocumentsContract.buildChildDocumentsUriUsingTree(
@@ -133,13 +141,11 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         if (imagesRegex.matches(mime)){
                             // Tested (on <9.0) Workaround to get filepath, bad practice probably but android devs forced my hand... "Security reasons"
                             val docSplit = docId.split(":")
-                            val storages: Array<out File> = context!!.getExternalFilesDirs(null)
                             var filepath = docSplit[1]
-                            if("primary".equals(docSplit[0])) {
-                                filepath = storages[0].absolutePath.split("Android/")[0] + filepath
-                            }
-                            else{
-                                filepath = storages[1].absolutePath.split("Android/")[0] + filepath
+                            filepath = if("primary".equals(docSplit[0])) {
+                                storages[0].absolutePath.split("Android/")[0] + filepath
+                            } else{
+                                storages[1].absolutePath.split("Android/")[0] + filepath
                             }
                             //Log.d(TAG, "FilePath $filepath")
                             val duplicates = memeFileViewModel.searchPath(filepath)
@@ -210,6 +216,35 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private fun updateProgressText(){
         progressNumber+=1
         indexbuilder_button.text="$progressNumber"
+    }
+
+    private fun writeToHistory(path: String?, extraInfo: String){
+        if (!path.isNullOrEmpty()){
+            lifecycleScope.launch {
+
+                whenStarted {
+                    val duplicates = usageHistoryViewModel.searchPathOrQuery(path)
+                    if (duplicates.isEmpty()) {
+                        usageHistoryViewModel.insert(
+                            UsageHistory(
+                                actionId = 0,
+                                pathOrQuery = path,
+                                extraInfo = extraInfo
+                            )
+                        )
+                    }
+                    else{
+                        for (duplicate in duplicates){
+                            usageHistoryViewModel.update(
+                                duplicate
+                            )
+                        }
+                        
+                    }
+                }
+            }
+        }
+
     }
 
     // Util method to check if the mime type is a directory
