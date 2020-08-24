@@ -14,17 +14,22 @@ import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
+import com.legendbois.memeindexer.database.UsageHistory
 import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
+import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
+import kotlinx.coroutines.launch
 import java.util.*
 
 
 class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     private lateinit var memeFileViewModel: MemeFileViewModel
+    private lateinit var usageHistoryViewModel: UsageHistoryViewModel
     private lateinit var adapter: SearchRVAdapter
     companion object{
         const val TAG = "SearchMemesFragment"
@@ -55,6 +60,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context, 2)
         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
+        usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
         search.isFocusable=false
         search.isIconifiedByDefault = false
         search.clearFocus()
@@ -68,6 +74,14 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
             memeFileViewModel.searchMemes("%${query.toLowerCase(Locale.ROOT)}%").observe(this, Observer { memes ->
                 adapter.setMemes(memes)
             })
+            lifecycleScope.launch {
+                usageHistoryViewModel.insert(
+                    UsageHistory(
+                        pathOrQuery = query,
+                        actionId = 1
+                    )
+                )
+            }
         }
         return true
     }
@@ -83,6 +97,14 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         shareIntent.type = "image/*"
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         startActivity(Intent.createChooser(shareIntent, "Share Meme"))
+        lifecycleScope.launch {
+            usageHistoryViewModel.insert(
+                UsageHistory(
+                    pathOrQuery = filepath,
+                    actionId = 2
+                )
+            )
+        }
     }
 
     fun imagePopup(filepath: String){

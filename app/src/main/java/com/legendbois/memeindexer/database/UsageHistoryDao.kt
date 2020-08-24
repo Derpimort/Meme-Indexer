@@ -3,7 +3,6 @@ package com.legendbois.memeindexer.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
-// Thanks to https://stackoverflow.com/a/50142304
 @Dao
 interface UsageHistoryDao {
 
@@ -25,25 +24,26 @@ interface UsageHistoryDao {
     @Delete
     fun delete(action: UsageHistory)
 
-//    companion object{
-//        open class UsageHistoryDaoWrapper(private val daoInstance: UsageHistoryDao){
-//            fun insertWithTimestamp(action: UsageHistory){
-//                this@UsageHistoryDaoWrapper.daoInstance.insert(
-//                    action.apply {
-//                        createdAt = System.currentTimeMillis()
-//                        modifiedAt = System.currentTimeMillis()
-//                    }
-//                )
-//            }
-//
-//            fun updateWithTimestamp(action: UsageHistory){
-//                this@UsageHistoryDaoWrapper.daoInstance.update(
-//                    action.apply {
-//                        modifiedAt = System.currentTimeMillis()
-//                    }
-//                )
-//            }
-//        }
-//    }
+    // Thanks to https://stackoverflow.com/a/50142304
+    /*companion object{
+        open class UsageHistoryDaoWrapper(private val daoInstance: UsageHistoryDao){
+            fun insertWithTimestamp(action: UsageHistory){
+                this@UsageHistoryDaoWrapper.daoInstance.insert(
+                    action.apply {
+                        createdAt = System.currentTimeMillis()
+                        modifiedAt = System.currentTimeMillis()
+                    }
+                )
+            }
+
+            fun updateWithTimestamp(action: UsageHistory){
+                this@UsageHistoryDaoWrapper.daoInstance.update(
+                    action.apply {
+                        modifiedAt = System.currentTimeMillis()
+                    }
+                )
+            }
+        }
+    }*/
 
 }

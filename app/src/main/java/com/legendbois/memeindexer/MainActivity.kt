@@ -65,8 +65,9 @@ class MainActivity : AppCompatActivity() {
         /*val db = MemeFilesDatabase.getDatabase(applicationContext)
         db.clearAllTables()*/
 
-        val db = UsageHistoryDatabase.getDatabase(applicationContext)
-        Log.d("MainActivity", "Memes in db: ${db.usageHistoryDao.getRowCount()}")
+        // uncomment to log total number of actions in db
+        /*val db = UsageHistoryDatabase.getDatabase(applicationContext)
+        Log.d("MainActivity", "Actions in db: ${db.usageHistoryDao.getRowCount()}")*/
 
         // uncomment to log total number of memes in db
         /*val db = MemeFilesDatabase.getDatabase(applicationContext)
