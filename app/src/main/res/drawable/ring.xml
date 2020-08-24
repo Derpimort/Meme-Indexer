@@ -5,7 +5,8 @@
         android:color="@color/colorAccent"/>
     <stroke
         android:width="16dp"
-        android:color="@color/colorBackgroundDark"/>
+        android:color="@color/transparent"/>
+
     <size
         android:width="120dp"
         android:height="120dp"/>
