@@ -2,6 +2,7 @@ package com.legendbois.memeindexer.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import com.legendbois.memeindexer.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,6 +15,9 @@ class UsageHistoryViewModel(application: Application): AndroidViewModel(applicat
 //        return database.findByText(text)
 //    }
 //
+    fun getSharedMemes(): LiveData<List<UsageHistory>>{
+        return database.findSharedMemes()
+    }
     fun searchPathOrQuery(pathOrQuery: String):List<UsageHistory>{
         return database.findPathOrQuery(pathOrQuery)
     }

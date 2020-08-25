@@ -27,7 +27,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
             1 -> IndexBuilderFragment.newInstance()
             //1 -> PlaceholderFragment.newInstance(position + 1)
             //2 -> SelectorTestFragment.newInstance()
-            else -> IndexBuilderFragment.newInstance()
+            else -> HistoryFragment.newInstance()
     }
 
 //    override fun getPageTitle(position: Int): CharSequence? {
