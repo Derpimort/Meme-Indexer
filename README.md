@@ -2,6 +2,7 @@
 
 Android app to ocr and index all the memes inside specified folder for later easier search and retrieval.
 
+
 ## What works - Basic features
 
 - [x] Select folder and scan all memes inside it.
@@ -37,6 +38,7 @@ Indexing    |   Searching
  - I'll start releasing signed apks on github as soon as i'm done with the basic features. 
  - If you wanna test before that or develop... just clone this repo, point Android studio to the directory and let it do it's magic.
 
+**Updated Design Credit: Khushal Metar**
 
 
 
