@@ -11,12 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
@@ -26,17 +28,15 @@ import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 import kotlinx.coroutines.launch
 import java.util.*
 
-
-class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
-    private lateinit var memeFileViewModel: MemeFileViewModel
+class HistoryFragment: Fragment(){
     private lateinit var usageHistoryViewModel: UsageHistoryViewModel
-    private lateinit var adapter: SearchRVAdapter
+    private lateinit var adapter: HistoryRVAdapter
     companion object{
-        const val TAG = "SearchMemesFragment"
+        const val TAG = "HistoryFragment"
 
         @JvmStatic
-        fun newInstance(): SearchMemesFragment{
-            return SearchMemesFragment()
+        fun newInstance(): HistoryFragment{
+            return HistoryFragment()
         }
     }
     override fun onCreateView(
@@ -44,52 +44,28 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.searchmemes_frag, container, false)
-        val search: SearchView = root.findViewById(R.id.searchmemes_search)
+        val root = inflater.inflate(R.layout.history_frag, container, false)
         val application = requireNotNull(this.activity).application
-        val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_recyclerview)
+        val recyclerView = root.findViewById<RecyclerView>(R.id.history_recyclerview)
 
         //Thanks to https://antonioleiva.com/recyclerview-listener/
-        adapter = SearchRVAdapter(application.applicationContext){ item, share ->
+        adapter = HistoryRVAdapter(application.applicationContext){ item, share ->
             when(share){
-                0-> imagePopup(item.filepath)
-                1-> shareImage(item.filepath)
-                else -> infoPopup(item)
+                0 -> imagePopup(item.pathOrQuery)
+                else -> null
             }
         }
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(context, 2)
-        memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
-        search.isFocusable=false
-        search.isIconifiedByDefault = false
-        search.clearFocus()
-        search.setOnQueryTextListener(this)
+        usageHistoryViewModel.getSharedMemes().observe(viewLifecycleOwner, Observer {actions ->
+            adapter.setActions(actions)
+        })
         return root
     }
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        if (query != null) {
-            view!!.findViewById<SearchView>(R.id.searchmemes_search).clearFocus()
-            memeFileViewModel.searchMemes("%${query.toLowerCase(Locale.ROOT)}%").observe(this, Observer { memes ->
-                adapter.setMemes(memes)
-            })
-            lifecycleScope.launch {
-                usageHistoryViewModel.insert(
-                    UsageHistory(
-                        pathOrQuery = query,
-                        actionId = 1
-                    )
-                )
-            }
-        }
-        return true
-    }
 
-    override fun onQueryTextChange(newText: String?): Boolean {
-        return false
-    }
-
+    // TODO: Move these to a helper class coz they exist in searchmemesfrag too
     fun shareImage(filepath: String){
         val shareIntent = Intent()
         shareIntent.action = Intent.ACTION_SEND
@@ -97,14 +73,6 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         shareIntent.type = "image/*"
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         startActivity(Intent.createChooser(shareIntent, "Share Meme"))
-        lifecycleScope.launch {
-            usageHistoryViewModel.insert(
-                UsageHistory(
-                    pathOrQuery = filepath,
-                    actionId = 2
-                )
-            )
-        }
     }
 
     fun imagePopup(filepath: String){
@@ -129,10 +97,5 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         imageDialog.create()
         imageDialog.show()
 
-    }
-
-    fun infoPopup(memefile: MemeFile){
-        val dialog = MemeInfoDialogFragment.newInstance(memefile)
-        dialog.show(parentFragmentManager, "meme_info")
     }
 }

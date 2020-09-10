@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/waves">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/colorPrimary50">
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -18,19 +20,46 @@
             app:titleTextAppearance="@style/ToolbarTitleText">
         </androidx.appcompat.widget.Toolbar>
 
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
+        <TextView
+            android:id="@+id/toolbar_fragment_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimaryDark"/>
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="@string/tab_text_1"
+            android:textSize="18sp" />
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+    </androidx.viewpager.widget.ViewPager>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="?attr/colorPrimaryDark"
+        android:elevation="3dp">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:icon="@drawable/ic_image_search_24px"
+            android:tint="@color/colorAccent" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_image_search_24px"
+            android:tint="@color/colorAccent" />
+    </com.google.android.material.tabs.TabLayout>
 
     <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
