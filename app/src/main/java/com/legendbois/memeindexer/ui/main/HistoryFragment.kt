@@ -24,6 +24,7 @@ import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
 import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
+import com.legendbois.memeindexer.viewmodel.MemesHelper
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 import kotlinx.coroutines.launch
 import java.util.*
@@ -64,38 +65,15 @@ class HistoryFragment: Fragment(){
         return root
     }
 
-
-    // TODO: Move these to a helper class coz they exist in searchmemesfrag too
     fun shareImage(filepath: String){
-        val shareIntent = Intent()
-        shareIntent.action = Intent.ACTION_SEND
-        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://$filepath"))
-        shareIntent.type = "image/*"
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        startActivity(Intent.createChooser(shareIntent, "Share Meme"))
+        if (context != null){
+            MemesHelper.shareImage(context!!.applicationContext, filepath)
+        }
     }
 
     fun imagePopup(filepath: String){
-        //Toast.makeText(context, "Item clicked $fileuri", Toast.LENGTH_LONG).show()
-        val imageDialog = AlertDialog.Builder(context, R.style.AlertDialogBase)
-        val inflater = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val layout = inflater.inflate(R.layout.popup_image, null)
-        val image = layout.findViewById<ImageView>(R.id.popup_image_meme)
-        image.setImageBitmap(BitmapFactory.decodeFile(filepath))
-        imageDialog.setView(layout)
-        imageDialog.setPositiveButton(
-            "Share"
-        ){ dialog, i ->
-            shareImage(filepath)
+        if(context != null){
+            MemesHelper.imagePopup(context!!, filepath)
         }
-
-        imageDialog.setNegativeButton(
-            R.string.return_button
-        ) { dialog, which ->
-            dialog.dismiss()
-        }
-        imageDialog.create()
-        imageDialog.show()
-
     }
 }

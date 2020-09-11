@@ -34,4 +34,27 @@ object MemesHelper {
         context.startActivity(Intent.createChooser(shareIntent, "Share Meme"))
     }
 
+    fun imagePopup(context: Context, filepath: String){
+        //Toast.makeText(context, "Item clicked $fileuri", Toast.LENGTH_LONG).show()
+        val imageDialog = AlertDialog.Builder(context, R.style.AlertDialogBase)
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val layout = inflater.inflate(R.layout.popup_image, null)
+        val image = layout.findViewById<ImageView>(R.id.popup_image_meme)
+        image.setImageBitmap(BitmapFactory.decodeFile(filepath))
+        imageDialog.setView(layout)
+        imageDialog.setPositiveButton(
+            "Share"
+        ){ dialog, i ->
+            shareImage(context, filepath)
+        }
+
+        imageDialog.setNegativeButton(
+            R.string.return_button
+        ) { dialog, which ->
+            dialog.dismiss()
+        }
+        imageDialog.create()
+        imageDialog.show()
+    }
+
 }
