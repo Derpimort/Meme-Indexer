@@ -2,6 +2,7 @@ package com.legendbois.memeindexer
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -28,6 +29,10 @@ class MainActivity : AppCompatActivity() {
         R.string.tab_text_3,
         R.string.tab_text_4
     )
+
+    companion object{
+        val sdkVersion = Build.VERSION.SDK_INT
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

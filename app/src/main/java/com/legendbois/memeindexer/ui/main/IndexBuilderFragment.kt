@@ -6,14 +6,17 @@ import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +24,7 @@ import androidx.lifecycle.whenStarted
 import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
+import com.legendbois.memeindexer.MainActivity
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
@@ -32,6 +36,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.Closeable
 import java.io.File
+import java.net.URI
 import java.util.*
 
 // TODO: Foreground service for uninterrupted large scans
@@ -100,6 +105,8 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     suspend fun traverseDirectoryEntries(rootUri: Uri?){
         val contentResolver = activity!!.contentResolver
         val storages: Array<out File> = context!!.getExternalFilesDirs(null)
+        val oreoSdk = Build.VERSION_CODES.O
+
         var childrenUri: Uri = try {
             //for childs and sub child dirs
             DocumentsContract.buildChildDocumentsUriUsingTree(
@@ -137,17 +144,27 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         val docId: String = c.getString(0)
                         val name: String = c.getString(1)
                         val mime: String = c.getString(2)
-                        //Log.d(TAG, "New File $docId, $name, ${c.getString(3)}")
+                        //Log.d(TAG, "New File $docId, $name, $childrenUri")
                         if (imagesRegex.matches(mime)){
-                            // Tested (on <9.0) Workaround to get filepath, bad practice probably but android devs forced my hand... "Security reasons"
-                            val docSplit = docId.split(":")
-                            var filepath = docSplit[1]
-                            filepath = if("primary".equals(docSplit[0])) {
-                                storages[0].absolutePath.split("Android/")[0] + filepath
-                            } else{
-                                storages[1].absolutePath.split("Android/")[0] + filepath
+                            var filepath = ""
+                            // Tested (on <9.0) Workaround to get filepath, bad practice probably but android devs forced my hand... "Security reasons"\
+                            if (MainActivity.sdkVersion < oreoSdk){
+                                val docSplit = docId.split(":")
+                                filepath = docSplit[1]
+                                filepath = if("primary".equals(docSplit[0])) {
+                                    storages[0].absolutePath.split("Android/")[0] + filepath
+                                } else if("raw".equals(docSplit[0])){
+                                    docId
+                                } else{
+                                    storages[1].absolutePath.split("Android/")[0] + filepath
+                                }
                             }
-                            //Log.d(TAG, "FilePath $filepath")
+                            else{
+                                val file = File(docId)
+                                filepath = file.path.split(":")[1]
+                            }
+
+                            // Log.d(TAG, "FilePath $filepath")
                             val duplicates = memeFileViewModel.searchPath(filepath)
                             if (duplicates.isEmpty() || updateDuplicates) {
                                 //Log.d(TAG, "Empty $filepath $duplicates")
