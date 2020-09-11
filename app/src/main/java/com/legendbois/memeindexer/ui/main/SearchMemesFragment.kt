@@ -22,6 +22,7 @@ import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
 import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
+import com.legendbois.memeindexer.viewmodel.MemesHelper
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 import kotlinx.coroutines.launch
 import java.util.*
@@ -91,20 +92,18 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     }
 
     fun shareImage(filepath: String){
-        val shareIntent = Intent()
-        shareIntent.action = Intent.ACTION_SEND
-        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://$filepath"))
-        shareIntent.type = "image/*"
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        startActivity(Intent.createChooser(shareIntent, "Share Meme"))
-        lifecycleScope.launch {
-            usageHistoryViewModel.insert(
-                UsageHistory(
-                    pathOrQuery = filepath,
-                    actionId = 2
+        if (context != null){
+            MemesHelper.shareImage(context!!.applicationContext, filepath)
+            lifecycleScope.launch {
+                usageHistoryViewModel.insert(
+                    UsageHistory(
+                        pathOrQuery = filepath,
+                        actionId = 2
+                    )
                 )
-            )
+            }
         }
+
     }
 
     fun imagePopup(filepath: String){
