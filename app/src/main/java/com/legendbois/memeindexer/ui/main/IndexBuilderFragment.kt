@@ -84,17 +84,18 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                 if (requestCode == DIRECTORY_REQUEST_CODE) {
                     if (this.context != null) {
                         val parentUri = data.data!!
+                        var totalFiles: Int = 0
                         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
                         usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
                         toggleButtonState(false, parentUri.path)
                         lifecycleScope.launch {
                             whenStarted {
-                                traverseDirectoryEntries(parentUri)
+                                totalFiles = traverseDirectoryEntries(parentUri)
                             }
                             while(concurrentImages != 0){
                                 delay(1000)
                             }
-                            toggleButtonState(true)
+                            toggleButtonState(true, totalFiles = totalFiles)
 
                             writeToHistory(parentUri.path, progressNumber.toString())
                         }
@@ -105,7 +106,8 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         }
     }
     //Thanks to https://stackoverflow.com/questions/41096332/issues-traversing-through-directory-hierarchy-with-android-storage-access-framew
-    suspend fun traverseDirectoryEntries(rootUri: Uri?){
+    suspend fun traverseDirectoryEntries(rootUri: Uri?): Int{
+        var totalFiles = 0
         val contentResolver = activity!!.contentResolver
         val storages: Array<out File> = context!!.getExternalFilesDirs(null)
         // val oreoSdk = Build.VERSION_CODES.O
@@ -149,6 +151,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         val mime: String = c.getString(2)
                         //Log.d(TAG, "New File $docId, $name, $childrenUri")
                         if (imagesRegex.matches(mime)){
+                            totalFiles += 1
                             var filepath = ""
                             // Tested (on <9.0) Workaround to get filepath, bad practice probably but android devs forced my hand... "Security reasons"\
                             try {
@@ -201,15 +204,15 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         for (f in db.loadTopByText("%maroon 5%")){
             Log.d(TAG, "TestingText ${f.rowid}, ${f.filename}, ${f.fileuri}")
         }*/
-
+        return totalFiles
     }
 
-    private fun toggleButtonState(value: Boolean, path: String? = ""){
+    private fun toggleButtonState(value: Boolean, path: String? = "", totalFiles: Int = 0){
         if(value){
             indexbuilder_progressbar.visibility=View.GONE
             val snackbar = Snackbar.make(
                 rootView,
-                "Succesfully indexed $progressNumber files",
+                "Succesfully indexed $progressNumber out of $totalFiles files",
                 Snackbar.LENGTH_INDEFINITE
             )
             snackbar.setAction("DISMISS") {
