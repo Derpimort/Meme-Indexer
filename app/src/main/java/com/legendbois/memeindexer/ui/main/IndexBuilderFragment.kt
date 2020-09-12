@@ -91,8 +91,11 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                             whenStarted {
                                 traverseDirectoryEntries(parentUri)
                             }
+                            while(concurrentImages != 0){
+                                delay(1000)
+                            }
                             toggleButtonState(true)
-                            concurrentImages = 0
+
                             writeToHistory(parentUri.path, progressNumber.toString())
                         }
                     }
@@ -105,7 +108,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     suspend fun traverseDirectoryEntries(rootUri: Uri?){
         val contentResolver = activity!!.contentResolver
         val storages: Array<out File> = context!!.getExternalFilesDirs(null)
-        val oreoSdk = Build.VERSION_CODES.O
+        // val oreoSdk = Build.VERSION_CODES.O
 
         var childrenUri: Uri = try {
             //for childs and sub child dirs
@@ -148,23 +151,23 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         if (imagesRegex.matches(mime)){
                             var filepath = ""
                             // Tested (on <9.0) Workaround to get filepath, bad practice probably but android devs forced my hand... "Security reasons"\
-                            if (MainActivity.sdkVersion < oreoSdk){
+                            try {
                                 val docSplit = docId.split(":")
                                 filepath = docSplit[1]
                                 filepath = if("primary".equals(docSplit[0])) {
                                     storages[0].absolutePath.split("Android/")[0] + filepath
                                 } else if("raw".equals(docSplit[0])){
-                                    docId
+                                    filepath
                                 } else{
                                     storages[1].absolutePath.split("Android/")[0] + filepath
                                 }
                             }
-                            else{
+                            catch (versionE: Exception){
                                 val file = File(docId)
                                 filepath = file.path.split(":")[1]
                             }
 
-                            // Log.d(TAG, "FilePath $filepath")
+                            Log.d(TAG, "FilePath $filepath")
                             val duplicates = memeFileViewModel.searchPath(filepath)
                             if (duplicates.isEmpty() || updateDuplicates) {
                                 //Log.d(TAG, "Empty $filepath $duplicates")
