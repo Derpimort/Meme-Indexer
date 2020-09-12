@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:gravity="center"
+            android:textColor="@color/colorTitleText"
             android:text="@string/tab_text_1"
             android:textSize="18sp" />
 

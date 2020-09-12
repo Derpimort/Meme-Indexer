@@ -23,5 +23,6 @@
     <color name="colorTopBar">@color/colorPrimary50</color>
     <color name="colorBigButton">@color/colorAccent</color>
     <color name="colorSearch">@color/white</color>
+    <color name="colorTitleText">@color/white</color>
 
 </resources>
