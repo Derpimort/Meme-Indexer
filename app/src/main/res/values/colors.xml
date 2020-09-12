@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#C90000</color>
-    <color name="colorPrimary50">#50C90000</color>
-    <color name="colorAccent">#fe9a00</color>
-    <color name="colorPrimaryDark">#900000</color>
+    <color name="colorPrimary">#DE5050</color>
+    <color name="colorPrimary50">#E1DE5050</color>
+    <color name="colorAccent">#0D0D0D</color>
+    <color name="colorPrimaryDark">#B24040</color>
     <color name="colorPrimaryLight">#ff4e2f</color>
-    <color name="colorSecondary">#fe9800</color>
-    <color name="colorSecondaryDark">#c56900</color>
-    <color name="colorSecondaryLight">#ffc947</color>
-    <color name="colorBackground">#0D0D0D</color>
-    <color name="colorBackgroundDark">#000000</color>
-    <color name="colorBackgroundLight">#252525</color>
-    <color name="colorPrimaryText">#ffffff</color>
+    <color name="colorSecondary">#0D0D0D</color>
+    <color name="colorSecondaryDark">#000000</color>
+    <color name="colorSecondaryLight">#252525</color>
+    <color name="colorBackground">#FBFBFB</color>
+    <color name="colorBackgroundDark">#FFFFFF</color>
+    <color name="colorBackgroundLight">#FFFFFF</color>
+    <color name="colorPrimaryText">#000000</color>
     <color name="colorPrimaryTextHint">#8C8C8C</color>
-    <color name="colorSecondaryText">#BEBEBE</color>
+    <color name="colorSecondaryText">#303030</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
@@ -21,7 +21,8 @@
 
     <color name="colorBottomBar">@color/colorBackground</color>
     <color name="colorTopBar">@color/colorPrimary50</color>
-    <color name="colorBigButton">@color/colorAccent</color>
-    <color name="colorSearch">@color/white</color>
+    <color name="colorBigButton">@color/colorPrimary</color>
+    <color name="colorSearch">@color/black</color>
+    <color name="colorTitleText">@color/white</color>
 
 </resources>
