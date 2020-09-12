@@ -43,7 +43,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/bottom_selected"
                 android:src="@drawable/ic_info_black"
-                android:tint="@color/colorSecondary"
+                android:tint="@color/colorAccent"
                 app:srcCompat="@android:drawable/ic_dialog_info"
                 tools:srcCompat="@android:drawable/ic_menu_info_details" />
 
@@ -62,7 +62,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/bottom_selected"
                 android:src="@drawable/ic_share_black"
-                android:tint="@color/colorSecondary"
+                android:tint="@color/colorAccent"
                 app:srcCompat="?attr/actionModeShareDrawable"
                 tools:srcCompat="?attr/actionModeShareDrawable" />
         </LinearLayout>

@@ -8,7 +8,6 @@
     android:background="@drawable/rounded_layout">
 
 
-
     <SearchView
         android:id="@+id/searchmemes_search"
         style="@android:style/Widget.Material.SearchView"
@@ -20,7 +19,7 @@
         android:closeIcon="@android:drawable/ic_menu_close_clear_cancel"
         android:queryHint="@string/search_hint"
         android:searchHintIcon="@null"
-        android:searchIcon="@android:drawable/ic_menu_search"
+        android:searchIcon="@drawable/ic_search_24px"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -34,6 +33,7 @@
         android:id="@+id/searchmemes_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:foregroundTint="#F44336"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

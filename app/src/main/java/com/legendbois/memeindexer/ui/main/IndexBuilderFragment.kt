@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -84,7 +85,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                 if (requestCode == DIRECTORY_REQUEST_CODE) {
                     if (this.context != null) {
                         val parentUri = data.data!!
-                        var totalFiles: Int = 0
+                        var totalFiles = 0
                         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
                         usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
                         toggleButtonState(false, parentUri.path)
@@ -159,7 +160,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                                 filepath = docSplit[1]
                                 filepath = if("primary".equals(docSplit[0])) {
                                     storages[0].absolutePath.split("Android/")[0] + filepath
-                                } else if("raw".equals(docSplit[0])){
+                                } else if("raw" == docSplit[0]){
                                     filepath
                                 } else{
                                     storages[1].absolutePath.split("Android/")[0] + filepath
@@ -219,7 +220,8 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                 snackbar.dismiss()
                 indexbuilder_button.text = getString(R.string.scan)
             }
-            snackbar.setActionTextColor(Color.parseColor("#fe9a00"))
+            snackbar.setActionTextColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
+            snackbar.view.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorBackgroundLight))
             snackbar.show()
 
         }

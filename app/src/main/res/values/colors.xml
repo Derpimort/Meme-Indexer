@@ -18,4 +18,10 @@
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
 
+
+    <color name="colorBottomBar">@color/colorBackground</color>
+    <color name="colorTopBar">@color/colorPrimary50</color>
+    <color name="colorBigButton">@color/colorAccent</color>
+    <color name="colorSearch">@color/white</color>
+
 </resources>
