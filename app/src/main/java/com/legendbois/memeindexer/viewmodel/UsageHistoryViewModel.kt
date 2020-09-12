@@ -26,6 +26,10 @@ class UsageHistoryViewModel(application: Application): AndroidViewModel(applicat
         return database.getRowCount()
     }
 
+    suspend fun getAll(): List<UsageHistory>{
+        return database.getAll()
+    }
+
     suspend fun insert(action: UsageHistory) {
         withContext(Dispatchers.IO) {
             database.insert(action.apply {

@@ -9,7 +9,7 @@ interface UsageHistoryDao {
     @Query("SELECT * from usage_history_table where path_or_query LIKE :pathOrQuery")
     fun findPathOrQuery(pathOrQuery: String): List<UsageHistory>
 
-    @Query("SELECT * from usage_history_table where actionId=2")
+    @Query("SELECT * from usage_history_table where actionId=2 ORDER BY extra_info DESC")
     fun findSharedMemes(): LiveData<List<UsageHistory>>
 
     @Query("SELECT * FROM usage_history_table")

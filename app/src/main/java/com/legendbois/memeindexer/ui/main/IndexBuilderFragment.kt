@@ -98,7 +98,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                             }
                             toggleButtonState(true, totalFiles = totalFiles)
 
-                            writeToHistory(parentUri.path, progressNumber.toString())
+                            writeToHistory(parentUri.path, progressNumber)
                         }
                     }
                 }
@@ -243,7 +243,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         indexbuilder_button.text="$progressNumber"
     }
 
-    private fun writeToHistory(path: String?, extraInfo: String){
+    private fun writeToHistory(path: String?, extraInfo: Int){
         if (!path.isNullOrEmpty()){
             lifecycleScope.launch {
 

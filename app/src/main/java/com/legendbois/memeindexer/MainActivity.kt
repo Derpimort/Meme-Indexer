@@ -13,12 +13,15 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.tabs.TabLayout
 import com.legendbois.memeindexer.database.UsageHistoryDatabase
+import com.legendbois.memeindexer.ui.main.SearchMemesFragment
 import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         val sdkVersion = Build.VERSION.SDK_INT
+        val TAG = "MainActivity"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +72,9 @@ class MainActivity : AppCompatActivity() {
 
         // uncomment to nuke database
         /*val db = MemeFilesDatabase.getDatabase(applicationContext)
+        db.clearAllTables()
+
+        val db = UsageHistoryDatabase.getDatabase(applicationContext)
         db.clearAllTables()*/
 
         // uncomment to log total number of actions in db
@@ -77,6 +84,15 @@ class MainActivity : AppCompatActivity() {
         // uncomment to log total number of memes in db
         /*val db = MemeFilesDatabase.getDatabase(applicationContext)
         Log.d("MainActivity", "Memes in db: ${db.memeFileDao.getRowCount()}")*/
+
+        lifecycleScope.launch {
+            val db = UsageHistoryDatabase.getDatabase(applicationContext).usageHistoryDao
+            for (usage in db.getAll()){
+                Log.d(TAG, "UsageHistory: ${usage.id}, ${usage.pathOrQuery}," +
+                        "${usage.actionId}, ${usage.extraInfo}," +
+                        "${usage.createdAt}, ${usage.modifiedAt}")
+            }
+        }
 
     }
 

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,6 +63,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         recyclerView.layoutManager = GridLayoutManager(context, 2)
         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
         usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
+
         search.isFocusable=false
         search.isIconifiedByDefault = false
         search.clearFocus()
@@ -95,12 +97,30 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         if (context != null){
             MemesHelper.shareImage(context!!.applicationContext, filepath)
             lifecycleScope.launch {
-                usageHistoryViewModel.insert(
-                    UsageHistory(
-                        pathOrQuery = filepath,
-                        actionId = 2
+                val duplicates = usageHistoryViewModel.searchPathOrQuery(filepath)
+                if (duplicates.isEmpty()) {
+                    usageHistoryViewModel.insert(
+                        UsageHistory(
+                            pathOrQuery = filepath,
+                            actionId = 2,
+                            extraInfo = 1
+                        )
                     )
-                )
+                }
+                else{
+                    for (duplicate in duplicates){
+                        usageHistoryViewModel.update(
+                            UsageHistory(
+                                id = duplicate.id,
+                                pathOrQuery = duplicate.pathOrQuery,
+                                actionId = duplicate.actionId,
+                                extraInfo = duplicate.extraInfo!! + 1
+                            )
+                        )
+                    }
+
+                }
+
             }
         }
 
