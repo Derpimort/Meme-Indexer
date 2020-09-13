@@ -48,7 +48,7 @@ class UsageHistoryViewModel(application: Application): AndroidViewModel(applicat
                         1 or 2 -> duplicate.extraInfo = duplicate.extraInfo?.plus(1)
                         else -> null
                     }
-                    database.update(duplicate)
+                    update(duplicate)
                 }
             }
         }
