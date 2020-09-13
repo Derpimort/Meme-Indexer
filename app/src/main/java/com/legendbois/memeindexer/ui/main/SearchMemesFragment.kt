@@ -19,7 +19,7 @@ import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
 import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
-import com.legendbois.memeindexer.viewmodel.MemesHelper
+import com.legendbois.memeindexer.MemesHelper
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 import kotlinx.coroutines.launch
 import java.util.*

@@ -3,19 +3,18 @@ package com.legendbois.memeindexer.dialogs
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
-import com.legendbois.memeindexer.ui.main.PlaceholderFragment
+import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
+import kotlinx.coroutines.launch
 
 class MemeInfoDialogFragment : DialogFragment() {
 
@@ -62,6 +61,10 @@ class MemeInfoDialogFragment : DialogFragment() {
                 val ocrtextView = layout.findViewById<TextView>(R.id.memeinfo_ocrtext)
                 ocrtextView.text = ocrtext
                 ocrtextView.movementMethod = ScrollingMovementMethod()
+                ocrtextView.setOnClickListener {
+                    ocrtextEditDialog(it.context, rowid, ocrtext)
+                }
+
                 layout.findViewById<ImageButton>(R.id.memeinfo_title_close).setOnClickListener {
                     dismiss()
                 }
@@ -83,5 +86,39 @@ class MemeInfoDialogFragment : DialogFragment() {
             // Create the AlertDialog object and return it
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+
+    // TODO: Base dialog for use in both feedback and this, reduce code repetition
+    fun ocrtextEditDialog(context: Context, rowId: Int, ocrtext: String?){
+        val alertDialog = AlertDialog.Builder(context, R.style.AlertDialogBase)
+        val dialogView = layoutInflater.inflate(R.layout.popup_feedback, null)
+        alertDialog.setTitle("Update OCRed Text")
+        // Created a layout just in case
+        alertDialog.setView(dialogView)
+        val feedbackText = dialogView.findViewById<EditText>(R.id.feedback_text)
+        feedbackText.hint = "OCR text"
+        feedbackText.setText(ocrtext)
+
+        alertDialog.setNegativeButton(
+            "Cancel"
+        ) { dialog, which ->
+            dialog.dismiss()
+        }
+
+        alertDialog.setPositiveButton(
+            "Update"
+        ){ dialog, i ->
+
+            if(!feedbackText.text.equals(ocrtext)){
+                val memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
+                lifecycleScope.launch {
+                    memeFileViewModel.searchAndUpdate(rowId, feedbackText.text.toString())
+                }
+            }
+        }
+        alertDialog.create().show()
+
+
     }
 }

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.adapters.HistoryRV
-import com.legendbois.memeindexer.viewmodel.MemesHelper
+import com.legendbois.memeindexer.MemesHelper
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 
 class HistoryFragment: Fragment(){
