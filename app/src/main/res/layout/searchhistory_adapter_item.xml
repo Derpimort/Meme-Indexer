@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/searchhistory_cardview"
+    android:layout_width="wrap_content"
+    android:layout_height="25dp"
+    android:layout_margin="2dp"
+    app:cardBackgroundColor="@color/colorBackgroundLight"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp"
+    app:contentPadding="3dp"
+    app:strokeColor="@color/colorAccent"
+    app:strokeWidth="1dp"
+    android:minWidth="50dp">
+
+    <TextView
+        android:id="@+id/searchhistory_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/placeholder"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="14sp" />
+</androidx.cardview.widget.CardView>

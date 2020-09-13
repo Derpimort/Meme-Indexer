@@ -85,14 +85,15 @@ class MainActivity : AppCompatActivity() {
         /*val db = MemeFilesDatabase.getDatabase(applicationContext)
         Log.d("MainActivity", "Memes in db: ${db.memeFileDao.getRowCount()}")*/
 
-        lifecycleScope.launch {
+        // uncomment to log all usagehistory
+        /*lifecycleScope.launch {
             val db = UsageHistoryDatabase.getDatabase(applicationContext).usageHistoryDao
             for (usage in db.getAll()){
                 Log.d(TAG, "UsageHistory: ${usage.id}, ${usage.pathOrQuery}," +
                         "${usage.actionId}, ${usage.extraInfo}," +
                         "${usage.createdAt}, ${usage.modifiedAt}")
             }
-        }
+        }*/
 
     }
 

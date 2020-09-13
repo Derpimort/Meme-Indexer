@@ -1,23 +1,20 @@
-package com.legendbois.memeindexer.ui.main
+package com.legendbois.memeindexer.adapters
 
 import android.content.Context
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.legendbois.memeindexer.R
-import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
 import com.squareup.picasso.Picasso
 import java.io.File
 
-class HistoryRVAdapter internal constructor(
+class HistoryRV internal constructor(
     context: Context,
     private val listener: (UsageHistory, Int) -> Unit
-): RecyclerView.Adapter<HistoryRVAdapter.HistoryRViewHolder>(){
+): RecyclerView.Adapter<HistoryRV.HistoryRViewHolder>(){
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var actions = emptyList<UsageHistory>()

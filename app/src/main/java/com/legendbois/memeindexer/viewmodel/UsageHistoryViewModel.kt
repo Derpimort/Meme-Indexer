@@ -16,7 +16,10 @@ class UsageHistoryViewModel(application: Application): AndroidViewModel(applicat
 //    }
 //
     fun getSharedMemes(): LiveData<List<UsageHistory>>{
-        return database.findSharedMemes()
+        return database.getSharedMemes()
+    }
+    fun getSearchedTerms(): LiveData<List<UsageHistory>>{
+        return database.getSearchedTerms()
     }
     fun searchPathOrQuery(pathOrQuery: String):List<UsageHistory>{
         return database.findPathOrQuery(pathOrQuery)
