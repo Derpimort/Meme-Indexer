@@ -62,14 +62,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
             memeFileViewModel.searchMemes("%${query.toLowerCase(Locale.ROOT)}%").observe(viewLifecycleOwner, Observer { memes ->
                 adapter.setMemes(memes)
             })
-            lifecycleScope.launch {
-                usageHistoryViewModel.insert(
-                    UsageHistory(
-                        pathOrQuery = query,
-                        actionId = 1
-                    )
-                )
-            }
+            addUsageHistory(query, 1, 1)
         }
         return true
     }
@@ -112,35 +105,22 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         })
     }
 
+    fun addUsageHistory(queryOrPath: String, actionId: Int, extraInfo: Int?){
+        lifecycleScope.launch {
+            usageHistoryViewModel.insert(
+                UsageHistory(
+                    pathOrQuery = queryOrPath,
+                    actionId = actionId,
+                    extraInfo = extraInfo
+                )
+            )
+        }
+    }
+
     fun shareImage(filepath: String){
         if (context != null){
             MemesHelper.shareImage(context!!.applicationContext, filepath)
-            lifecycleScope.launch {
-                val duplicates = usageHistoryViewModel.searchPathOrQuery(filepath)
-                if (duplicates.isEmpty()) {
-                    usageHistoryViewModel.insert(
-                        UsageHistory(
-                            pathOrQuery = filepath,
-                            actionId = 2,
-                            extraInfo = 1
-                        )
-                    )
-                }
-                else{
-                    for (duplicate in duplicates){
-                        usageHistoryViewModel.update(
-                            UsageHistory(
-                                id = duplicate.id,
-                                pathOrQuery = duplicate.pathOrQuery,
-                                actionId = duplicate.actionId,
-                                extraInfo = duplicate.extraInfo!! + 1
-                            )
-                        )
-                    }
-
-                }
-
-            }
+            addUsageHistory(filepath, 2, 1)
         }
 
     }
