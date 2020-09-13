@@ -23,6 +23,9 @@ interface MemeFileDao {
     @Query("Select rowid, filepath, filename from meme_file_table where filepath LIKE :searchpath")
     fun findPath(searchpath: String): List<MemeFile>
 
+    @Query("Select rowid, filepath, filename from meme_file_table where rowid = :rowId")
+    fun findByRow(rowId: Int): List<MemeFile>
+
     @Query("SELECT COUNT(rowid) FROM meme_file_table")
     fun getRowCount(): Int
 

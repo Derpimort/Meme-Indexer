@@ -25,6 +25,19 @@ class MemeFileViewModel(application: Application): AndroidViewModel(application)
         return database.getRowCount()
     }
 
+    suspend fun searchAndUpdate(rowId: Int, ocrtext: String){
+        withContext(Dispatchers.IO) {
+            val searched = database.findByRow(rowId)
+            for (meme in searched) {
+                database.update(
+                    meme.apply {
+                        this.ocrtext = ocrtext
+                    }
+                )
+            }
+        }
+    }
+
     suspend fun insert(meme: MemeFile) {
         withContext(Dispatchers.IO) {
             database.insert(meme)

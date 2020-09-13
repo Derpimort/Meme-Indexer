@@ -1,7 +1,6 @@
-package com.legendbois.memeindexer.ui.main
+package com.legendbois.memeindexer.adapters
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +13,10 @@ import com.legendbois.memeindexer.database.MemeFile
 import com.squareup.picasso.Picasso
 import java.io.File
 
-class SearchRVAdapter internal constructor(
+class SearchRV internal constructor(
     context: Context,
     private val listener: (MemeFile, Int) -> Unit
-): RecyclerView.Adapter<SearchRVAdapter.SearchRViewHolder>(){
+): RecyclerView.Adapter<SearchRV.SearchRViewHolder>(){
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var memes = emptyList<MemeFile>()

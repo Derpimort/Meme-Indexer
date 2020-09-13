@@ -8,5 +8,5 @@ data class MemeFile (
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "rowid") var rowid: Int = 0,
     @ColumnInfo(name = "filepath") val filepath: String,
     @ColumnInfo(name = "filename") val filename: String,
-    @ColumnInfo(name = "ocrtext") val ocrtext: String? = ""
+    @ColumnInfo(name = "ocrtext") var ocrtext: String? = ""
     )

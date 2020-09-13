@@ -16,7 +16,10 @@ class UsageHistoryViewModel(application: Application): AndroidViewModel(applicat
 //    }
 //
     fun getSharedMemes(): LiveData<List<UsageHistory>>{
-        return database.findSharedMemes()
+        return database.getSharedMemes()
+    }
+    fun getSearchedTerms(): LiveData<List<UsageHistory>>{
+        return database.getSearchedTerms()
     }
     fun searchPathOrQuery(pathOrQuery: String):List<UsageHistory>{
         return database.findPathOrQuery(pathOrQuery)
@@ -32,10 +35,22 @@ class UsageHistoryViewModel(application: Application): AndroidViewModel(applicat
 
     suspend fun insert(action: UsageHistory) {
         withContext(Dispatchers.IO) {
-            database.insert(action.apply {
-                createdAt = System.currentTimeMillis()
-                modifiedAt = System.currentTimeMillis()
-            })
+            val duplicates = database.findPathOrQuery(action.pathOrQuery)
+            if(duplicates.isEmpty()){
+                database.insert(action.apply {
+                    createdAt = System.currentTimeMillis()
+                    modifiedAt = System.currentTimeMillis()
+                })
+            }
+            else{
+                for(duplicate in duplicates){
+                    when(duplicate.actionId){
+                        1 or 2 -> duplicate.extraInfo = duplicate.extraInfo?.plus(1)
+                        else -> null
+                    }
+                    update(duplicate)
+                }
+            }
         }
     }
 

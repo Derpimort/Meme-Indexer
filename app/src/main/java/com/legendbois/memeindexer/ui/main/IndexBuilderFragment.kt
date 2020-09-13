@@ -246,26 +246,14 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private fun writeToHistory(path: String?, extraInfo: Int){
         if (!path.isNullOrEmpty()){
             lifecycleScope.launch {
-
                 whenStarted {
-                    val duplicates = usageHistoryViewModel.searchPathOrQuery(path)
-                    if (duplicates.isEmpty()) {
-                        usageHistoryViewModel.insert(
-                            UsageHistory(
-                                actionId = 0,
-                                pathOrQuery = path,
-                                extraInfo = extraInfo
-                            )
+                    usageHistoryViewModel.insert(
+                        UsageHistory(
+                            actionId = 0,
+                            pathOrQuery = path,
+                            extraInfo = extraInfo
                         )
-                    }
-                    else{
-                        for (duplicate in duplicates){
-                            usageHistoryViewModel.update(
-                                duplicate
-                            )
-                        }
-                        
-                    }
+                    )
                 }
             }
         }

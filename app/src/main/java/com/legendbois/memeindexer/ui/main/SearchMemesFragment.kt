@@ -1,29 +1,25 @@
 package com.legendbois.memeindexer.ui.main
 
-import android.app.AlertDialog
-import android.content.Context
-import android.content.Intent
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.legendbois.memeindexer.R
+import com.legendbois.memeindexer.adapters.SearchHistoryRV
+import com.legendbois.memeindexer.adapters.SearchRV
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
 import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
-import com.legendbois.memeindexer.viewmodel.MemesHelper
+import com.legendbois.memeindexer.MemesHelper
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 import kotlinx.coroutines.launch
 import java.util.*
@@ -32,7 +28,7 @@ import java.util.*
 class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     private lateinit var memeFileViewModel: MemeFileViewModel
     private lateinit var usageHistoryViewModel: UsageHistoryViewModel
-    private lateinit var adapter: SearchRVAdapter
+    private lateinit var adapter: SearchRV
     companion object{
         const val TAG = "SearchMemesFragment"
 
@@ -48,22 +44,11 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     ): View? {
         val root = inflater.inflate(R.layout.searchmemes_frag, container, false)
         val search: SearchView = root.findViewById(R.id.searchmemes_search)
-        val application = requireNotNull(this.activity).application
-        val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_recyclerview)
 
-        //Thanks to https://antonioleiva.com/recyclerview-listener/
-        adapter = SearchRVAdapter(application.applicationContext){ item, share ->
-            when(share){
-                0-> imagePopup(item.filepath)
-                1-> shareImage(item.filepath)
-                else -> infoPopup(item)
-            }
-        }
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(context, 2)
+        setupSearchRV(root)
         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
         usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
-
+        setupSearchHistoryRV(root)
         search.isFocusable=false
         search.isIconifiedByDefault = false
         search.clearFocus()
@@ -74,17 +59,10 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) {
             view!!.findViewById<SearchView>(R.id.searchmemes_search).clearFocus()
-            memeFileViewModel.searchMemes("%${query.toLowerCase(Locale.ROOT)}%").observe(this, Observer { memes ->
+            memeFileViewModel.searchMemes("%${query.toLowerCase(Locale.ROOT)}%").observe(viewLifecycleOwner, Observer { memes ->
                 adapter.setMemes(memes)
             })
-            lifecycleScope.launch {
-                usageHistoryViewModel.insert(
-                    UsageHistory(
-                        pathOrQuery = query,
-                        actionId = 1
-                    )
-                )
-            }
+            addUsageHistory(query, 1, 1)
         }
         return true
     }
@@ -93,35 +71,56 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         return false
     }
 
+    fun setupSearchRV(root: View){
+        val application = requireNotNull(this.activity).application
+        val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_recyclerview)
+
+        //Thanks to https://antonioleiva.com/recyclerview-listener/
+        adapter =
+            SearchRV(application.applicationContext) { item, share ->
+                when (share) {
+                    0 -> imagePopup(item.filepath)
+                    1 -> shareImage(item.filepath)
+                    else -> infoPopup(item)
+                }
+            }
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
+    }
+
+    fun setupSearchHistoryRV(root: View){
+        val application = requireNotNull(this.activity).application
+        val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_historyrv)
+
+        //Thanks to https://antonioleiva.com/recyclerview-listener/
+        val shAdapter =
+            SearchHistoryRV(application.applicationContext) { item ->
+                root.findViewById<SearchView>(R.id.searchmemes_search).setQuery(item.pathOrQuery, true)
+                // onQueryTextSubmit(item.pathOrQuery)
+            }
+        recyclerView.adapter = shAdapter
+        recyclerView.layoutManager = LinearLayoutManager(application, LinearLayoutManager.HORIZONTAL, false)
+        usageHistoryViewModel.getSearchedTerms().observe(viewLifecycleOwner, Observer { actions ->
+            shAdapter.setActions(actions)
+        })
+    }
+
+    fun addUsageHistory(queryOrPath: String, actionId: Int, extraInfo: Int?){
+        lifecycleScope.launch {
+            usageHistoryViewModel.insert(
+                UsageHistory(
+                    pathOrQuery = queryOrPath,
+                    actionId = actionId,
+                    extraInfo = extraInfo
+                )
+            )
+        }
+    }
+
     fun shareImage(filepath: String){
         if (context != null){
             MemesHelper.shareImage(context!!.applicationContext, filepath)
-            lifecycleScope.launch {
-                val duplicates = usageHistoryViewModel.searchPathOrQuery(filepath)
-                if (duplicates.isEmpty()) {
-                    usageHistoryViewModel.insert(
-                        UsageHistory(
-                            pathOrQuery = filepath,
-                            actionId = 2,
-                            extraInfo = 1
-                        )
-                    )
-                }
-                else{
-                    for (duplicate in duplicates){
-                        usageHistoryViewModel.update(
-                            UsageHistory(
-                                id = duplicate.id,
-                                pathOrQuery = duplicate.pathOrQuery,
-                                actionId = duplicate.actionId,
-                                extraInfo = duplicate.extraInfo!! + 1
-                            )
-                        )
-                    }
-
-                }
-
-            }
+            addUsageHistory(filepath, 2, 1)
         }
 
     }
