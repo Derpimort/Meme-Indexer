@@ -6,29 +6,41 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageView
 import androidx.core.content.FileProvider
 import java.io.File
 
 object MemesHelper {
-    val legacyUriSdk = Build.VERSION_CODES.N_MR1
-    fun shareImage(context: Context, filepath: String){
+    const val TAG = "MemesHelper"
+    const val legacyUriSdk = Build.VERSION_CODES.M
+    fun shareOrViewImage(context: Context, filepath: String, intentShare: Boolean = true){
         val memeUri: Uri
         if(MainActivity.sdkVersion > legacyUriSdk){
             val memeFile = File(filepath)
             memeUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", memeFile)
+            // Log.d(TAG, "Using Fileprovider")
         }
         else{
             memeUri = Uri.parse("file://$filepath")
         }
-
+        var intentTitle = "Share Meme"
         val shareIntent = Intent()
-        shareIntent.action = Intent.ACTION_SEND
-        shareIntent.putExtra(Intent.EXTRA_STREAM, memeUri)
-        shareIntent.type = "image/*"
+        if (intentShare){
+            shareIntent.action = Intent.ACTION_SEND
+            shareIntent.putExtra(Intent.EXTRA_STREAM, memeUri)
+            shareIntent.type = "image/*"
+        }
+        else{
+            shareIntent.action = Intent.ACTION_VIEW
+            shareIntent.data = memeUri
+            shareIntent.setDataAndType(memeUri, "image/*")
+            intentTitle = "View Meme"
+        }
+
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        context.startActivity(Intent.createChooser(shareIntent, "Share Meme"))
+        context.startActivity(Intent.createChooser(shareIntent, intentTitle))
     }
 
     fun imagePopup(context: Context, filepath: String){
@@ -42,7 +54,7 @@ object MemesHelper {
         imageDialog.setPositiveButton(
             "Share"
         ){ dialog, i ->
-            shareImage(context, filepath)
+            shareOrViewImage(context, filepath)
         }
 
         imageDialog.setNegativeButton(

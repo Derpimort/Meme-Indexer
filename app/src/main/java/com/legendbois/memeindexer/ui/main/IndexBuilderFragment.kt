@@ -4,20 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
-import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -25,11 +20,9 @@ import androidx.lifecycle.whenStarted
 import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
-import com.legendbois.memeindexer.MainActivity
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
-import com.legendbois.memeindexer.database.UsageHistoryDatabase
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 import kotlinx.android.synthetic.main.indexbuilder_frag.*
@@ -37,7 +30,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.Closeable
 import java.io.File
-import java.net.URI
 import java.util.*
 
 // TODO: Foreground service for uninterrupted large scans
@@ -171,7 +163,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                                 filepath = file.path.split(":")[1]
                             }
 
-                            Log.d(TAG, "FilePath $filepath")
+                            // Log.d(TAG, "FilePath $filepath")
                             val duplicates = memeFileViewModel.searchPath(filepath)
                             if (duplicates.isEmpty() || updateDuplicates) {
                                 //Log.d(TAG, "Empty $filepath $duplicates")

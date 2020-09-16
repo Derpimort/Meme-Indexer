@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <files-path name="internal_files" path="/" />
-    <external-path name="external_files" path="."/>
+    <external-path name="external" path="/"/>
+    <external-files-path name="external_files" path="." />
+    <cache-path name="cache" path="." />
+    <external-cache-path name="external_cache" path="." />
+    <!-- Bad but can't show memes in external sd card without this -->
+    <root-path name="sdcard1" path="."/>
 </paths>

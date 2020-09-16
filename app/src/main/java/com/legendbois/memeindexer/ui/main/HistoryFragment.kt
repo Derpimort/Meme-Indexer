@@ -53,7 +53,7 @@ class HistoryFragment: Fragment(){
 
     fun shareImage(filepath: String){
         if (context != null){
-            MemesHelper.shareImage(context!!.applicationContext, filepath)
+            MemesHelper.shareOrViewImage(context!!.applicationContext, filepath)
         }
     }
 

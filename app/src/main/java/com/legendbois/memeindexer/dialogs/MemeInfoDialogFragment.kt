@@ -11,6 +11,7 @@ import android.widget.*
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.legendbois.memeindexer.MemesHelper
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
@@ -51,9 +52,9 @@ class MemeInfoDialogFragment : DialogFragment() {
             val filename = arguments!!.getString(ARG_NAME)
             val filepath = arguments!!.getString(ARG_PATH)
             val ocrtext = arguments!!.getString(ARG_OCRTEXT)
-            return activity?.let {
-                val builder = AlertDialog.Builder(it, R.style.AlertDialogBase)
-                val inflater = it.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            return activity?.let { activity ->
+                val builder = AlertDialog.Builder(activity, R.style.AlertDialogBase)
+                val inflater = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val layout = inflater.inflate(R.layout.popup_memeinfo, null)
                 layout.findViewById<ImageView>(R.id.memeinfo_title_image).setImageBitmap(BitmapFactory.decodeFile(filepath))
                 layout.findViewById<TextView>(R.id.memeinfo_title_filename).text = filename
@@ -67,6 +68,12 @@ class MemeInfoDialogFragment : DialogFragment() {
 
                 layout.findViewById<ImageButton>(R.id.memeinfo_title_close).setOnClickListener {
                     dismiss()
+                }
+                layout.findViewById<TextView>(R.id.memeinfo_filepath).setOnClickListener {
+                    if (filepath != null){
+                        MemesHelper.shareOrViewImage(it.context, filepath, false)
+                    }
+
                 }
                 builder.setView(layout)
 
