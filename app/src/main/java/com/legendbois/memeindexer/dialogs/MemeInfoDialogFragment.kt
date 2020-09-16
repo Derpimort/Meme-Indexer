@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.media.Image
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
@@ -62,10 +63,9 @@ class MemeInfoDialogFragment : DialogFragment() {
                 val ocrtextView = layout.findViewById<TextView>(R.id.memeinfo_ocrtext)
                 ocrtextView.text = ocrtext
                 ocrtextView.movementMethod = ScrollingMovementMethod()
-                ocrtextView.setOnClickListener {
+                layout.findViewById<ImageButton>(R.id.memeinfo_ocrtext_edit).setOnClickListener {
                     ocrtextEditDialog(it.context, rowid, ocrtext)
                 }
-
                 layout.findViewById<ImageButton>(R.id.memeinfo_title_close).setOnClickListener {
                     dismiss()
                 }

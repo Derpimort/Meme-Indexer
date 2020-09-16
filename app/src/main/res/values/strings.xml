@@ -20,4 +20,6 @@
     <string name="memeinfo_ocrtext">Text:</string>
     <string name="scan">Scan</string>
     <string name="path">Path</string>
+    <string name="close_info_dialog">Close info dialog</string>
+    <string name="edit_ocr_text">Edit OCR text</string>
 </resources>
