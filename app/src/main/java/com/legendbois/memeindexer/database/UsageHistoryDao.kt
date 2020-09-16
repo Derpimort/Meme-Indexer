@@ -12,7 +12,7 @@ interface UsageHistoryDao {
     @Query("SELECT * from usage_history_table where actionId=2 ORDER BY extra_info DESC LIMIT 50")
     fun getSharedMemes(): LiveData<List<UsageHistory>>
 
-    @Query("SELECT * FROM usage_history_table where actionId=1 ORDER BY modified_at, extra_info DESC LIMIT 50")
+    @Query("SELECT * FROM usage_history_table where actionId=1 ORDER BY modified_at DESC LIMIT 50")
     fun getSearchedTerms(): LiveData<List<UsageHistory>>
 
     @Query("SELECT * FROM usage_history_table")
