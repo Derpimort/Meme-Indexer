@@ -117,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:background="@color/transparent"
-                android:src="@drawable/ic_edit_review_24px"
+                android:src="@drawable/ic_edit_review_32px"
                 android:contentDescription="@string/edit_ocr_text" />
         </LinearLayout>
 
