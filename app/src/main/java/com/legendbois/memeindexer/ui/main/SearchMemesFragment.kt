@@ -1,6 +1,7 @@
 package com.legendbois.memeindexer.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.legendbois.memeindexer.MemesHelper
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.adapters.SearchHistoryRV
 import com.legendbois.memeindexer.adapters.SearchRV
@@ -19,8 +21,9 @@ import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
 import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
-import com.legendbois.memeindexer.MemesHelper
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.searchmemes_frag.*
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -86,6 +89,23 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
             }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context, 2)
+        // TODO: Hide stuff on scroll
+        // Cant use nestedscrollview, laggy af
+
+        // Start testing, this is glitchy and shit
+        recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val scrollOffset = recyclerView.computeVerticalScrollOffset()
+                //Log.d(TAG, "Scrolled: $scrollOffset")
+                if(scrollOffset > 0){
+                    searchmemes_historyrv.visibility = View.GONE
+                }
+                else if(scrollOffset == 0){
+                    searchmemes_historyrv.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     fun setupSearchHistoryRV(root: View){
