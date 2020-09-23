@@ -75,6 +75,20 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         return false
     }
 
+    fun toggleScrolled(){
+        if(adapter.itemCount !=0) {
+            if (positiveScrolled) {
+                searchmemes_collapsible.visibility = View.VISIBLE
+                activity?.tabs?.visibility = View.VISIBLE
+                positiveScrolled = false
+            } else {
+                searchmemes_collapsible.visibility = View.GONE
+                activity?.tabs?.visibility = View.GONE
+                positiveScrolled = true
+            }
+        }
+    }
+
     fun setupSearchRV(root: View){
         val application = requireNotNull(this.activity).application
         val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_recyclerview)
@@ -92,6 +106,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 
         // Fixed the glitches...TTBOMK,  but now it fuks up the rounded corners of the layout.
+        // Kinda fixed the corners with constraint offset, workaround till the below is achieved.
         // TODO: Figure out a way to add the rounded corners to foreground while staying transparent
         recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -99,8 +114,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
                 // Can combine into one with && short circuiting but..... this looks cleaner
                 if(newState == RecyclerView.SCROLL_STATE_IDLE){
                     if(recyclerView.computeVerticalScrollOffset() == 0){
-                        searchmemes_collapsible.visibility = View.VISIBLE
-                        positiveScrolled = false
+                        toggleScrolled()
                     }
                 }
             }
@@ -109,8 +123,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
                 //Log.d(TAG, "Scrolled: $scrollOffset")
                 if(!positiveScrolled){
                     if(recyclerView.computeVerticalScrollOffset() > 0){
-                        searchmemes_collapsible.visibility = View.GONE
-                        positiveScrolled = true
+                        toggleScrolled()
                     }
                 }
             }

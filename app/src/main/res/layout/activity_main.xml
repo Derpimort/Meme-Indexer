@@ -41,26 +41,33 @@
 
     </androidx.viewpager.widget.ViewPager>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/colorBottomBar"
-        android:elevation="3dp">
-
-        <com.google.android.material.tabs.TabItem
+        android:animateLayoutChanges="true">
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:icon="@drawable/ic_image_search_24px"
-            android:tint="@color/colorAccent" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_image_search_24px"
-            android:tint="@color/colorAccent" />
-    </com.google.android.material.tabs.TabLayout>
+            android:layout_gravity="bottom"
+            android:background="@color/colorBottomBar"
+            android:elevation="3dp">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:icon="@drawable/ic_image_search_24px"
+                android:tint="@color/colorAccent" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_image_search_24px"
+                android:tint="@color/colorAccent" />
+        </com.google.android.material.tabs.TabLayout>
+    </LinearLayout>
+
 
     <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
