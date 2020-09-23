@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.widget.EditText
@@ -52,7 +53,9 @@ class MainActivity : AppCompatActivity() {
                 updateToolbarText(TAB_TITLES[pos])
             }
 
-            override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {}
+            override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {
+                tabs.visibility = View.VISIBLE
+            }
             override fun onPageScrollStateChanged(arg0: Int) {}
         })
         tabs = findViewById(R.id.tabs)

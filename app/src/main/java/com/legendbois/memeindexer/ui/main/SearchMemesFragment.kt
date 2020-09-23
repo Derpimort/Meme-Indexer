@@ -75,9 +75,9 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         return false
     }
 
-    fun toggleScrolled(){
+    fun toggleScrolled(boolean: Boolean){
         if(adapter.itemCount !=0) {
-            if (positiveScrolled) {
+            if (boolean) {
                 searchmemes_collapsible.visibility = View.VISIBLE
                 activity?.tabs?.visibility = View.VISIBLE
                 positiveScrolled = false
@@ -114,16 +114,17 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
                 // Can combine into one with && short circuiting but..... this looks cleaner
                 if(newState == RecyclerView.SCROLL_STATE_IDLE){
                     if(recyclerView.computeVerticalScrollOffset() == 0){
-                        toggleScrolled()
+                        toggleScrolled(true)
                     }
                 }
             }
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 //Log.d(TAG, "Scrolled: $scrollOffset")
-                if(!positiveScrolled){
+                // TODO: positiveScroll needed?
+                if(!positiveScrolled || activity?.tabs?.visibility == View.VISIBLE){
                     if(recyclerView.computeVerticalScrollOffset() > 0){
-                        toggleScrolled()
+                        toggleScrolled(false)
                     }
                 }
             }
