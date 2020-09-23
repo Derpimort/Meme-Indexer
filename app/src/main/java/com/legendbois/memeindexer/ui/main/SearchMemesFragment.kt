@@ -91,22 +91,27 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 
-        // sometimes glitchy... works good,  but now it fuks up the rounded corners of the layout.
+        // Fixed the glitches...TTBOMK,  but now it fuks up the rounded corners of the layout.
         // TODO: Figure out a way to add the rounded corners to foreground while staying transparent
         recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                // Can combine into one with && short circuiting but..... this looks cleaner
+                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                    if(recyclerView.computeVerticalScrollOffset() == 0){
+                        searchmemes_collapsible.visibility = View.VISIBLE
+                        positiveScrolled = false
+                    }
+                }
+            }
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val scrollOffset = recyclerView.computeVerticalScrollOffset()
                 //Log.d(TAG, "Scrolled: $scrollOffset")
-                if(!positiveScrolled && scrollOffset > 0){
-                    //searchmemes_collapsible.animate().translationY(searchmemes_collapsible.height*-1f)
-                    searchmemes_collapsible.visibility = View.GONE
-                    positiveScrolled = true
-                }
-                else if(scrollOffset == 0){
-                    //searchmemes_collapsible.animate().translationY(0f)
-                    searchmemes_collapsible.visibility = View.VISIBLE
-                    positiveScrolled = false
+                if(!positiveScrolled){
+                    if(recyclerView.computeVerticalScrollOffset() > 0){
+                        searchmemes_collapsible.visibility = View.GONE
+                        positiveScrolled = true
+                    }
                 }
             }
         })
