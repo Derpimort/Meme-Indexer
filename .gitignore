@@ -58,3 +58,4 @@ bitrise.yml
 
 # NDK files
 **/.cxx
+/app/release/
