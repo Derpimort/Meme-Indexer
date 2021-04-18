@@ -1,6 +1,7 @@
 package com.legendbois.memeindexer.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.legendbois.memeindexer.MemesHelper
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.adapters.SearchHistoryRV
 import com.legendbois.memeindexer.adapters.SearchRV
@@ -19,8 +21,9 @@ import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
 import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
-import com.legendbois.memeindexer.MemesHelper
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.searchmemes_frag.*
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -29,6 +32,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     private lateinit var memeFileViewModel: MemeFileViewModel
     private lateinit var usageHistoryViewModel: UsageHistoryViewModel
     private lateinit var adapter: SearchRV
+    private var positiveScrolled: Boolean = false
     companion object{
         const val TAG = "SearchMemesFragment"
 
@@ -71,6 +75,20 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         return false
     }
 
+    fun toggleScrolled(boolean: Boolean){
+        if(adapter.itemCount !=0) {
+            if (boolean) {
+                searchmemes_collapsible.visibility = View.VISIBLE
+                activity?.tabs?.visibility = View.VISIBLE
+                positiveScrolled = false
+            } else {
+                searchmemes_collapsible.visibility = View.GONE
+                activity?.tabs?.visibility = View.GONE
+                positiveScrolled = true
+            }
+        }
+    }
+
     fun setupSearchRV(root: View){
         val application = requireNotNull(this.activity).application
         val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_recyclerview)
@@ -86,6 +104,31 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
             }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context, 2)
+
+        // Fixed the glitches...TTBOMK,  but now it fuks up the rounded corners of the layout.
+        // Kinda fixed the corners with constraint offset, workaround till the below is achieved.
+        // TODO: Figure out a way to add the rounded corners to foreground while staying transparent
+        recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                // Can combine into one with && short circuiting but..... this looks cleaner
+                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                    if(recyclerView.computeVerticalScrollOffset() == 0){
+                        toggleScrolled(true)
+                    }
+                }
+            }
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                //Log.d(TAG, "Scrolled: $scrollOffset")
+                // TODO: positiveScroll needed?
+                if(!positiveScrolled || activity?.tabs?.visibility == View.VISIBLE){
+                    if(recyclerView.computeVerticalScrollOffset() > 0){
+                        toggleScrolled(false)
+                    }
+                }
+            }
+        })
     }
 
     fun setupSearchHistoryRV(root: View){
