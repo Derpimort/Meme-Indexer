@@ -30,6 +30,65 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:background="@drawable/rounded_layout"
         android:animateLayoutChanges="true">
+
+        <TextView
+            android:id="@+id/aboutus_info_body_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/aboutus_info_body"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/aboutus_info_us_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/aboutus_info_us_title"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutus_info_logo_container" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/aboutus_info_logo_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:cardCornerRadius="64dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutus_info_body_text">
+
+            <ImageView
+                android:id="@+id/aboutus_info_logo"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                tools:srcCompat="@tools:sample/avatars"
+                android:contentDescription="@string/org_logo" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/aboutus_info_us_body_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/aboutus_info_us_body"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutus_info_us_title_text" />
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

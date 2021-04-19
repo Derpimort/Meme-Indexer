@@ -23,4 +23,8 @@
     <string name="close_info_dialog">Close info dialog</string>
     <string name="edit_ocr_text">Edit OCR text</string>
     <string name="about_us">About Us</string>
+    <string name="aboutus_info_body">We searched for a solution to that allowed us to find and share a meme in that tiny \"timing\" window. We didn\'t find any that did that specifically so....</string>
+    <string name="aboutus_info_us_title">Spacebar, Inc.</string>
+    <string name="aboutus_info_us_body">We materialize remarkable ideas into elegant apps.</string>
+    <string name="org_logo">Org logo</string>
 </resources>
