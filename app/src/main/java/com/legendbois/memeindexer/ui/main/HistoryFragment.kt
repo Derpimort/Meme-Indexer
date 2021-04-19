@@ -52,14 +52,11 @@ class HistoryFragment: Fragment(){
     }
 
     fun shareImage(filepath: String){
-        if (context != null){
-            MemesHelper.shareOrViewImage(context!!.applicationContext, filepath)
-        }
+        this.activity?.let { MemesHelper.shareOrViewImage(it, filepath) }
     }
 
     fun imagePopup(filepath: String){
-        if(context != null){
-            MemesHelper.imagePopup(context!!, filepath)
-        }
+        this.activity?.let { MemesHelper.imagePopup(it, filepath) }
+
     }
 }

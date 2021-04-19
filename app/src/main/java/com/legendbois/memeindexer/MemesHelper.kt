@@ -1,5 +1,6 @@
 package com.legendbois.memeindexer
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -15,7 +16,7 @@ import java.io.File
 object MemesHelper {
     const val TAG = "MemesHelper"
     const val legacyUriSdk = Build.VERSION_CODES.M
-    fun shareOrViewImage(context: Context, filepath: String, intentShare: Boolean = true){
+    fun shareOrViewImage(context: Activity, filepath: String, intentShare: Boolean = true){
         val memeUri: Uri
         if(MainActivity.sdkVersion > legacyUriSdk){
             val memeFile = File(filepath)
@@ -43,7 +44,7 @@ object MemesHelper {
         context.startActivity(Intent.createChooser(shareIntent, intentTitle))
     }
 
-    fun imagePopup(context: Context, filepath: String){
+    fun imagePopup(context: Activity, filepath: String){
         //Toast.makeText(context, "Item clicked $fileuri", Toast.LENGTH_LONG).show()
         val imageDialog = AlertDialog.Builder(context, R.style.AlertDialogBase)
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

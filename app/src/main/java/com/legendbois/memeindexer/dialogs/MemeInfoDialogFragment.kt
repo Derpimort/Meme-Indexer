@@ -71,7 +71,7 @@ class MemeInfoDialogFragment : DialogFragment() {
                 }
                 layout.findViewById<TextView>(R.id.memeinfo_filepath).setOnClickListener {
                     if (filepath != null){
-                        MemesHelper.shareOrViewImage(it.context, filepath, false)
+                        MemesHelper.shareOrViewImage(activity, filepath, false)
                     }
 
                 }

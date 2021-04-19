@@ -161,17 +161,14 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     }
 
     fun shareImage(filepath: String){
-        if (context != null){
-            MemesHelper.shareOrViewImage(context!!.applicationContext, filepath)
-            addUsageHistory(filepath, 2, 1)
-        }
+        this.activity?.let {
+            MemesHelper.shareOrViewImage(it, filepath)
+            addUsageHistory(filepath, 2, 1)}
 
     }
 
     fun imagePopup(filepath: String){
-        if(context != null){
-            MemesHelper.imagePopup(context!!, filepath)
-        }
+        this.activity?.let { MemesHelper.imagePopup(it, filepath) }
 
     }
 
