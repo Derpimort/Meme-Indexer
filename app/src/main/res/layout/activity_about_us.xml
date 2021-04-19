@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AboutUsActivity"
+    android:background="@drawable/app_background">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/transparent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/aboutus_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?actionBarSize"
+            app:titleTextAppearance="@style/ToolbarTitleText">
+        </androidx.appcompat.widget.Toolbar>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/aboutus_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/rounded_layout"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/aboutus_info_body_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/aboutus_info_body"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/aboutus_info_us_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/aboutus_info_us_title"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutus_info_logo_container" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/aboutus_info_logo_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:cardCornerRadius="64dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutus_info_body_text">
+
+            <ImageView
+                android:id="@+id/aboutus_info_logo"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:contentDescription="@string/org_logo"
+                app:srcCompat="@drawable/ic_spacebar_logo_128" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/aboutus_info_us_body_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/aboutus_info_us_body"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutus_info_us_title_text" />
+
+        <TextView
+            android:id="@+id/aboutus_info_us_findus_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text="@string/find_us_at"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutus_info_us_body_text" />
+
+        <LinearLayout
+            android:id="@+id/aboutus_info_findus_jatin"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutus_info_us_findus_text">
+
+            <ImageView
+                android:id="@+id/aboutus_info_findus_jatin_github"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                app:srcCompat="@drawable/ic_brand_github_light_64px"
+                android:contentDescription="@string/github"
+                android:tag="https://github.com/Derpimort"
+                android:onClick="openSocial"/>
+
+            <ImageView
+                android:id="@+id/aboutus_info_findus_jatin_linkedin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                app:srcCompat="@drawable/ic_brand_linkedin"
+                android:contentDescription="@string/linkedin"
+                android:tag="https://www.linkedin.com/in/derpimort/"
+                android:onClick="openSocial"/>
+
+            <ImageView
+                android:id="@+id/aboutus_info_findus_jatin_mail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                app:srcCompat="@drawable/ic_email_24px"
+                android:contentDescription="@string/email"
+                android:tag="email"
+                android:onClick="openSocial"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/aboutus_info_findus_khushal"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutus_info_findus_jatin"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/aboutus_info_findus_khushal_linkedin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                app:srcCompat="@drawable/ic_brand_linkedin"
+                android:contentDescription="@string/linkedin"
+                android:tag="https://www.linkedin.com/in/khushal-5119/"
+                android:onClick="openSocial"/>
+
+            <ImageView
+                android:id="@+id/aboutus_info_findus_khushal_behance"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                app:srcCompat="@drawable/ic_brand_behance_32dp"
+                android:contentDescription="@string/behance"
+                android:tag="https://www.behance.net/khushalmetar"
+                android:onClick="openSocial"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_dialog_email" />-->
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

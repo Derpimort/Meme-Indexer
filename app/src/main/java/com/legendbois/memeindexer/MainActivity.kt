@@ -128,6 +128,11 @@ class MainActivity : AppCompatActivity() {
                 sendFeedback()
                 true
             }
+            R.id.aboutus_menuitem ->{
+                val aboustUsIntent = Intent(this@MainActivity, AboutUsActivity::class.java)
+                startActivity(aboustUsIntent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -175,17 +180,9 @@ class MainActivity : AppCompatActivity() {
             val feedbackText = dialogView.findViewById<EditText>(R.id.feedback_text)
             if(feedbackText.text.isNotBlank()){
 
-                val intent = Intent(Intent.ACTION_SENDTO)
-                intent.data= Uri.parse("mailto:")
-                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("jatinsaini580@gmail.com"))
-                intent.putExtra(Intent.EXTRA_SUBJECT,"Feedback for Meme Indexer")
-                intent.putExtra(Intent.EXTRA_TEXT, feedbackText.text)
-                try{
-                    startActivity(Intent.createChooser(intent,"Send Mail..."))
-                }
-                catch ( ex : android.content.ActivityNotFoundException){
-                    Toast.makeText(applicationContext,"There are no email clients installed",Toast.LENGTH_SHORT).show()
-                }
+                MiscHelper.sendMail(context = applicationContext,
+                                    emailSubject = "Feedback for Meme Indexer",
+                                    emailText = feedbackText.text.toString())
             }
         }
         alertDialog.create().show()
