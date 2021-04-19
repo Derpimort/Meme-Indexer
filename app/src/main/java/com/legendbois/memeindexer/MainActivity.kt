@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity() {
             val feedbackText = dialogView.findViewById<EditText>(R.id.feedback_text)
             if(feedbackText.text.isNotBlank()){
 
-                MiscHelper.sendMail(context = applicationContext,
+                MiscHelper.sendMail(context = this,
                                     emailSubject = "Feedback for Meme Indexer",
                                     emailText = feedbackText.text.toString())
             }
