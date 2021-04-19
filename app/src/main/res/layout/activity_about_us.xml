@@ -118,7 +118,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 app:srcCompat="@drawable/ic_brand_github_light_64px"
-                android:contentDescription="@string/github" />
+                android:contentDescription="@string/github"
+                android:tag="https://github.com/Derpimort"
+                android:onClick="openSocial"/>
 
             <ImageView
                 android:id="@+id/aboutus_info_findus_jatin_linkedin"
@@ -126,7 +128,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 app:srcCompat="@drawable/ic_brand_linkedin"
-                android:contentDescription="@string/linkedin" />
+                android:contentDescription="@string/linkedin"
+                android:tag="https://www.linkedin.com/in/derpimort/"
+                android:onClick="openSocial"/>
 
             <ImageView
                 android:id="@+id/aboutus_info_findus_jatin_mail"
@@ -134,7 +138,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 app:srcCompat="@drawable/ic_email_24px"
-                android:contentDescription="@string/email" />
+                android:contentDescription="@string/email"
+                android:tag="https://github.com/Derpimort"
+                android:onClick="openSocial"/>
         </LinearLayout>
 
         <LinearLayout
@@ -152,20 +158,24 @@
             app:layout_constraintVertical_bias="0.0">
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/aboutus_info_findus_khushal_linkedin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 app:srcCompat="@drawable/ic_brand_linkedin"
-                android:contentDescription="@string/linkedin" />
+                android:contentDescription="@string/linkedin"
+                android:tag="https://www.linkedin.com/in/khushal-5119/"
+                android:onClick="openSocial"/>
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/aboutus_info_findus_khushal_behance"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 app:srcCompat="@drawable/ic_brand_behance_32dp"
-                android:contentDescription="@string/behance" />
+                android:contentDescription="@string/behance"
+                android:tag="https://www.behance.net/khushalmetar"
+                android:onClick="openSocial"/>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
