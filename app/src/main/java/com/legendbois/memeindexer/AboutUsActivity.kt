@@ -18,8 +18,16 @@ class AboutUsActivity : AppCompatActivity() {
 
     fun openSocial(view: View){
         val url = view.tag.toString()
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        intent.addCategory(Intent.CATEGORY_BROWSABLE)
-        startActivity(intent)
+        if(url == "email"){
+            MiscHelper.sendMail(context = applicationContext,
+                                emailSubject = "[Meme-Indexer Contact]:")
+        }
+        else {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            intent.addCategory(Intent.CATEGORY_BROWSABLE)
+            startActivity(intent)
+        }
     }
+
+
 }

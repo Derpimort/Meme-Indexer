@@ -139,7 +139,7 @@
                 android:layout_weight="0.3"
                 app:srcCompat="@drawable/ic_email_24px"
                 android:contentDescription="@string/email"
-                android:tag="https://github.com/Derpimort"
+                android:tag="email"
                 android:onClick="openSocial"/>
         </LinearLayout>
 
