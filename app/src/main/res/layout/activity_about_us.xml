@@ -27,9 +27,9 @@
         android:id="@+id/aboutus_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:animateLayoutChanges="true"
         android:background="@drawable/rounded_layout"
-        android:animateLayoutChanges="true">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
             android:id="@+id/aboutus_info_body_text"
@@ -74,8 +74,8 @@
                 android:id="@+id/aboutus_info_logo"
                 android:layout_width="128dp"
                 android:layout_height="128dp"
-                tools:srcCompat="@tools:sample/avatars"
-                android:contentDescription="@string/org_logo" />
+                android:contentDescription="@string/org_logo"
+                app:srcCompat="@drawable/ic_spacebar_logo_128" />
         </androidx.cardview.widget.CardView>
 
         <TextView
@@ -83,11 +83,90 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/aboutus_info_us_body"
+            android:textAlignment="center"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/aboutus_info_us_title_text" />
 
+        <TextView
+            android:id="@+id/aboutus_info_us_findus_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text="@string/find_us_at"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutus_info_us_body_text" />
 
+        <LinearLayout
+            android:id="@+id/aboutus_info_findus_jatin"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutus_info_us_findus_text">
+
+            <ImageView
+                android:id="@+id/aboutus_info_findus_jatin_github"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                app:srcCompat="@drawable/ic_brand_github_light_64px"
+                android:contentDescription="@string/github" />
+
+            <ImageView
+                android:id="@+id/aboutus_info_findus_jatin_linkedin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                app:srcCompat="@drawable/ic_brand_linkedin"
+                android:contentDescription="@string/linkedin" />
+
+            <ImageView
+                android:id="@+id/aboutus_info_findus_jatin_mail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                app:srcCompat="@drawable/ic_email_24px"
+                android:contentDescription="@string/email" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/aboutus_info_findus_khushal"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutus_info_findus_jatin"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                app:srcCompat="@drawable/ic_brand_linkedin"
+                android:contentDescription="@string/linkedin" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                app:srcCompat="@drawable/ic_brand_behance_32dp"
+                android:contentDescription="@string/behance" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
