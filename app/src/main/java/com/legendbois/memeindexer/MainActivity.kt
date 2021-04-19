@@ -128,6 +128,11 @@ class MainActivity : AppCompatActivity() {
                 sendFeedback()
                 true
             }
+            R.id.aboutus_menuitem ->{
+                val aboustUsIntent = Intent(this@MainActivity, AboutUsActivity::class.java)
+                startActivity(aboustUsIntent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
