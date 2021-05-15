@@ -26,7 +26,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
     <style name="AppFontStyle">
-        <item name="android:fontFamily">@font/capriola</item>
+        <item name="android:fontFamily">@font/noto_sans</item>
         <item name="android:textColor">@color/colorTitleText</item>
     </style>
 
@@ -39,9 +39,9 @@
     </style>
 
     <style name="ToolbarTitleText"  parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:fontFamily">@font/megrim</item>
+        <item name="android:fontFamily">@font/raleway_thin</item>
         <item name="android:textSize">24sp</item>
-        <item name="android:textStyle">bold</item>
+        <!--<item name="android:textStyle">bold</item>-->
     </style>
     
     <style name="AlertDialogBase" parent="Theme.AppCompat.DayNight.Dialog.Alert">
