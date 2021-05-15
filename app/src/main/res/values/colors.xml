@@ -2,15 +2,15 @@
 <resources>
     <color name="colorPrimary">#C90000</color>
     <color name="colorPrimary50">#50C90000</color>
-    <color name="colorAccent">#fe9a00</color>
+    <color name="colorAccent">#ffffff</color>
     <color name="colorPrimaryDark">#900000</color>
     <color name="colorPrimaryLight">#ff4e2f</color>
-    <color name="colorSecondary">#fe9800</color>
-    <color name="colorSecondaryDark">#c56900</color>
-    <color name="colorSecondaryLight">#ffc947</color>
-    <color name="colorBackground">#0D0D0D</color>
-    <color name="colorBackgroundDark">#000000</color>
-    <color name="colorBackgroundLight">#252525</color>
+    <color name="colorSecondary">#ffdddd</color>
+    <color name="colorSecondaryDark">#ffffff</color>
+    <color name="colorSecondaryLight">#fff7f7</color>
+    <color name="colorBackground">#302525</color>
+    <color name="colorBackgroundDark">#221a1a</color>
+    <color name="colorBackgroundLight">#3e3030</color>
     <color name="colorPrimaryText">#ffffff</color>
     <color name="colorPrimaryTextHint">#8C8C8C</color>
     <color name="colorSecondaryText">#BEBEBE</color>
@@ -21,7 +21,7 @@
 
     <color name="colorBottomBar">@color/colorBackground</color>
     <color name="colorTopBar">@color/colorPrimary50</color>
-    <color name="colorBigButton">@color/colorAccent</color>
+    <color name="colorBigButton">@color/colorPrimaryDark</color>
     <color name="colorSearch">@color/white</color>
     <color name="colorTitleText">@color/white</color>
     <color name="colorHyperlink">#2196F3</color>
