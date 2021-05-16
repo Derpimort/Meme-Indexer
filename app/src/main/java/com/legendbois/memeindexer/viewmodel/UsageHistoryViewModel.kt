@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 
 
 class UsageHistoryViewModel(application: Application): AndroidViewModel(application) {
-    private val database: UsageHistoryDao = UsageHistoryDatabase.getDatabase(application).usageHistoryDao
+    private val database: UsageHistoryDao = MemeFilesDatabase.getDatabase(application).usageHistoryDao
 
 //    fun searchMemes(text: String): LiveData<List<MemeFile>> {
 //        return database.findByText(text)
