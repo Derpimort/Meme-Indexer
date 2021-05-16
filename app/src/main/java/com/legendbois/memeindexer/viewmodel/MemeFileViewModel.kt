@@ -12,13 +12,13 @@ import kotlinx.coroutines.withContext
 
 class MemeFileViewModel(application: Application): AndroidViewModel(application) {
     private val database: MemeFileDao = MemeFilesDatabase.getDatabase(application).memeFileDao
-
+    private val ftsSpecialChar = Regex("[^a-zA-Z0-9]")
     fun searchMemes(text: String): LiveData<List<MemeFile>>{
         return database.findByText(text)
     }
 
     fun searchPath(path: String):List<Int>{
-        return database.findPath(path)
+        return database.findPath(path.replace(ftsSpecialChar, " "), path)
     }
 
     fun getMemesCount(): Int{
