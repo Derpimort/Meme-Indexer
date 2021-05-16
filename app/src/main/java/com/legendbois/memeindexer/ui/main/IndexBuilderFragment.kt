@@ -164,7 +164,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                             }
 
                             // Log.d(TAG, "FilePath $filepath")
-                            val duplicates = memeFileViewModel.searchPath(filepath)
+                            val duplicates = memeFileViewModel.searchPath(filepath, name)
                             if (duplicates.isEmpty() || updateDuplicates) {
                                 //Log.d(TAG, "Empty $filepath $duplicates")
                                 getImageText(filepath, name, duplicates)

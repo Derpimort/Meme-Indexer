@@ -17,8 +17,8 @@ class MemeFileViewModel(application: Application): AndroidViewModel(application)
         return database.findByText(text)
     }
 
-    fun searchPath(path: String):List<Int>{
-        return database.findPath(path.replace(ftsSpecialChar, " "), path)
+    fun searchPath(path: String, filename: String):List<Int>{
+        return database.findPath(path, filename.replace(ftsSpecialChar, " "))
     }
 
     fun getMemesCount(): Int{
