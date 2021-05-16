@@ -145,7 +145,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         //Log.d(TAG, "New File $docId, $name, $childrenUri")
                         if (imagesRegex.matches(mime)){
                             totalFiles += 1
-                            var filepath = ""
+                            var filepath: String
                             // Tested (on <9.0) Workaround to get filepath, bad practice probably but android devs forced my hand... "Security reasons"\
                             try {
                                 val docSplit = docId.split(":")
@@ -171,7 +171,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
                             }
                             while(concurrentImages>4){
-                                delay(1000)
+                                delay(100)
                             }
                         }
                         if (isDirectory(mime)) {
@@ -215,13 +215,12 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             snackbar.setActionTextColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
             snackbar.view.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorBackgroundLight))
             snackbar.show()
-
         }
         else{
             indexbuilder_progressbar.visibility=View.VISIBLE
             indexbuilder_button.text = "$progressNumber"
         }
-
+        progressNumber = 0
         indexbuilder_button.isEnabled = value
         indexbuilder_button.isClickable = value
         indexbuilder_path.setText(path)
@@ -269,7 +268,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         }
     }
 
-    private fun getImageText(imagePath: String, name: String, duplicates: List<MemeFile>){
+    private fun getImageText(imagePath: String, name: String, duplicates: List<Int>){
         try {
             concurrentImages += 1
             val imageBitmap = BitmapFactory.decodeFile(imagePath)
@@ -299,8 +298,8 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                                 lifecycleScope.launch {
                                     memeFileViewModel.update(
                                         MemeFile(
-                                            rowid = duplicate.rowid,
-                                            filepath = duplicate.filepath,
+                                            rowid = duplicate,
+                                            filepath = imagePath,
                                             filename = name,
                                             ocrtext = visionText.text.toLowerCase(Locale.ROOT)
                                         )

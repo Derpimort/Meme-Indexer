@@ -17,7 +17,7 @@ class MemeFileViewModel(application: Application): AndroidViewModel(application)
         return database.findByText(text)
     }
 
-    fun searchPath(path: String):List<MemeFile>{
+    fun searchPath(path: String):List<Int>{
         return database.findPath(path)
     }
 
