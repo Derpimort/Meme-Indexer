@@ -17,18 +17,24 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenResumed
 import androidx.lifecycle.whenStarted
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.android.material.snackbar.Snackbar
+import com.legendbois.memeindexer.ConstantsHelper
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
+import com.legendbois.memeindexer.workers.IndexWorker
 import kotlinx.android.synthetic.main.indexbuilder_frag.*
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.Closeable
 import java.io.File
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 // TODO: Foreground service for uninterrupted large scans
 class IndexBuilderFragment: Fragment(), View.OnClickListener {
@@ -41,6 +47,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         const val TAG="IndexBuilderFragment"
         const val DIRECTORY_REQUEST_CODE=2
         val imagesRegex="image/.*".toRegex()
+        const val updateDuplicates = false
 
         @JvmStatic
         fun newInstance(): IndexBuilderFragment{
@@ -85,6 +92,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                             toggleButtonState(true, totalFiles = totalFiles)
                             writeToHistory(parentUri.path, totalFiles)
                         }
+                        scheduleIndex()
                     }
                 }
             }
@@ -162,9 +170,9 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
                             // Log.d(TAG, "FilePath $filepath")
                             val duplicates = memeFileViewModel.searchPath(filepath, name)
-                            if (duplicates.isEmpty()) {
+                            if (duplicates.isEmpty() || updateDuplicates) {
                                 //Log.d(TAG, "Empty $filepath $duplicates")
-                                writeFileToDb(filepath, name)
+                                writeFileToDb(filepath, name, duplicates)
 
                             }
                         }
@@ -268,13 +276,37 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         Toast.makeText(context, "Finding images in the directory, please don't close the app.", Toast.LENGTH_LONG).show()
     }
 
-    private suspend fun writeFileToDb(imagePath: String, name: String) {
+    private suspend fun writeFileToDb(imagePath: String, name: String, duplicates: List<Int>) {
         progressNumber += 1
-        memeFileViewModel.insert(
-            MemeFile(
-                filename = name,
-                filepath = imagePath
+        if(duplicates.isEmpty()){
+            memeFileViewModel.insert(
+                MemeFile(
+                    filename = name,
+                    filepath = imagePath
+                )
             )
-        )
+        }
+        else{
+            for (duplicate in duplicates) {
+                    memeFileViewModel.update(
+                        MemeFile(
+                            rowid = duplicate,
+                            filepath = imagePath,
+                            filename = name,
+                            ocrtext = ConstantsHelper.defaultText
+                        )
+                    )
+                }
+        }
+
+    }
+
+    private fun scheduleIndex(){
+        val workerRequest = OneTimeWorkRequestBuilder<IndexWorker>()
+            .build()
+        if(this.context != null){
+            WorkManager.getInstance(this.context!!.applicationContext).enqueue(workerRequest)
+        }
+
     }
 }
