@@ -80,19 +80,22 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                 if (requestCode == DIRECTORY_REQUEST_CODE) {
                     if (this.context != null) {
                         val parentUri = data.data!!
-                        var totalFiles: Int
+                        var totalFiles = 0
                         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
                         usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
                         toggleButtonState(false, parentUri.path)
 
                         lifecycleScope.launch {
-                            showStartToast()
-                            totalFiles = traverseDirectoryEntries(parentUri)
-
+                            whenStarted {
+                                showStartToast()
+                                totalFiles = traverseDirectoryEntries(parentUri)
+                            }
                             toggleButtonState(true, totalFiles = totalFiles)
                             writeToHistory(parentUri.path, totalFiles)
+                        }.invokeOnCompletion {
+                            scheduleIndex()
                         }
-                        scheduleIndex()
+
                     }
                 }
             }

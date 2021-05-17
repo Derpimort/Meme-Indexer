@@ -20,6 +20,7 @@ import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.MemeFilesDatabase
 import kotlinx.coroutines.delay
+import java.util.*
 
 class IndexWorker(context: Context, parameters: WorkerParameters) :
     CoroutineWorker(context, parameters) {
@@ -29,38 +30,56 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
     var totalFiles: Int = 0
     var progressNumber: Int = 0
     var concurrentImages: Int = 0
-    val maxParallelRequests = 10
+
+    private val maxParallelRequests = 10
     private val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as
                 NotificationManager
 
+    private lateinit var notificationBuilder : NotificationCompat.Builder
+
+
     override suspend fun doWork(): Result {
         val memeFileDatabase = MemeFilesDatabase.getDatabase(this.applicationContext).memeFileDao
         totalFiles = memeFileDatabase.getUnindexedRowCount()
-        val intialContent = "Preparing $totalFiles Files"
-        var remainingFiles = totalFiles
+        var rawTotal: Int
+        val intialContent = "Preparing Files..."
         val model = TextRecognition.getClient()
+
+        initializeNotifBuilder()
+
+
         val foregroundInfo = createForegroundInfo(intialContent)
         setForeground(foregroundInfo)
 
         // Lazy man's paginations?
-        while(remainingFiles > 0){
+        while(totalFiles > 0){
             val memeFiles = memeFileDatabase.getUnindexedRows(maxParallelRequests)
             concurrentImages = memeFiles.size
             for(memeFile in memeFiles){
                 updateImageText(model, memeFile)
             }
             while(concurrentImages > 0){
-                Log.d("MEMEINDEXERSERVICE", "Concurrent images $concurrentImages")
+                //Log.d("MEMEINDEXERSERVICE", "Concurrent images $concurrentImages")
                 delay(1000)
             }
             memeFileDatabase.update(*memeFiles.toTypedArray())
-            remainingFiles = memeFileDatabase.getUnindexedRowCount()
+            totalFiles = memeFileDatabase.getUnindexedRowCount()
             progressNumber += memeFiles.size
-            setForeground(ForegroundInfo(notificationId, getNotification(progress = progressNumber).build()))
-            Log.d("MEMEINDEXERSERVICE", "Remaining Files $remainingFiles")
+            rawTotal = progressNumber + totalFiles
+            setForeground(
+                ForegroundInfo(notificationId, notificationBuilder
+                    .setContentTitle("Processing Images...")
+                    .setContentText("$progressNumber/$rawTotal")
+                    .setProgress(rawTotal, progressNumber, false)
+                    .build()
+                )
+            )
+            //Log.d("MEMEINDEXERSERVICE", "Remaining Files $totalFiles")
         }
 
+        setForeground(ForegroundInfo(notificationId, notificationBuilder.setContentText("Cleaning up...").build()))
+        //memeFileDatabase.deleteEmpty()
         return Result.success()
     }
 
@@ -72,7 +91,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
             model.process(image)
                 .addOnSuccessListener { visionText ->
                     memeFile.apply {
-                        ocrtext = visionText.text
+                        ocrtext = visionText.text.toLowerCase(Locale.ROOT)
                     }
                 }
                 .addOnFailureListener{
@@ -89,10 +108,11 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
             memeFile.apply {
                 ocrtext = ConstantsHelper.defaultFailedText
             }
+            //Log.d("MEMEINDEXERSERVICE", "OCRTEXT ${memeFile.ocrtext}")
         }
     }
 
-    private fun getNotification(content: String = "Processing Images", progress: Int = 0): NotificationCompat.Builder{
+    private fun initializeNotifBuilder(){
         val id = channelId
         val title = applicationContext.getString(R.string.notification_title)
         val cancel = applicationContext.getString(R.string.notification_cancel)
@@ -100,19 +120,16 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
         val intent = WorkManager.getInstance(applicationContext)
             .createCancelPendingIntent(getId())
 
-        val notification = NotificationCompat.Builder(applicationContext, id)
-            .setContentTitle(title)
+        notificationBuilder = NotificationCompat.Builder(applicationContext, id)
+            .setContentTitle("Processing Images")
             .setTicker(title)
-            .setContentText(content)
-            .setProgress(totalFiles, progress, false)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOngoing(true)
             // Add the cancel action to the notification which can
             // be used to cancel the worker
             .addAction(android.R.drawable.ic_delete, cancel, intent)
-
-        return notification
     }
+
 
     // Creates an instance of ForegroundInfo which can be used to update the
     // ongoing notification.
@@ -124,7 +141,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
             createChannel()
         }
 
-        val notification = getNotification(content).build()
+        val notification = notificationBuilder.setContentTitle(content).build()
 
         return ForegroundInfo(notificationId, notification)
     }
@@ -132,7 +149,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createChannel() {
-        val channel = NotificationChannel(channelId, R.string.notification_channel_name.toString(), NotificationManager.IMPORTANCE_DEFAULT)
+        val channel = NotificationChannel(channelId, R.string.notification_channel_name.toString(), NotificationManager.IMPORTANCE_LOW)
         notificationManager.createNotificationChannel(channel)
     }
 
