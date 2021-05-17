@@ -3,7 +3,6 @@ package com.legendbois.memeindexer.ui.main
 import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.DocumentsContract
@@ -16,10 +15,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenResumed
 import androidx.lifecycle.whenStarted
 import com.google.android.material.snackbar.Snackbar
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.TextRecognition
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
@@ -35,10 +33,8 @@ import java.util.*
 // TODO: Foreground service for uninterrupted large scans
 class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private var progressNumber: Int = 0
-    private var concurrentImages: Int = 0
     private lateinit var memeFileViewModel: MemeFileViewModel
     private lateinit var usageHistoryViewModel: UsageHistoryViewModel
-    private var updateDuplicates: Boolean = false
     private lateinit var rootView: View
 
     companion object{
@@ -55,7 +51,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         rootView = inflater.inflate(R.layout.indexbuilder_frag, container, false)
         val button: Button = rootView.findViewById(R.id.indexbuilder_button)
 
@@ -77,20 +73,17 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                 if (requestCode == DIRECTORY_REQUEST_CODE) {
                     if (this.context != null) {
                         val parentUri = data.data!!
-                        var totalFiles = 0
+                        var totalFiles: Int
                         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
                         usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
                         toggleButtonState(false, parentUri.path)
-                        lifecycleScope.launch {
-                            whenStarted {
-                                totalFiles = traverseDirectoryEntries(parentUri)
-                            }
-                            while(concurrentImages != 0){
-                                delay(1000)
-                            }
-                            toggleButtonState(true, totalFiles = totalFiles)
 
-                            writeToHistory(parentUri.path, progressNumber)
+                        lifecycleScope.launch {
+                            showStartToast()
+                            totalFiles = traverseDirectoryEntries(parentUri)
+
+                            toggleButtonState(true, totalFiles = totalFiles)
+                            writeToHistory(parentUri.path, totalFiles)
                         }
                     }
                 }
@@ -150,12 +143,16 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                             try {
                                 val docSplit = docId.split(":")
                                 filepath = docSplit[1]
-                                filepath = if("primary".equals(docSplit[0])) {
-                                    storages[0].absolutePath.split("Android/")[0] + filepath
-                                } else if("raw" == docSplit[0]){
-                                    filepath
-                                } else{
-                                    storages[1].absolutePath.split("Android/")[0] + filepath
+                                filepath = when {
+                                    "primary" == docSplit[0] -> {
+                                        storages[0].absolutePath.split("Android/")[0] + filepath
+                                    }
+                                    "raw" == docSplit[0] -> {
+                                        filepath
+                                    }
+                                    else -> {
+                                        storages[1].absolutePath.split("Android/")[0] + filepath
+                                    }
                                 }
                             }
                             catch (versionE: Exception){
@@ -165,13 +162,10 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
                             // Log.d(TAG, "FilePath $filepath")
                             val duplicates = memeFileViewModel.searchPath(filepath, name)
-                            if (duplicates.isEmpty() || updateDuplicates) {
+                            if (duplicates.isEmpty()) {
                                 //Log.d(TAG, "Empty $filepath $duplicates")
-                                getImageText(filepath, name, duplicates)
+                                writeFileToDb(filepath, name)
 
-                            }
-                            while(concurrentImages>4){
-                                delay(100)
                             }
                         }
                         if (isDirectory(mime)) {
@@ -181,7 +175,8 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         }
                     }
                 }
-            } finally {
+            }
+            finally {
                 closeQuietly(c)
             }
         }
@@ -203,9 +198,10 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private fun toggleButtonState(value: Boolean, path: String? = "", totalFiles: Int = 0){
         if(value){
             indexbuilder_progressbar.visibility=View.GONE
+
             val snackbar = Snackbar.make(
                 rootView,
-                "Succesfully indexed $progressNumber out of $totalFiles files",
+                "Total $progressNumber out of $totalFiles images found in the directory will be scanned.",
                 Snackbar.LENGTH_INDEFINITE
             )
             snackbar.setAction("DISMISS") {
@@ -231,7 +227,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
     private fun updateProgressText(){
         progressNumber+=1
-        indexbuilder_button.text="$progressNumber"
+        indexbuilder_button?.text="$progressNumber"
     }
 
     private fun writeToHistory(path: String?, extraInfo: Int){
@@ -268,61 +264,17 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         }
     }
 
-    private fun getImageText(imagePath: String, name: String, duplicates: List<Int>){
-        try {
-            concurrentImages += 1
-            val imageBitmap = BitmapFactory.decodeFile(imagePath)
-            val image: InputImage = InputImage.fromBitmap(imageBitmap, 0)
-            val model = TextRecognition.getClient()
-            model.process(image)
-                .addOnSuccessListener { visionText ->
-                    /*Log.v(
-                    TAG,
-                    "docId: $id, name: $name, text: ${visionText.text}, uri: $imagePath")*/
+    private fun showStartToast(){
+        Toast.makeText(context, "Finding images in the directory, please don't close the app.", Toast.LENGTH_LONG).show()
+    }
 
-                    if (visionText.text.isNotBlank()) {
-                        updateProgressText()
-                        if (duplicates.isEmpty()) {
-                            lifecycleScope.launch {
-                                memeFileViewModel.insert(
-                                    MemeFile(
-                                        filename = name,
-                                        filepath = imagePath,
-                                        ocrtext = visionText.text.toLowerCase(Locale.ROOT)
-                                    )
-                                )
-                            }
-
-                        } else {
-                            for (duplicate in duplicates) {
-                                lifecycleScope.launch {
-                                    memeFileViewModel.update(
-                                        MemeFile(
-                                            rowid = duplicate,
-                                            filepath = imagePath,
-                                            filename = name,
-                                            ocrtext = visionText.text.toLowerCase(Locale.ROOT)
-                                        )
-                                    )
-                                }
-
-                            }
-                        }
-
-                    }
-
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT)
-                        .show()
-                }
-                .addOnCompleteListener {
-                    concurrentImages -= 1
-                }
-        }
-        catch (e: java.lang.Exception){
-            concurrentImages-=1
-        }
-
+    private suspend fun writeFileToDb(imagePath: String, name: String) {
+        progressNumber += 1
+        memeFileViewModel.insert(
+            MemeFile(
+                filename = name,
+                filepath = imagePath
+            )
+        )
     }
 }
