@@ -15,10 +15,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenResumed
 import androidx.lifecycle.whenStarted
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
 import com.legendbois.memeindexer.ConstantsHelper
 import com.legendbois.memeindexer.R
@@ -28,15 +26,15 @@ import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 import com.legendbois.memeindexer.workers.IndexWorker
 import kotlinx.android.synthetic.main.indexbuilder_frag.*
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
+
 import kotlinx.coroutines.launch
 import java.io.Closeable
 import java.io.File
+
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
-// TODO: Foreground service for uninterrupted large scans
 class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private var progressNumber: Int = 0
     private lateinit var memeFileViewModel: MemeFileViewModel
@@ -280,7 +278,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     }
 
     private suspend fun writeFileToDb(imagePath: String, name: String, duplicates: List<Int>) {
-        progressNumber += 1
+        updateProgressText()
         if(duplicates.isEmpty()){
             memeFileViewModel.insert(
                 MemeFile(
@@ -304,11 +302,46 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
     }
 
+    private fun getTargetTime(): Calendar{
+        val targetTime = Calendar.getInstance()
+
+        targetTime.set(Calendar.HOUR_OF_DAY, 3)
+        targetTime.set(Calendar.MINUTE, 18)
+        targetTime.set(Calendar.SECOND, 0)
+        targetTime.set(Calendar.MILLISECOND, 0)
+
+        return targetTime
+    }
+
+    private fun getStartDelay(): Long{
+        val targetTime = getTargetTime()
+        val currentTime = Calendar.getInstance()
+        if(abs(targetTime.timeInMillis - currentTime.timeInMillis) > 300000){
+            if (targetTime.timeInMillis < currentTime.timeInMillis){
+                targetTime.add(Calendar.DAY_OF_MONTH, 1)
+            }
+            return targetTime.timeInMillis/1000 - currentTime.timeInMillis/1000
+        }
+        return 0
+    }
+
     private fun scheduleIndex(){
-        val workerRequest = OneTimeWorkRequestBuilder<IndexWorker>()
+        val constraints = Constraints.Builder()
+            .setRequiresBatteryNotLow(true)
             .build()
+
+        val workerRequest = PeriodicWorkRequestBuilder<IndexWorker>(24, TimeUnit.HOURS)
+            .setInitialDelay(getStartDelay()/60, TimeUnit.MINUTES)
+            .setConstraints(constraints)
+            .addTag(ConstantsHelper.WORKREQ_TAG)
+            .build()
+
         if(this.context != null){
-            WorkManager.getInstance(this.context!!.applicationContext).enqueue(workerRequest)
+            WorkManager.getInstance(this.context!!.applicationContext).enqueueUniquePeriodicWork(
+                ConstantsHelper.WORKMANAGER_UID,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                workerRequest
+            )
         }
 
     }
