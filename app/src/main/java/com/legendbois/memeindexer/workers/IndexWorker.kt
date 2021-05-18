@@ -153,7 +153,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
             .setTicker(title)
             .setContentIntent(PendingIntent.getActivity(applicationContext, 0, intent, 0))
             .setAutoCancel(true)
-            .setSmallIcon(R.drawable.ic_launcher_foreground).build()
+            .setSmallIcon(R.drawable.ic_meme_indexer_notif).build()
 
         notificationManager.notify(notificationId+1, notification)
 
@@ -170,7 +170,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
         notificationBuilder = NotificationCompat.Builder(applicationContext, id)
             .setContentTitle("Processing Images")
             .setTicker(title)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_meme_indexer_notif)
             .setOngoing(true)
             // Add the cancel action to the notification which can
             // be used to cancel the worker
