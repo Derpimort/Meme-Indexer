@@ -36,6 +36,9 @@ interface MemeFileDao {
     @Query("SELECT rowid, filepath, filename FROM meme_file_table WHERE ocrtext MATCH :defaultText LIMIT :topn")
     fun getUnindexedRows(topn: Int, defaultText: String = ConstantsHelper.defaultText): List<MemeFile>
 
+    @Query("DELETE FROM meme_file_table WHERE rowid in (:rowIds)")
+    fun deleteEmpty(rowIds: List<Int>)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg files: MemeFile)
 

@@ -30,6 +30,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
     var totalFiles: Int = 0
     var progressNumber: Int = 0
     var concurrentImages: Int = 0
+    var deletedImages: Int = 0
 
     private val maxParallelRequests = 10
     private val notificationManager =
@@ -45,7 +46,6 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
         var rawTotal: Int
         val intialContent = "Preparing Files..."
         val model = TextRecognition.getClient()
-
         initializeNotifBuilder()
 
 
@@ -63,7 +63,20 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
                 //Log.d("MEMEINDEXERSERVICE", "Concurrent images $concurrentImages")
                 delay(1000)
             }
-            memeFileDatabase.update(*memeFiles.toTypedArray())
+            /* TODO: Decide whether deleting is good or shall we just store them with the failed message
+                in ocrtext? Will help unnecessary rescans when user selects the same directory to be
+                indexed in the future.*/
+            val updateableMemes = memeFiles.mapNotNull {
+                    if (it.ocrtext.isNullOrBlank() || it.ocrtext!!.length < 3){
+                        deletedImages += 1
+                        memeFileDatabase.delete(it)
+                        null
+                    }
+                    else{
+                        it
+                    }
+                }
+            memeFileDatabase.update(*updateableMemes.toTypedArray())
             totalFiles = memeFileDatabase.getUnindexedRowCount()
             progressNumber += memeFiles.size
             rawTotal = progressNumber + totalFiles
@@ -77,9 +90,11 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
             )
             //Log.d("MEMEINDEXERSERVICE", "Remaining Files $totalFiles")
         }
-
         setForeground(ForegroundInfo(notificationId, notificationBuilder.setContentText("Cleaning up...").build()))
-        //memeFileDatabase.deleteEmpty()
+        //memeFileDatabase.deleteEmpty(deleteIds)
+
+        //sendSummaryNotif()
+
         return Result.success()
     }
 
