@@ -2,6 +2,7 @@ package com.legendbois.memeindexer.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.legendbois.memeindexer.ConstantsHelper
 
 @Dao
 interface MemeFileDao {
@@ -28,6 +29,15 @@ interface MemeFileDao {
 
     @Query("SELECT COUNT(rowid) FROM meme_file_table")
     fun getRowCount(): Int
+
+    @Query("SELECT COUNT(rowid) FROM meme_file_table WHERE ocrtext MATCH :defaultText")
+    fun getUnindexedRowCount(defaultText: String = ConstantsHelper.defaultText): Int
+
+    @Query("SELECT rowid, filepath, filename FROM meme_file_table WHERE ocrtext MATCH :defaultText LIMIT :topn")
+    fun getUnindexedRows(topn: Int, defaultText: String = ConstantsHelper.defaultText): List<MemeFile>
+
+    @Query("DELETE FROM meme_file_table WHERE rowid in (:rowIds)")
+    fun deleteEmpty(rowIds: List<Int>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg files: MemeFile)
