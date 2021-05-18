@@ -2,9 +2,12 @@ package com.legendbois.memeindexer.workers
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -16,6 +19,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.legendbois.memeindexer.ConstantsHelper
+import com.legendbois.memeindexer.MainActivity
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.MemeFilesDatabase
@@ -47,7 +51,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
         val intialContent = "Preparing Files..."
         val model = TextRecognition.getClient()
         initializeNotifBuilder()
-
+        val startTime = SystemClock.elapsedRealtime()
 
         val foregroundInfo = createForegroundInfo(intialContent)
         setForeground(foregroundInfo)
@@ -93,7 +97,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
         setForeground(ForegroundInfo(notificationId, notificationBuilder.setContentText("Cleaning up...").build()))
         //memeFileDatabase.deleteEmpty(deleteIds)
 
-        //sendSummaryNotif()
+        sendSummaryNotif(startTime)
 
         return Result.success()
     }
@@ -125,6 +129,34 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
             }
             //Log.d("MEMEINDEXERSERVICE", "OCRTEXT ${memeFile.ocrtext}")
         }
+    }
+
+    private fun sendSummaryNotif(startTime: Long){
+        val id = channelId
+        val title = applicationContext.getString(R.string.notification_title)
+        // This PendingIntent can be used to cancel the worker
+        val intent = Intent(applicationContext, MainActivity::class.java).apply{
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val elapsedTimeSeconds = (SystemClock.elapsedRealtime() - startTime)/1000
+        val elapsedTime = String.format("%02d:%02d:%02d", (elapsedTimeSeconds / (60 * 60))%24, (elapsedTimeSeconds / 60)%60, elapsedTimeSeconds % 60)
+        val filesSummary = """
+            Total: $progressNumber
+            Processed: ${progressNumber-deletedImages}
+            Invalid: $deletedImages
+        """.trimIndent()
+
+        val notification = NotificationCompat.Builder(applicationContext, id)
+            .setContentTitle("Total $progressNumber files processed")
+            .setContentText("Elapsed time $elapsedTime")
+            .setStyle(NotificationCompat.BigTextStyle().bigText(filesSummary))
+            .setTicker(title)
+            .setContentIntent(PendingIntent.getActivity(applicationContext, 0, intent, 0))
+            .setAutoCancel(true)
+            .setSmallIcon(R.drawable.ic_launcher_foreground).build()
+
+        notificationManager.notify(notificationId+1, notification)
+
     }
 
     private fun initializeNotifBuilder(){
