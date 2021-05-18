@@ -1,6 +1,7 @@
 package com.legendbois.memeindexer.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.legendbois.memeindexer.database.*
@@ -9,7 +10,7 @@ import kotlinx.coroutines.withContext
 
 
 class UsageHistoryViewModel(application: Application): AndroidViewModel(application) {
-    private val database: UsageHistoryDao = UsageHistoryDatabase.getDatabase(application).usageHistoryDao
+    private val database: UsageHistoryDao = MemeFilesDatabase.getDatabase(application).usageHistoryDao
 
 //    fun searchMemes(text: String): LiveData<List<MemeFile>> {
 //        return database.findByText(text)
@@ -44,9 +45,11 @@ class UsageHistoryViewModel(application: Application): AndroidViewModel(applicat
             }
             else{
                 for(duplicate in duplicates){
-                    when(duplicate.actionId){
-                        1 or 2 -> duplicate.extraInfo = duplicate.extraInfo?.plus(1)
-                        else -> null
+                    duplicate.apply {
+                        extraInfo = when(duplicate.actionId){
+                            1, 2 -> duplicate.extraInfo?.plus(1)
+                            else -> duplicate.extraInfo
+                        }
                     }
                     update(duplicate)
                 }

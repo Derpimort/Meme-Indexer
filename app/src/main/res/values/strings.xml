@@ -32,4 +32,9 @@
     <string name="linkedin">LinkedIn</string>
     <string name="email">Email</string>
     <string name="behance">Behance</string>
+    <string name="notification_channel_id">Meme Indexer Service</string>
+    <string name="notification_channel_name">Meme Indexer - Index Progress</string>
+    <string name="notification_channel_description">Used to show the user current progress of indexing the previously scanned images</string>
+    <string name="notification_title">@string/app_name</string>
+    <string name="notification_cancel">Stop</string>
 </resources>
