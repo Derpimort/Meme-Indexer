@@ -141,14 +141,14 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
         val elapsedTimeSeconds = (SystemClock.elapsedRealtime() - startTime)/1000
         val elapsedTime = String.format("%02d:%02d:%02d", (elapsedTimeSeconds / (60 * 60))%24, (elapsedTimeSeconds / 60)%60, elapsedTimeSeconds % 60)
         val filesSummary = """
-            Total: $progressNumber
-            Processed: ${progressNumber-deletedImages}
+            Elapsed Time: $elapsedTime
+            Images: ${progressNumber-deletedImages}
             Invalid: $deletedImages
         """.trimIndent()
 
         val notification = NotificationCompat.Builder(applicationContext, id)
-            .setContentTitle("Total $progressNumber files processed")
-            .setContentText("Elapsed time $elapsedTime")
+            .setContentTitle("All $progressNumber files processed")
+            .setContentText("You can now search for them in the app. Happy Meme-ing!")
             .setStyle(NotificationCompat.BigTextStyle().bigText(filesSummary))
             .setTicker(title)
             .setContentIntent(PendingIntent.getActivity(applicationContext, 0, intent, 0))
