@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.9.0 - Pre-Beta](https://github.com/Derpimort/Meme-Indexer/releases/tag/v0.9.0)
+20 May 2021, 2:18 am IST
+- Indexbuilder now only lists and puts filepaths in DB
+- Added CoroutineWorker to scan and process files in DB using foreground service concept
+- Scheduled daily scans
+- Post scan summary
+- Notification Icon
+- Dark theme apk
+
 
 ## [0.8.1 - Almost ready](https://github.com/Derpimort/Meme-Indexer/releases/tag/0.8.1)
 20 Apr 2021, 1:37 am IST
