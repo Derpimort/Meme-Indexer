@@ -14,10 +14,20 @@
         <item name="android:editTextColor">@color/colorPrimaryText</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
         <item name="android:textColorHint">@color/colorPrimaryTextHint</item>
+
         <item name="colorPrimaryVariant">@color/colorPrimaryLight</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary50">@color/colorPrimary50</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryDark">@color/colorSecondaryDark</item>
+        <item name="colorSecondaryLight">@color/colorSecondaryLight</item>
+        <item name="colorBackground">@color/colorBackground</item>
+        <item name="colorBackgroundDark">@color/colorBackgroundDark</item>
+        <item name="colorBackgroundLight">@color/colorBackgroundLight</item>
+
         <item name="primaryTextColor">@color/colorPrimaryText</item>
         <item name="buttonNormalColor">@color/colorPrimaryDark</item>
         <item name="buttonHighlightColor">@color/colorPrimary</item>
@@ -33,10 +43,20 @@
         <item name="android:editTextColor">@color/colorDarkPrimaryText</item>
         <item name="android:textColor">@color/colorDarkPrimaryText</item>
         <item name="android:textColorHint">@color/colorDarkPrimaryTextHint</item>
+
         <item name="colorPrimaryVariant">@color/colorDarkPrimaryLight</item>
         <item name="colorPrimary">@color/colorDarkPrimary</item>
         <item name="colorPrimaryDark">@color/colorDarkPrimaryDark</item>
+        <item name="colorPrimary50">@color/colorDarkPrimary50</item>
         <item name="colorAccent">@color/colorDarkAccent</item>
+
+        <item name="colorSecondary">@color/colorDarkSecondary</item>
+        <item name="colorSecondaryDark">@color/colorDarkSecondaryDark</item>
+        <item name="colorSecondaryLight">@color/colorDarkSecondaryLight</item>
+        <item name="colorBackground">@color/colorDarkBackground</item>
+        <item name="colorBackgroundDark">@color/colorDarkBackgroundDark</item>
+        <item name="colorBackgroundLight">@color/colorDarkBackgroundLight</item>
+
         <item name="primaryTextColor">@color/colorDarkPrimaryText</item>
         <item name="buttonNormalColor">@color/colorDarkPrimaryDark</item>
         <item name="buttonHighlightColor">@color/colorDarkPrimary</item>
@@ -52,10 +72,20 @@
         <item name="android:editTextColor">@color/colorLightPrimaryText</item>
         <item name="android:textColor">@color/colorLightPrimaryText</item>
         <item name="android:textColorHint">@color/colorLightPrimaryTextHint</item>
+
         <item name="colorPrimaryVariant">@color/colorLightPrimaryLight</item>
         <item name="colorPrimary">@color/colorLightPrimary</item>
         <item name="colorPrimaryDark">@color/colorLightPrimaryDark</item>
+        <item name="colorPrimary50">@color/colorLightPrimary50</item>
         <item name="colorAccent">@color/colorLightAccent</item>
+
+        <item name="colorSecondary">@color/colorLightSecondary</item>
+        <item name="colorSecondaryDark">@color/colorLightSecondaryDark</item>
+        <item name="colorSecondaryLight">@color/colorLightSecondaryLight</item>
+        <item name="colorBackground">@color/colorLightBackground</item>
+        <item name="colorBackgroundDark">@color/colorLightBackgroundDark</item>
+        <item name="colorBackgroundLight">@color/colorLightBackgroundLight</item>
+
         <item name="primaryTextColor">@color/colorLightPrimaryText</item>
         <item name="buttonNormalColor">@color/colorLightPrimaryDark</item>
         <item name="buttonHighlightColor">@color/colorLightPrimary</item>
