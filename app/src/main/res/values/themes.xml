@@ -3,6 +3,8 @@
     <!-- Base application theme. -->
     <style name="BaseAppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="elevation">0dp</item>
         <item name="android:typeface">sans</item>
         <item name="android:textViewStyle">@style/AppTextViewStyle</item>
@@ -29,8 +31,9 @@
         <item name="colorBackgroundLight">@color/colorBackgroundLight</item>
 
         <item name="primaryTextColor">@color/colorPrimaryText</item>
-        <item name="buttonNormalColor">@color/colorPrimaryDark</item>
-        <item name="buttonHighlightColor">@color/colorPrimary</item>
+        <item name="secondaryTextColor">@color/colorSecondaryText</item>
+        <item name="buttonNormalColor">@color/colorAccent</item>
+        <item name="buttonHighlightColor">@color/colorSecondaryDark</item>
         <item name="buttonTextColor">@color/colorPrimaryText</item>
         <item name="bottomBarColor">@color/colorBackground</item>
         <item name="topBarColor">@color/colorPrimary50</item>
@@ -58,6 +61,7 @@
         <item name="colorBackgroundLight">@color/colorDarkBackgroundLight</item>
 
         <item name="primaryTextColor">@color/colorDarkPrimaryText</item>
+        <item name="secondaryTextColor">@color/colorDarkSecondaryText</item>
         <item name="buttonNormalColor">@color/colorDarkPrimaryDark</item>
         <item name="buttonHighlightColor">@color/colorDarkPrimary</item>
         <item name="buttonTextColor">@color/colorDarkPrimaryText</item>
@@ -87,6 +91,7 @@
         <item name="colorBackgroundLight">@color/colorLightBackgroundLight</item>
 
         <item name="primaryTextColor">@color/colorLightPrimaryText</item>
+        <item name="secondaryTextColor">@color/colorLightSecondaryText</item>
         <item name="buttonNormalColor">@color/colorLightPrimaryDark</item>
         <item name="buttonHighlightColor">@color/colorLightPrimary</item>
         <item name="buttonTextColor">@color/colorLightPrimaryText</item>
