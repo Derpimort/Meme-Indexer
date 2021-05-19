@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="BaseAppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="elevation">0dp</item>
+        <item name="android:typeface">sans</item>
+        <item name="android:textViewStyle">@style/AppTextViewStyle</item>
+        <item name="buttonStyle">@style/AppButtonStyle</item>
+    </style>
+
+    <style name="AppTheme.Legacy" parent="BaseAppTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:editTextColor">@color/colorPrimaryText</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:textColorHint">@color/colorPrimaryTextHint</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryLight</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="primaryTextColor">@color/colorPrimaryText</item>
+        <item name="buttonNormalColor">@color/colorPrimaryDark</item>
+        <item name="buttonHighlightColor">@color/colorPrimary</item>
+        <item name="buttonTextColor">@color/colorPrimaryText</item>
+        <item name="bottomBarColor">@color/colorBackground</item>
+        <item name="topBarColor">@color/colorPrimary50</item>
+        <item name="searchColor">@color/white</item>
+        <item name="titleNameTextColor">@color/white</item>
+    </style>
+
+    <style name="AppTheme.Dark" parent="BaseAppTheme">
+        <item name="android:windowBackground">@color/colorDarkBackground</item>
+        <item name="android:editTextColor">@color/colorDarkPrimaryText</item>
+        <item name="android:textColor">@color/colorDarkPrimaryText</item>
+        <item name="android:textColorHint">@color/colorDarkPrimaryTextHint</item>
+        <item name="colorPrimaryVariant">@color/colorDarkPrimaryLight</item>
+        <item name="colorPrimary">@color/colorDarkPrimary</item>
+        <item name="colorPrimaryDark">@color/colorDarkPrimaryDark</item>
+        <item name="colorAccent">@color/colorDarkAccent</item>
+        <item name="primaryTextColor">@color/colorDarkPrimaryText</item>
+        <item name="buttonNormalColor">@color/colorDarkPrimaryDark</item>
+        <item name="buttonHighlightColor">@color/colorDarkPrimary</item>
+        <item name="buttonTextColor">@color/colorDarkPrimaryText</item>
+        <item name="bottomBarColor">@color/colorDarkBackground</item>
+        <item name="topBarColor">@color/colorDarkPrimary50</item>
+        <item name="searchColor">@color/white</item>
+        <item name="titleNameTextColor">@color/white</item>
+    </style>
+
+    <style name="AppTheme.Light" parent="BaseAppTheme">
+        <item name="android:windowBackground">@color/colorLightBackground</item>
+        <item name="android:editTextColor">@color/colorLightPrimaryText</item>
+        <item name="android:textColor">@color/colorLightPrimaryText</item>
+        <item name="android:textColorHint">@color/colorLightPrimaryTextHint</item>
+        <item name="colorPrimaryVariant">@color/colorLightPrimaryLight</item>
+        <item name="colorPrimary">@color/colorLightPrimary</item>
+        <item name="colorPrimaryDark">@color/colorLightPrimaryDark</item>
+        <item name="colorAccent">@color/colorLightAccent</item>
+        <item name="primaryTextColor">@color/colorLightPrimaryText</item>
+        <item name="buttonNormalColor">@color/colorLightPrimaryDark</item>
+        <item name="buttonHighlightColor">@color/colorLightPrimary</item>
+        <item name="buttonTextColor">@color/colorLightPrimaryText</item>
+        <item name="bottomBarColor">@color/colorLightBackground</item>
+        <item name="topBarColor">@color/colorLightPrimary50</item>
+        <item name="searchColor">@color/black</item>
+        <item name="titleNameTextColor">@color/white</item>
+
+    </style>
+
+
+</resources>
