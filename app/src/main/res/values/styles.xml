@@ -1,18 +1,13 @@
 <resources>
 
 
-    <style name="BaseAppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <style name="BaseAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="BaseAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
     <style name="AppFontStyle">
         <item name="android:fontFamily">@font/noto_sans</item>
-        <item name="android:textColor">@color/colorTitleText</item>
+        <item name="android:textColor">?attr/titleNameTextColor</item>
     </style>
 
     <style name="AppTextViewStyle" parent="android:Widget.TextView">
@@ -30,10 +25,19 @@
     </style>
     
     <style name="AlertDialogBase" parent="Theme.AppCompat.DayNight.Dialog.Alert">
-        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
-        <item name="android:windowBackground">@color/colorBackgroundLight</item>
+        <item name="android:textColorPrimary">?attr/primaryTextColor</item>
+        <item name="android:windowBackground">?attr/colorBackgroundLight</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <string name="search_hint">Text to search</string>
+    <!-- TODO: Find elegant way to properly use our color theme attributes in cardviews instead of  hardcoding legacy theme
+    <style name="SearchCardStyle" parent="CardView">
+        <item name="cardBackgroundColor">?attr/colorBackgroundLight</item>
+    </style>
+
+    <style name="MemefileCardStyle" parent="CardView">
+        <item name="cardBackgroundColor">#00FDF2F2</item>
+    </style>
+    -->
+
 </resources>

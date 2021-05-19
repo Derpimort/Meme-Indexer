@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:gravity="center"
-            android:textColor="@color/colorTitleText"
+            android:textColor="?attr/titleNameTextColor"
             android:text="@string/tab_text_1"
             android:textSize="18sp" />
 
@@ -51,20 +51,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/colorBottomBar"
+            android:background="?attr/bottomBarColor"
             android:elevation="3dp">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:icon="@drawable/ic_image_search_24px"
-                android:tint="@color/colorAccent" />
+                android:tint="?attr/colorAccent" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:icon="@drawable/ic_image_search_24px"
-                android:tint="@color/colorAccent" />
+                android:tint="?attr/colorAccent" />
         </com.google.android.material.tabs.TabLayout>
     </LinearLayout>
 
