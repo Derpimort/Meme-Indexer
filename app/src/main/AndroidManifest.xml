@@ -13,7 +13,8 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.Legacy">
+        android:theme="@style/AppTheme.Legacy"
+        android:name=".App">
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
