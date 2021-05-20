@@ -1,5 +1,3 @@
-package com.legendbois.memeindexer.ui.main
-
 import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
@@ -18,9 +16,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
 import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
-import com.legendbois.memeindexer.ConstantsHelper
+import com.legendbois.memeindexer.*
 import com.legendbois.memeindexer.R
-import com.legendbois.memeindexer.SharedPrefManager
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
@@ -218,8 +215,10 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                 snackbar.dismiss()
                 indexbuilder_button.text = getString(R.string.scan)
             }
-            snackbar.setActionTextColor(ContextCompat.getColor(requireActivity(), R.color.colorAccent))
-            snackbar.view.setBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.colorBackgroundLight))
+            val actionTextColor = (activity as MainActivity).getColorFromAttr(R.attr.colorAccent)
+            val backgroundColor = (activity as MainActivity).getColorFromAttr(R.attr.colorBackgroundLight)
+            snackbar.setActionTextColor(actionTextColor)
+            snackbar.view.setBackgroundColor(backgroundColor)
             snackbar.show()
         }
         else{
