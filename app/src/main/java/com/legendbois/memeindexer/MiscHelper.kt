@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import java.util.*
+import kotlin.math.abs
 
 object MiscHelper {
     private val EMAIL_IDS = arrayOf("jatinsaini580@gmail.com")
@@ -21,5 +23,24 @@ object MiscHelper {
         catch ( ex : android.content.ActivityNotFoundException){
             Toast.makeText(context.applicationContext,"There are no email clients installed", Toast.LENGTH_SHORT).show()
         }
+    }
+
+
+    fun getStartDelay(hour: Int, minutes: Int): Long{
+        val targetTime = Calendar.getInstance()
+        targetTime.set(Calendar.HOUR_OF_DAY, hour)
+        targetTime.set(Calendar.MINUTE, minutes)
+        targetTime.set(Calendar.SECOND, 0)
+        targetTime.set(Calendar.MILLISECOND, 0)
+
+
+        val currentTime = Calendar.getInstance()
+        if(abs(targetTime.timeInMillis - currentTime.timeInMillis) > 300000){
+            if (targetTime.timeInMillis < currentTime.timeInMillis){
+                targetTime.add(Calendar.DAY_OF_MONTH, 1)
+            }
+            return targetTime.timeInMillis/1000 - currentTime.timeInMillis/1000
+        }
+        return 0
     }
 }

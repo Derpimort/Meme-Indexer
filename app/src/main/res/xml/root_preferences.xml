@@ -20,17 +20,16 @@
 
         <SwitchPreference
             app:defaultValue="true"
-            app:key="sync"
+            app:key="@string/scan_key"
             app:summaryOff="@string/scan_summary_off"
             app:summaryOn="@string/scan_summary_on"
             app:title="@string/scan_title" />
-
-        <!--<SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />-->
+        <EditTextPreference
+            app:dependency="@string/scan_key"
+            app:defaultValue="03:00"
+            app:key="@string/scan_time_key"
+            app:summary="@string/scan_time_summary"
+            app:title="@string/scan_time_title"/>
 
     </PreferenceCategory>
 
