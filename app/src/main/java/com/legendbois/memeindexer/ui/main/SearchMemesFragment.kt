@@ -49,9 +49,10 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         val root = inflater.inflate(R.layout.searchmemes_frag, container, false)
         val search: SearchView = root.findViewById(R.id.searchmemes_search)
 
-        setupSearchRV(root)
+
         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
         usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
+        setupSearchRV(root)
         setupSearchHistoryRV(root)
         search.isFocusable=false
         search.isIconifiedByDefault = false
@@ -62,7 +63,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) {
-            view!!.findViewById<SearchView>(R.id.searchmemes_search).clearFocus()
+            requireView().findViewById<SearchView>(R.id.searchmemes_search).clearFocus()
             memeFileViewModel.searchMemes("%${query.toLowerCase(Locale.ROOT)}%").observe(viewLifecycleOwner, Observer { memes ->
                 adapter.setMemes(memes)
             })

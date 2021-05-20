@@ -25,7 +25,10 @@
     </style>
     
     <style name="AlertDialogBase" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="textColorAlertDialogListItem">?attr/secondaryTextColor</item>
+        <item name="android:textColor">?attr/primaryTextColor</item>
         <item name="android:textColorPrimary">?attr/primaryTextColor</item>
+        <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
         <item name="android:windowBackground">?attr/colorBackgroundLight</item>
         <item name="android:windowNoTitle">true</item>
     </style>

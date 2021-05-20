@@ -3,12 +3,14 @@ package com.legendbois.memeindexer
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
+import kotlinx.android.synthetic.main.settings_activity.*
 
 class SettingsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
+        setSupportActionBar(settings_toolbar)
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()

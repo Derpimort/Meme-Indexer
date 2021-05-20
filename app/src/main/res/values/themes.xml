@@ -9,6 +9,8 @@
         <item name="android:typeface">sans</item>
         <item name="android:textViewStyle">@style/AppTextViewStyle</item>
         <item name="buttonStyle">@style/AppButtonStyle</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="alertDialogTheme">@style/AlertDialogBase</item>
     </style>
 
     <style name="AppTheme.Legacy" parent="BaseAppTheme">
@@ -16,6 +18,9 @@
         <item name="android:editTextColor">@color/colorPrimaryText</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
         <item name="android:textColorHint">@color/colorPrimaryTextHint</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorSecondaryText</item>
+        <item name="android:textColorTertiary">@color/colorSecondaryText</item>
 
         <item name="colorPrimaryVariant">@color/colorPrimaryLight</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -39,6 +44,8 @@
         <item name="topBarColor">@color/colorPrimary50</item>
         <item name="searchColor">@color/white</item>
         <item name="titleNameTextColor">@color/white</item>
+
+
     </style>
 
     <style name="AppTheme.Dark" parent="BaseAppTheme">
@@ -46,6 +53,8 @@
         <item name="android:editTextColor">@color/colorDarkPrimaryText</item>
         <item name="android:textColor">@color/colorDarkPrimaryText</item>
         <item name="android:textColorHint">@color/colorDarkPrimaryTextHint</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorSecondaryText</item>
 
         <item name="colorPrimaryVariant">@color/colorDarkPrimaryLight</item>
         <item name="colorPrimary">@color/colorDarkPrimary</item>
@@ -76,6 +85,8 @@
         <item name="android:editTextColor">@color/colorLightPrimaryText</item>
         <item name="android:textColor">@color/colorLightPrimaryText</item>
         <item name="android:textColorHint">@color/colorLightPrimaryTextHint</item>
+        <item name="android:textColorPrimary">@color/colorLightPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorLightSecondaryText</item>
 
         <item name="colorPrimaryVariant">@color/colorLightPrimaryLight</item>
         <item name="colorPrimary">@color/colorLightPrimary</item>
