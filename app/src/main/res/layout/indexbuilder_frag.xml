@@ -25,7 +25,7 @@
             android:backgroundTint="?attr/primaryTextColor"
             android:ems="10"
             android:hint="@string/path"
-            android:inputType="textUri" />
+            android:inputType="textUri"/>
 
     </LinearLayout>
 

@@ -51,8 +51,11 @@ class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceCha
                 cancelAllPeriodicWork()
             }
         }
-        if(key == SharedPrefManager.KEY_SCAN_TIME){
+        else if(key == SharedPrefManager.KEY_SCAN_TIME){
             schedulePeriodicWork()
+        }
+        else if(key == SharedPrefManager.KEY_CURRENT_THEME){
+            Toast.makeText(this, "Please restart the app for the changes to be reflected properly.", Toast.LENGTH_LONG).show()
         }
     }
 

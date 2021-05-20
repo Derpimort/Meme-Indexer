@@ -229,6 +229,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         indexbuilder_button.isEnabled = value
         indexbuilder_button.isClickable = value
         indexbuilder_path.setText(path)
+        indexbuilder_path.setTextIsSelectable(!value)
         indexbuilder_path.isFocusableInTouchMode = value
         indexbuilder_path.isFocusable = value
 
