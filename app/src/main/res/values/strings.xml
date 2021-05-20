@@ -56,5 +56,6 @@
     <string name="scan_time_key">scan_time</string>
     <string name="scan_time_title">Preferred scan time</string>
     <string name="scan_time_summary">HH:MM 24-Hour format</string>
+    <string name="settings">Settings</string>
 
 </resources>

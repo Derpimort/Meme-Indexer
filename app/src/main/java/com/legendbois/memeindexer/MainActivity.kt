@@ -129,8 +129,13 @@ class MainActivity : BaseActivity() {
                 true
             }
             R.id.aboutus_menuitem ->{
-                val aboustUsIntent = Intent(this@MainActivity, SettingsActivity::class.java)
-                startActivity(aboustUsIntent)
+                val aboutUsIntent = Intent(this@MainActivity, AboutUsActivity::class.java)
+                startActivity(aboutUsIntent)
+                true
+            }
+            R.id.settings_menuitem ->{
+                val settingsIntent = Intent(this@MainActivity, SettingsActivity::class.java)
+                startActivity(settingsIntent)
                 true
             }
             else -> super.onOptionsItemSelected(item)

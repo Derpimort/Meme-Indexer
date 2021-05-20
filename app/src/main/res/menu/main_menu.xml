@@ -5,11 +5,16 @@
         android:id="@+id/feedback_menuitem"
         android:icon="@drawable/ic_email_24px"
         android:title="@string/feedback"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/aboutus_menuitem"
         android:icon="@drawable/ic_info_24dp"
         android:title="@string/about_us"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/settings_menuitem"
+        android:icon="@drawable/ic_settings_24dp"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom|withText"/>
 
 </menu>
