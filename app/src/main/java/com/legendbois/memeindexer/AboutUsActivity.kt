@@ -12,6 +12,7 @@ class AboutUsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about_us)
         setSupportActionBar(aboutus_toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     fun openSocial(view: View){
