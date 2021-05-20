@@ -90,12 +90,12 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     }
 
     fun setupSearchRV(root: View){
-        val application = requireNotNull(this.activity).application
+        val application = requireNotNull(this.activity)
         val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_recyclerview)
 
         //Thanks to https://antonioleiva.com/recyclerview-listener/
         adapter =
-            SearchRV(application.applicationContext) { item, share ->
+            SearchRV(application) { item, share ->
                 when (share) {
                     0 -> imagePopup(item.filepath)
                     1 -> shareImage(item.filepath)
@@ -132,12 +132,12 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     }
 
     fun setupSearchHistoryRV(root: View){
-        val application = requireNotNull(this.activity).application
+        val application = requireNotNull(this.activity)
         val recyclerView = root.findViewById<RecyclerView>(R.id.searchmemes_historyrv)
 
         //Thanks to https://antonioleiva.com/recyclerview-listener/
         val shAdapter =
-            SearchHistoryRV(application.applicationContext) { item ->
+            SearchHistoryRV(application) { item ->
                 root.findViewById<SearchView>(R.id.searchmemes_search).setQuery(item.pathOrQuery, true)
                 // onQueryTextSubmit(item.pathOrQuery)
             }

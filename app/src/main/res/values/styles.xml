@@ -30,14 +30,4 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <!-- TODO: Find elegant way to properly use our color theme attributes in cardviews instead of  hardcoding legacy theme
-    <style name="SearchCardStyle" parent="CardView">
-        <item name="cardBackgroundColor">?attr/colorBackgroundLight</item>
-    </style>
-
-    <style name="MemefileCardStyle" parent="CardView">
-        <item name="cardBackgroundColor">#00FDF2F2</item>
-    </style>
-    -->
-
 </resources>

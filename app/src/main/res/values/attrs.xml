@@ -18,7 +18,5 @@
     <attr name="topBarColor" format="reference"/>
     <attr name="searchColor" format="reference"/>
     <attr name="titleNameTextColor" format="reference"/>
-    <attr name="searchCardStyle" format="reference"/>
-    <attr name="memefileCardStyle" format="reference"/>
 
 </resources>
