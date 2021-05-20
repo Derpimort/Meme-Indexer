@@ -13,6 +13,7 @@ import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.tabs.TabLayout
@@ -95,6 +96,8 @@ class MainActivity : BaseActivity() {
             }
         }*/
 
+        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
+
     }
 
     override fun onRequestPermissionsResult(
@@ -126,7 +129,7 @@ class MainActivity : BaseActivity() {
                 true
             }
             R.id.aboutus_menuitem ->{
-                val aboustUsIntent = Intent(this@MainActivity, AboutUsActivity::class.java)
+                val aboustUsIntent = Intent(this@MainActivity, SettingsActivity::class.java)
                 startActivity(aboustUsIntent)
                 true
             }

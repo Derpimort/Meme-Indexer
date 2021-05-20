@@ -38,4 +38,19 @@
     <string name="notification_channel_description">Used to show the user current progress of indexing the previously scanned images</string>
     <string name="notification_title">@string/app_name</string>
     <string name="notification_cancel">Stop</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="theme_header">Themes</string>
+    <string name="scan_header">Scan Settings</string>
+
+    <!-- Theme Preferences -->
+    <string name="theme_title">Application Theme</string>
+    <string name="theme_key">current_theme</string>
+
+    <!-- Sync Preferences -->
+    <string name="scan_title">Scan periodically</string>
+    <string name="scan_summary_on">Automatically scan selected directories in background</string>
+    <string name="scan_summary_off">Only scan selected directories when manually requested</string>
+
 </resources>

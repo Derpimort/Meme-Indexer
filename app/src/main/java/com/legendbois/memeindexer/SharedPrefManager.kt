@@ -2,11 +2,12 @@ package com.legendbois.memeindexer
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 
 class SharedPrefManager private constructor(context: Context){
 
     init {
-        sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     }
 
     var currentTheme: String
@@ -19,6 +20,7 @@ class SharedPrefManager private constructor(context: Context){
 
     companion object{
         private const val SHARED_PREF_NAME = "meme_indexer_settings"
+        //TODO: bad coding, find alternative to get string resource here
         private const val KEY_CURRENT_THEME = "current_theme"
 
         private var mInstance: SharedPrefManager? = null
