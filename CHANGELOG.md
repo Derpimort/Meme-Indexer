@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.10.0 - Beta](https://github.com/Derpimort/Meme-Indexer/releases/tag/v0.10.0)
+23 May 2021, 2:08 am IST
+- **Themes & Settings activity**
+- Theme selection: 
+  - Legacy
+  - Dark
+  - Light
+- Schedule scan:
+  - On/Off
+  - Time selection
+  - Run onetime on indexbuilder select if Off
+- SharedPrefs and Preferences for settings
+- FIX
+  - Default color settings for themes
+  - Picasso in RV bind bug
+
+
+
 ## [0.9.0 - Pre-Beta](https://github.com/Derpimort/Meme-Indexer/releases/tag/v0.9.0)
 20 May 2021, 2:18 am IST
 - Indexbuilder now only lists and puts filepaths in DB
