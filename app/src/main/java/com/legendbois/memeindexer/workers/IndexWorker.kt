@@ -31,6 +31,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
 
     val notificationId = 69420
     val channelId = "Meme Indexer Service"
+    val channelName = "Meme Indexer - Index Progress"
     var totalFiles: Int = 0
     var progressNumber: Int = 0
     var concurrentImages: Int = 0
@@ -196,7 +197,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createChannel() {
-        val channel = NotificationChannel(channelId, R.string.notification_channel_name.toString(), NotificationManager.IMPORTANCE_LOW)
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_LOW)
         notificationManager.createNotificationChannel(channel)
     }
 

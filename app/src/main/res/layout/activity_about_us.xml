@@ -117,10 +117,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
-                app:srcCompat="@drawable/ic_brand_github_light_64px"
                 android:contentDescription="@string/github"
+                android:onClick="openSocial"
                 android:tag="https://github.com/Derpimort"
-                android:onClick="openSocial"/>
+                app:tint="?attr/primaryTextColor"
+                app:srcCompat="@drawable/ic_brand_github_light_64px" />
 
             <ImageView
                 android:id="@+id/aboutus_info_findus_jatin_linkedin"
@@ -137,10 +138,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
-                app:srcCompat="@drawable/ic_email_24px"
                 android:contentDescription="@string/email"
+                android:onClick="openSocial"
                 android:tag="email"
-                android:onClick="openSocial"/>
+                app:tint="?attr/primaryTextColor"
+                app:srcCompat="@drawable/ic_email_24px" />
         </LinearLayout>
 
         <LinearLayout

@@ -5,8 +5,8 @@
     <color name="black">#0f0f0f</color>
     <color name="transparent">#00000000</color>
     <color name="ic_launcher_background">#cb202d</color>
+    <color name="colorHyperlink">#2196F3</color>
 
-    <!-- Theme tut https://medium.com/@vinitagrawal91/android-colors-and-multiple-themes-fdfca3f75a15 -->
     <!-- Legacy Theme -->
     <color name="colorPrimary">#C90000</color>
     <color name="colorPrimary50">#50C90000</color>
@@ -54,13 +54,5 @@
     <color name="colorLightPrimaryText">#000000</color>
     <color name="colorLightPrimaryTextHint">#8C8C8C</color>
     <color name="colorLightSecondaryText">#303030</color>
-
-
-    <color name="colorBottomBar">@color/colorBackground</color>
-    <color name="colorTopBar">@color/colorPrimary50</color>
-    <color name="colorBigButton">@color/colorAccent</color>
-    <color name="colorSearch">@color/white</color>
-    <color name="colorTitleText">@color/white</color>
-    <color name="colorHyperlink">#2196F3</color>
 
 </resources>
