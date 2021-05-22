@@ -4,6 +4,6 @@
         <nine-patch android:src="@drawable/waves_new"/>
     </item>
     <item>
-        <color android:color="@color/colorPrimary50"/>
+        <color android:color="?attr/colorPrimary50"/>
     </item>
 </layer-list>

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="white">#fafafa</color>
+    <color name="black">#0f0f0f</color>
+    <color name="transparent">#00000000</color>
+    <color name="ic_launcher_background">#cb202d</color>
+
+    <!-- Theme tut https://medium.com/@vinitagrawal91/android-colors-and-multiple-themes-fdfca3f75a15 -->
+    <!-- Legacy Theme -->
     <color name="colorPrimary">#C90000</color>
     <color name="colorPrimary50">#50C90000</color>
     <color name="colorAccent">#fe9a00</color>
@@ -11,13 +19,42 @@
     <color name="colorBackground">#0D0D0D</color>
     <color name="colorBackgroundDark">#000000</color>
     <color name="colorBackgroundLight">#252525</color>
-    <color name="colorPrimaryText">#ffffff</color>
+    <color name="colorPrimaryText">#fafafa</color>
     <color name="colorPrimaryTextHint">#8C8C8C</color>
     <color name="colorSecondaryText">#BEBEBE</color>
-    <color name="white">#ffffff</color>
-    <color name="black">#000000</color>
-    <color name="transparent">#00000000</color>
-    <color name="ic_launcher_background">#cb202d</color>
+
+    <!-- Dark Theme -->
+    <color name="colorDarkPrimary">#C90000</color>
+    <color name="colorDarkPrimary50">#50C90000</color>
+    <color name="colorDarkAccent">#ffffff</color>
+    <color name="colorDarkPrimaryDark">#900000</color>
+    <color name="colorDarkPrimaryLight">#ff4e2f</color>
+    <color name="colorDarkSecondary">#ffdddd</color>
+    <color name="colorDarkSecondaryDark">#ffffff</color>
+    <color name="colorDarkSecondaryLight">#fff7f7</color>
+    <color name="colorDarkBackground">#302525</color>
+    <color name="colorDarkBackgroundDark">#221a1a</color>
+    <color name="colorDarkBackgroundLight">#3e3030</color>
+    <color name="colorDarkPrimaryText">#fafafa</color>
+    <color name="colorDarkPrimaryTextHint">#8C8C8C</color>
+    <color name="colorDarkSecondaryText">#BEBEBE</color>
+
+    <!-- Light Theme -->
+    <color name="colorLightPrimary">#DE5050</color>
+    <color name="colorLightPrimary50">#E1DE5050</color>
+    <color name="colorLightAccent">#0D0D0D</color>
+    <color name="colorLightPrimaryDark">#B24040</color>
+    <color name="colorLightPrimaryLight">#ff4e2f</color>
+    <color name="colorLightSecondary">#0D0D0D</color>
+    <color name="colorLightSecondaryDark">#000000</color>
+    <color name="colorLightSecondaryLight">#252525</color>
+    <color name="colorLightBackground">#FBFBFB</color>
+    <color name="colorLightBackgroundDark">#FFFFFF</color>
+    <color name="colorLightBackgroundLight">#FFFFFF</color>
+    <color name="colorLightPrimaryText">#000000</color>
+    <color name="colorLightPrimaryTextHint">#8C8C8C</color>
+    <color name="colorLightSecondaryText">#303030</color>
+
 
     <color name="colorBottomBar">@color/colorBackground</color>
     <color name="colorTopBar">@color/colorPrimary50</color>

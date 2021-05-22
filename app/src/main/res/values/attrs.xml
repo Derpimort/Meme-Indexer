@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorPrimary50" format="reference"/>
+    <attr name="colorSecondary" format="reference"/>
+    <attr name="colorSecondaryDark" format="reference"/>
+    <attr name="colorSecondaryLight" format="reference"/>
+
+    <attr name="colorBackground" format="reference"/>
+    <attr name="colorBackgroundDark" format="reference"/>
+    <attr name="colorBackgroundLight" format="reference"/>
+
+    <attr name="primaryTextColor" format="reference"/>
+    <attr name="secondaryTextColor" format="reference"/>
+    <attr name="buttonNormalColor" format="reference"/>
+    <attr name="buttonHighlightColor" format="reference" />
+    <attr name="buttonTextColor" format="reference" />
+    <attr name="bottomBarColor" format="reference"/>
+    <attr name="topBarColor" format="reference"/>
+    <attr name="searchColor" format="reference"/>
+    <attr name="titleNameTextColor" format="reference"/>
+
+</resources>

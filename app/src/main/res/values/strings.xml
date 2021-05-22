@@ -10,6 +10,7 @@
     <string name="_0">0</string>
     <string name="files_processed">Files processed</string>
     <string name="meme_file_popup">Meme file popup image</string>
+    <string name="search_hint">Text to search</string>
     <string name="feedback">Feedback</string>
     <string name="send_feedback">Send Feedback</string>
     <string name="feedback_hint"><font size="16">What could be implemented or improved</font></string>
@@ -37,4 +38,24 @@
     <string name="notification_channel_description">Used to show the user current progress of indexing the previously scanned images</string>
     <string name="notification_title">@string/app_name</string>
     <string name="notification_cancel">Stop</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="theme_header">Themes</string>
+    <string name="scan_header">Scan Settings</string>
+
+    <!-- Theme Preferences -->
+    <string name="theme_title">Application Theme</string>
+    <string name="theme_key">current_theme</string>
+
+    <!-- Sync Preferences -->
+    <string name="scan_title">Scan periodically</string>
+    <string name="scan_summary_on">Automatically scan selected directories in background</string>
+    <string name="scan_summary_off">Only scan selected directories when manually requested</string>
+    <string name="scan_key">scan_bool</string>
+    <string name="scan_time_key">scan_time</string>
+    <string name="scan_time_title">Preferred scan time</string>
+    <string name="scan_time_summary">HH:MM 24-Hour format</string>
+    <string name="settings">Settings</string>
+
 </resources>

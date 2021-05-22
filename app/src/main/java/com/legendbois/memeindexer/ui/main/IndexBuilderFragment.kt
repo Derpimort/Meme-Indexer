@@ -1,5 +1,3 @@
-package com.legendbois.memeindexer.ui.main
-
 import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
@@ -18,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
 import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
-import com.legendbois.memeindexer.ConstantsHelper
+import com.legendbois.memeindexer.*
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
@@ -103,8 +101,8 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     //Thanks to https://stackoverflow.com/questions/41096332/issues-traversing-through-directory-hierarchy-with-android-storage-access-framew
     suspend fun traverseDirectoryEntries(rootUri: Uri?): Int{
         var totalFiles = 0
-        val contentResolver = activity!!.contentResolver
-        val storages: Array<out File> = context!!.getExternalFilesDirs(null)
+        val contentResolver = requireActivity().contentResolver
+        val storages: Array<out File> = requireContext().getExternalFilesDirs(null)
         // val oreoSdk = Build.VERSION_CODES.O
 
         var childrenUri: Uri = try {
@@ -217,8 +215,10 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                 snackbar.dismiss()
                 indexbuilder_button.text = getString(R.string.scan)
             }
-            snackbar.setActionTextColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
-            snackbar.view.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorBackgroundLight))
+            val actionTextColor = (activity as MainActivity).getColorFromAttr(R.attr.colorAccent)
+            val backgroundColor = (activity as MainActivity).getColorFromAttr(R.attr.colorBackgroundLight)
+            snackbar.setActionTextColor(actionTextColor)
+            snackbar.view.setBackgroundColor(backgroundColor)
             snackbar.show()
         }
         else{
@@ -229,6 +229,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         indexbuilder_button.isEnabled = value
         indexbuilder_button.isClickable = value
         indexbuilder_path.setText(path)
+        indexbuilder_path.setTextIsSelectable(!value)
         indexbuilder_path.isFocusableInTouchMode = value
         indexbuilder_path.isFocusable = value
 
@@ -302,47 +303,31 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
     }
 
-    private fun getTargetTime(): Calendar{
-        val targetTime = Calendar.getInstance()
 
-        targetTime.set(Calendar.HOUR_OF_DAY, 3)
-        targetTime.set(Calendar.MINUTE, 18)
-        targetTime.set(Calendar.SECOND, 0)
-        targetTime.set(Calendar.MILLISECOND, 0)
-
-        return targetTime
-    }
-
-    private fun getStartDelay(): Long{
-        val targetTime = getTargetTime()
-        val currentTime = Calendar.getInstance()
-        if(abs(targetTime.timeInMillis - currentTime.timeInMillis) > 300000){
-            if (targetTime.timeInMillis < currentTime.timeInMillis){
-                targetTime.add(Calendar.DAY_OF_MONTH, 1)
-            }
-            return targetTime.timeInMillis/1000 - currentTime.timeInMillis/1000
-        }
-        return 0
-    }
 
     private fun scheduleIndex(){
         val constraints = Constraints.Builder()
             .setRequiresBatteryNotLow(true)
             .build()
-
-        val workerRequest = PeriodicWorkRequestBuilder<IndexWorker>(24, TimeUnit.HOURS)
-            .setInitialDelay(getStartDelay()/60, TimeUnit.MINUTES)
-            .setConstraints(constraints)
-            .addTag(ConstantsHelper.WORKREQ_TAG)
-            .build()
-
         if(this.context != null){
-            WorkManager.getInstance(this.context!!.applicationContext).enqueueUniquePeriodicWork(
-                ConstantsHelper.WORKMANAGER_UID,
-                ExistingPeriodicWorkPolicy.REPLACE,
-                workerRequest
-            )
+            val workManager = WorkManager.getInstance(this.requireContext().applicationContext)
+            if(!SharedPrefManager.getInstance(requireContext()).scanBool){
+
+                val workerRequest = OneTimeWorkRequestBuilder<IndexWorker>()
+                    .setConstraints(constraints)
+                    .addTag(ConstantsHelper.ONETIME_WORKREQ_TAG)
+                    .build()
+
+                workManager.enqueueUniqueWork(
+                        ConstantsHelper.WORKMANAGER_UID,
+                        ExistingWorkPolicy.APPEND_OR_REPLACE,
+                        workerRequest
+                    )
+            }
+
         }
+
+
 
     }
 }

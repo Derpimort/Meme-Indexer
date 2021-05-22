@@ -5,11 +5,11 @@
     android:layout_width="wrap_content"
     android:layout_height="25dp"
     android:layout_margin="2dp"
-    app:cardBackgroundColor="@color/colorBackgroundLight"
+    app:cardBackgroundColor="?attr/colorBackgroundLight"
     app:cardCornerRadius="12dp"
     app:cardElevation="3dp"
     app:contentPadding="3dp"
-    app:strokeColor="@color/colorAccent"
+    app:strokeColor="?attr/colorSecondary"
     app:strokeWidth="1dp"
     android:minWidth="50dp">
 
@@ -19,6 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/placeholder"
-        android:textColor="@color/colorPrimaryText"
+        android:textColor="?attr/primaryTextColor"
         android:textSize="14sp" />
 </androidx.cardview.widget.CardView>

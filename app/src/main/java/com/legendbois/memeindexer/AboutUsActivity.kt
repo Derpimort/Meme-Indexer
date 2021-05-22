@@ -4,16 +4,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_about_us.*
 
 
-class AboutUsActivity : AppCompatActivity() {
+class AboutUsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about_us)
         setSupportActionBar(aboutus_toolbar)
-
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     fun openSocial(view: View){

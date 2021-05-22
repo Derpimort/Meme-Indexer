@@ -13,8 +13,7 @@ import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.tabs.TabLayout
@@ -23,7 +22,7 @@ import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var tabs: TabLayout
     private val TAB_TITLES = arrayOf(
@@ -97,6 +96,8 @@ class MainActivity : AppCompatActivity() {
             }
         }*/
 
+        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
+
     }
 
     override fun onRequestPermissionsResult(
@@ -128,8 +129,13 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.aboutus_menuitem ->{
-                val aboustUsIntent = Intent(this@MainActivity, AboutUsActivity::class.java)
-                startActivity(aboustUsIntent)
+                val aboutUsIntent = Intent(this@MainActivity, AboutUsActivity::class.java)
+                startActivity(aboutUsIntent)
+                true
+            }
+            R.id.settings_menuitem ->{
+                val settingsIntent = Intent(this@MainActivity, SettingsActivity::class.java)
+                startActivity(settingsIntent)
                 true
             }
             else -> super.onOptionsItemSelected(item)

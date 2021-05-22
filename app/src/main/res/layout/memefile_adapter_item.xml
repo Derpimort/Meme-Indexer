@@ -43,7 +43,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/bottom_selected"
                 android:src="@drawable/ic_info_black"
-                android:tint="@color/colorAccent"
+                android:tint="?attr/colorAccent"
                 app:srcCompat="@android:drawable/ic_dialog_info"
                 tools:srcCompat="@android:drawable/ic_menu_info_details" />
 
@@ -52,7 +52,7 @@
                 android:layout_width="1dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
-                android:background="@color/colorAccent" />
+                android:background="?attr/colorAccent" />
 
             <ImageButton
                 android:id="@+id/recycler_item_button"
@@ -62,7 +62,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/bottom_selected"
                 android:src="@drawable/ic_share_black"
-                android:tint="@color/colorAccent"
+                android:tint="?attr/colorAccent"
                 app:srcCompat="?attr/actionModeShareDrawable"
                 tools:srcCompat="?attr/actionModeShareDrawable" />
         </LinearLayout>

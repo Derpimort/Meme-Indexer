@@ -1,33 +1,13 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="elevation">0dp</item>
-        <item name="android:typeface">sans</item>
-        <item name="android:textViewStyle">@style/AppTextViewStyle</item>
-        <item name="buttonStyle">@style/AppButtonStyle</item>
-        <item name="android:editTextColor">@color/colorPrimaryText</item>
-        <item name="android:textColor">@color/colorPrimaryText</item>
-        <item name="android:textColorHint">@color/colorPrimaryTextHint</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryLight</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="BaseAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
+    <style name="BaseAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
     <style name="AppFontStyle">
         <item name="android:fontFamily">@font/noto_sans</item>
-        <item name="android:textColor">@color/colorTitleText</item>
+        <item name="android:textColor">?attr/titleNameTextColor</item>
     </style>
 
     <style name="AppTextViewStyle" parent="android:Widget.TextView">
@@ -45,10 +25,12 @@
     </style>
     
     <style name="AlertDialogBase" parent="Theme.AppCompat.DayNight.Dialog.Alert">
-        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
-        <item name="android:windowBackground">@color/colorBackgroundLight</item>
+        <item name="textColorAlertDialogListItem">?attr/secondaryTextColor</item>
+        <item name="android:textColor">?attr/primaryTextColor</item>
+        <item name="android:textColorPrimary">?attr/primaryTextColor</item>
+        <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
+        <item name="android:windowBackground">?attr/colorBackgroundLight</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <string name="search_hint">Text to search</string>
 </resources>

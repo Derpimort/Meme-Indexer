@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
     <solid
-        android:color="@color/colorBigButton"/>
+        android:color="?attr/buttonNormalColor"/>
     <stroke
         android:width="16dp"
         android:color="@color/transparent"/>
