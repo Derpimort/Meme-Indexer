@@ -36,16 +36,17 @@
             android:id="@+id/searchmemes_historyrv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:foregroundTint="#F44336"
             android:orientation="horizontal"
-            android:scrollbars="horizontal">
+            android:scrollbars="none">
 
         </androidx.recyclerview.widget.RecyclerView>
 
         <View
             android:id="@+id/searchmemes_divider2"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
