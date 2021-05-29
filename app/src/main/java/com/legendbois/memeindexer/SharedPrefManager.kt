@@ -34,12 +34,21 @@ class SharedPrefManager private constructor(context: Context){
         editor.apply()
     }
 
+    var disclaimerBool: Boolean
+    get() = sharedPreferences.getBoolean(KEY_DISCLAIMER_BOOL, false)
+    set(value) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(KEY_DISCLAIMER_BOOL, value)
+        editor.apply()
+    }
+
     companion object{
         private const val SHARED_PREF_NAME = "meme_indexer_settings"
         //TODO: bad coding, find alternative to get string resource here
         const val KEY_CURRENT_THEME = "current_theme"
         const val KEY_SCAN_BOOL = "scan_bool"
         const val KEY_SCAN_TIME = "scan_time"
+        const val KEY_DISCLAIMER_BOOL = "disclaimer"
 
         private var mInstance: SharedPrefManager? = null
         private lateinit var sharedPreferences: SharedPreferences

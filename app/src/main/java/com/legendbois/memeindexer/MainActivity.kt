@@ -97,6 +97,7 @@ class MainActivity : BaseActivity() {
         }*/
 
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
+        checkDisclaimer(SharedPrefManager.getInstance(this))
 
     }
 
@@ -191,6 +192,35 @@ class MainActivity : BaseActivity() {
             }
         }
         alertDialog.create().show()
+
+    }
+
+    fun checkDisclaimer(sharedPrefManager: SharedPrefManager){
+        if(sharedPrefManager.disclaimerBool){
+            return
+        }
+        else{
+            val dialogView = layoutInflater.inflate(R.layout.popup_disclaimer, null)
+
+            val alertDialog = AlertDialog.Builder(this, R.style.AlertDialogBase)
+                .setTitle("Disclaimer Of Warranty")
+                .setView(dialogView)
+                .setCancelable(false)
+
+
+            alertDialog.setNegativeButton(
+                "Disagree"
+            ) { dialog, which ->
+                finish()
+            }
+            alertDialog.setPositiveButton(
+                "Agree"
+            ){ dialog, i ->
+                sharedPrefManager.disclaimerBool = true
+            }
+
+            alertDialog.create().show()
+        }
 
     }
 }
