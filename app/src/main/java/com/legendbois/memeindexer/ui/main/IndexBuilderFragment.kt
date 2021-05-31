@@ -326,7 +326,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                     .build()
 
                 workManager.enqueueUniqueWork(
-                        ConstantsHelper.WORKMANAGER_UID,
+                        ConstantsHelper.ONETIME_WORKMANAGER_UID,
                         ExistingWorkPolicy.APPEND_OR_REPLACE,
                         workerRequest
                     )
