@@ -200,7 +200,7 @@ class MainActivity : BaseActivity() {
             return
         }
         else{
-            val dialogView = layoutInflater.inflate(R.layout.popup_text, null)
+            val dialogView = layoutInflater.inflate(R.layout.popup_disclaimer, null)
 
             val alertDialog = AlertDialog.Builder(this, R.style.AlertDialogBase)
                 .setTitle("Disclaimer Of Warranty")

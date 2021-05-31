@@ -26,8 +26,7 @@ import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 import com.legendbois.memeindexer.workers.IndexWorker
 import kotlinx.android.synthetic.main.indexbuilder_frag.*
-import kotlinx.android.synthetic.main.popup_text.view.*
-
+import kotlinx.android.synthetic.main.popup_files_populated.view.*
 import kotlinx.coroutines.launch
 import java.io.Closeable
 import java.io.File
@@ -208,7 +207,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private fun toggleButtonState(value: Boolean, path: String? = "", totalFiles: Int = 0){
         if(value){
             indexbuilder_progressbar.visibility=View.GONE
-            val dialogView = layoutInflater.inflate(R.layout.popup_text, null)
+            val dialogView = layoutInflater.inflate(R.layout.popup_files_populated, null)
             dialogView.popup_text_text.text = getString(R.string.scan_success, progressNumber, totalFiles)
             val alertDialog = AlertDialog.Builder(this.requireActivity(), R.style.AlertDialogBase)
                 .setTitle("Files populated")
