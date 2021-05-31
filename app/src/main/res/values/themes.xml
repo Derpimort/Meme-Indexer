@@ -15,10 +15,10 @@
 
     <style name="AppTheme.Legacy" parent="BaseAppTheme">
         <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="android:editTextColor">@color/colorPrimaryText</item>
-        <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:editTextColor">@color/primary_text</item>
+        <item name="android:textColor">@color/primary_text</item>
         <item name="android:textColorHint">@color/colorPrimaryTextHint</item>
-        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
         <item name="android:textColorTertiary">@color/colorSecondaryText</item>
 
@@ -35,11 +35,11 @@
         <item name="colorBackgroundDark">@color/colorBackgroundDark</item>
         <item name="colorBackgroundLight">@color/colorBackgroundLight</item>
 
-        <item name="primaryTextColor">@color/colorPrimaryText</item>
+        <item name="primaryTextColor">@color/primary_text</item>
         <item name="secondaryTextColor">@color/colorSecondaryText</item>
         <item name="buttonNormalColor">@color/colorAccent</item>
         <item name="buttonHighlightColor">@color/colorSecondaryDark</item>
-        <item name="buttonTextColor">@color/colorPrimaryText</item>
+        <item name="buttonTextColor">@color/primary_text</item>
         <item name="bottomBarColor">@color/colorBackground</item>
         <item name="topBarColor">@color/colorPrimary50</item>
         <item name="searchColor">@color/white</item>
@@ -50,10 +50,10 @@
 
     <style name="AppTheme.Dark" parent="BaseAppTheme">
         <item name="android:windowBackground">@color/colorDarkBackground</item>
-        <item name="android:editTextColor">@color/colorDarkPrimaryText</item>
-        <item name="android:textColor">@color/colorDarkPrimaryText</item>
+        <item name="android:editTextColor">@color/dark_primary_text</item>
+        <item name="android:textColor">@color/dark_primary_text</item>
         <item name="android:textColorHint">@color/colorDarkPrimaryTextHint</item>
-        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColorPrimary">@color/dark_primary_text</item>
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
 
         <item name="colorPrimaryVariant">@color/colorDarkPrimaryLight</item>
@@ -69,11 +69,11 @@
         <item name="colorBackgroundDark">@color/colorDarkBackgroundDark</item>
         <item name="colorBackgroundLight">@color/colorDarkBackgroundLight</item>
 
-        <item name="primaryTextColor">@color/colorDarkPrimaryText</item>
+        <item name="primaryTextColor">@color/dark_primary_text</item>
         <item name="secondaryTextColor">@color/colorDarkSecondaryText</item>
         <item name="buttonNormalColor">@color/colorDarkPrimaryDark</item>
         <item name="buttonHighlightColor">@color/colorDarkPrimary</item>
-        <item name="buttonTextColor">@color/colorDarkPrimaryText</item>
+        <item name="buttonTextColor">@color/dark_primary_text</item>
         <item name="bottomBarColor">@color/colorDarkBackground</item>
         <item name="topBarColor">@color/colorDarkPrimary50</item>
         <item name="searchColor">@color/white</item>
@@ -82,10 +82,10 @@
 
     <style name="AppTheme.Light" parent="BaseAppTheme">
         <item name="android:windowBackground">@color/colorLightBackground</item>
-        <item name="android:editTextColor">@color/colorLightPrimaryText</item>
-        <item name="android:textColor">@color/colorLightPrimaryText</item>
+        <item name="android:editTextColor">@color/light_primary_text</item>
+        <item name="android:textColor">@color/light_primary_text</item>
         <item name="android:textColorHint">@color/colorLightPrimaryTextHint</item>
-        <item name="android:textColorPrimary">@color/colorLightPrimaryText</item>
+        <item name="android:textColorPrimary">@color/light_primary_text</item>
         <item name="android:textColorSecondary">@color/colorLightSecondaryText</item>
 
         <item name="colorPrimaryVariant">@color/colorLightPrimaryLight</item>
@@ -101,11 +101,11 @@
         <item name="colorBackgroundDark">@color/colorLightBackgroundDark</item>
         <item name="colorBackgroundLight">@color/colorLightBackgroundLight</item>
 
-        <item name="primaryTextColor">@color/colorLightPrimaryText</item>
+        <item name="primaryTextColor">@color/light_primary_text</item>
         <item name="secondaryTextColor">@color/colorLightSecondaryText</item>
         <item name="buttonNormalColor">@color/colorLightPrimaryDark</item>
         <item name="buttonHighlightColor">@color/colorLightPrimary</item>
-        <item name="buttonTextColor">@color/colorLightPrimaryText</item>
+        <item name="buttonTextColor">@color/light_primary_text</item>
         <item name="bottomBarColor">@color/colorLightBackground</item>
         <item name="topBarColor">@color/colorLightPrimary50</item>
         <item name="searchColor">@color/black</item>
