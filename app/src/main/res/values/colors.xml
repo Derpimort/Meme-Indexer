@@ -33,8 +33,8 @@
     <color name="colorDarkSecondaryDark">#ffffff</color>
     <color name="colorDarkSecondaryLight">#fff7f7</color>
     <color name="colorDarkBackground">#302525</color>
-    <color name="colorDarkBackgroundDark">#221a1a</color>
-    <color name="colorDarkBackgroundLight">#3e3030</color>
+    <color name="colorDarkBackgroundDark">#121212</color>
+    <color name="colorDarkBackgroundLight">#333333</color>
     <color name="colorDarkPrimaryText">#fafafa</color>
     <color name="colorDarkPrimaryTextHint">#8C8C8C</color>
     <color name="colorDarkSecondaryText">#BEBEBE</color>
