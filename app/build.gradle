@@ -11,8 +11,8 @@ android {
         applicationId "com.legendbois.memeindexer"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 4
-        versionName '0.10.0'
+        versionCode 5
+        versionName '0.10.1'
         archivesBaseName = "Meme-Indexer-$versionName"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
