@@ -38,7 +38,7 @@
     <string name="notification_channel_description">Used to show the user current progress of indexing the previously scanned images</string>
     <string name="notification_title">@string/app_name</string>
     <string name="notification_cancel">Stop</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Settings</string>
 
     <!-- Preference Titles -->
     <string name="theme_header">Themes</string>
