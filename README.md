@@ -15,8 +15,8 @@ Android app to ocr and index all the memes inside specified folder for later eas
 - [x] ~~Searchable meme tags~~, Just edit the ocr text :P.
 - [ ] Favourites
 - [x] Meme history
-- [ ] Use foreground service, to prevent interruptions during indexing.
-- [ ] Better app icons.
+- [x] Use foreground service, to prevent interruptions during indexing.
+- [x] Better app icons.
 - [x] Take user feedback.
 
 ***New Design Cred: Khushal Metar***

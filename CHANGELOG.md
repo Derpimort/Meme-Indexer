@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.10.1 - Beta internal testing](https://github.com/Derpimort/Meme-Indexer/releases/tag/v0.10.1)
+01 June 2021, 12:32 am IST
+### Release for play store internal testing
+- **Minor UI fixes**
+  - search history scrollbar hide
+  - Dark theme color updates
+  - primary disabled text color
+  - dialog instead of snackbar on index complete
+  - Spacebar name and logo
+- **Bugs**
+  - Different workmanager UID for onetimerequests, gives error on change otherwise... ofc
+
+
+
 ## [0.10.0 - Beta](https://github.com/Derpimort/Meme-Indexer/releases/tag/v0.10.0)
 23 May 2021, 2:08 am IST
 - **Themes & Settings activity**
