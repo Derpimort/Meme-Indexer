@@ -4,11 +4,13 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.DocumentsContract
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +26,7 @@ import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 import com.legendbois.memeindexer.workers.IndexWorker
 import kotlinx.android.synthetic.main.indexbuilder_frag.*
+import kotlinx.android.synthetic.main.popup_text.view.*
 
 import kotlinx.coroutines.launch
 import java.io.Closeable
@@ -205,21 +208,26 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private fun toggleButtonState(value: Boolean, path: String? = "", totalFiles: Int = 0){
         if(value){
             indexbuilder_progressbar.visibility=View.GONE
+            val dialogView = layoutInflater.inflate(R.layout.popup_text, null)
+            dialogView.popup_text_text.text = getString(R.string.scan_success, progressNumber, totalFiles)
+            val alertDialog = AlertDialog.Builder(this.requireActivity(), R.style.AlertDialogBase)
+                .setTitle("Files populated")
+                .setView(dialogView)
 
-            val snackbar = Snackbar.make(
-                rootView,
-                "Total $progressNumber out of $totalFiles images found in the directory will be scanned.",
-                Snackbar.LENGTH_INDEFINITE
-            )
-            snackbar.setAction("DISMISS") {
-                snackbar.dismiss()
-                indexbuilder_button.text = getString(R.string.scan)
+
+            alertDialog.setNegativeButton(
+                "Dismiss"
+            ) { dialog, _ ->
+                dialog.dismiss()
             }
-            val actionTextColor = (activity as MainActivity).getColorFromAttr(R.attr.colorAccent)
-            val backgroundColor = (activity as MainActivity).getColorFromAttr(R.attr.colorBackgroundLight)
-            snackbar.setActionTextColor(actionTextColor)
-            snackbar.view.setBackgroundColor(backgroundColor)
-            snackbar.show()
+            alertDialog.setPositiveButton(
+                "Scan now"
+            ){ _, _ ->
+                scheduleIndex(true)
+            }
+
+            alertDialog.create().show()
+            indexbuilder_button.text = getString(R.string.scan)
         }
         else{
             indexbuilder_progressbar.visibility=View.VISIBLE
@@ -305,14 +313,13 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
 
 
-    private fun scheduleIndex(){
+    private fun scheduleIndex(scanNow: Boolean = false){
         val constraints = Constraints.Builder()
             .setRequiresBatteryNotLow(true)
             .build()
         if(this.context != null){
-            val workManager = WorkManager.getInstance(this.requireContext().applicationContext)
-            if(!SharedPrefManager.getInstance(requireContext()).scanBool){
-
+            if(scanNow || !SharedPrefManager.getInstance(requireContext()).scanBool){
+                val workManager = WorkManager.getInstance(this.requireContext().applicationContext)
                 val workerRequest = OneTimeWorkRequestBuilder<IndexWorker>()
                     .setConstraints(constraints)
                     .addTag(ConstantsHelper.ONETIME_WORKREQ_TAG)

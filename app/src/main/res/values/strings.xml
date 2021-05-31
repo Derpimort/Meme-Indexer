@@ -20,6 +20,7 @@
     <string name="placeholder">Placeholder</string>
     <string name="memeinfo_ocrtext">Text:</string>
     <string name="scan">Scan</string>
+    <string name="scan_success">Total %1$d out of %2$d images found in the directory will be scanned.</string>
     <string name="path">Path</string>
     <string name="close_info_dialog">Close info dialog</string>
     <string name="edit_ocr_text">Edit OCR text</string>
@@ -39,6 +40,7 @@
     <string name="notification_title">@string/app_name</string>
     <string name="notification_cancel">Stop</string>
     <string name="title_activity_settings">Settings</string>
+
 
     <!-- Preference Titles -->
     <string name="theme_header">Themes</string>
