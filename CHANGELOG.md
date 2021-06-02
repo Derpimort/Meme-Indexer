@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.0](https://github.com/Derpimort/Meme-Indexer/releases/tag/v1.0.0)
+03 June 2021, 02:06 am IST
+- **UI/UX Changes**
+  - Increase title text weight
+  - Index fragment background and button updates
+  - Waves updated
+  - Multiple paths for scans
+  - Index runs on non UI thread
+  - First boot opens index fragment
+  - Parallel queued images can be changed from settings
+  - App name updated in disclaimer
+  - Notif channel name update
+- **Bugs Fixes**
+  - Skip files instead of crashing app when not getting path
+  - Workmanager request crash fix, not using applicationContext now
+
+
 ## [0.10.1 - Beta internal testing](https://github.com/Derpimort/Meme-Indexer/releases/tag/v0.10.1)
 01 June 2021, 12:32 am IST
 ### Release for play store internal testing
