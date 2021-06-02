@@ -11,11 +11,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.work.*
-import com.google.android.material.snackbar.Snackbar
 import com.legendbois.memeindexer.*
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
@@ -32,8 +30,6 @@ import java.io.Closeable
 import java.io.File
 
 import java.util.*
-import java.util.concurrent.TimeUnit
-import kotlin.math.abs
 
 class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private var progressNumber: Int = 0
@@ -108,7 +104,6 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         val contentResolver = requireActivity().contentResolver
         val storages: Array<out File> = requireContext().getExternalFilesDirs(null)
         // val oreoSdk = Build.VERSION_CODES.O
-
         var childrenUri: Uri = try {
             //for childs and sub child dirs
             DocumentsContract.buildChildDocumentsUriUsingTree(
@@ -128,7 +123,6 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         dirNodes.add(childrenUri)
         while (dirNodes.isNotEmpty()) {
             childrenUri = dirNodes.removeAt(0) // get the item from top
-            //Log.d(TAG, "node uri:  $childrenUri")
             val c: Cursor? = contentResolver.query(
                 childrenUri,
                 arrayOf(
@@ -146,14 +140,13 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         val docId: String = c.getString(0)
                         val name: String = c.getString(1)
                         val mime: String = c.getString(2)
-                        Log.d(TAG, "New File $docId, $name, $childrenUri")
                         if (imagesRegex.matches(mime)){
                             totalFiles += 1
                             var filepath: String
                             // Tested (on <9.0) Workaround to get filepath, bad practice probably but android devs forced my hand... "Security reasons"\
                             try {
                                 val docSplit = docId.split(":")
-                                Log.d(TAG, "DocSplit $docSplit")
+                                //Log.d(TAG, "DocSplit $docSplit")
                                 filepath = docSplit[1]
                                 filepath = when {
                                     "primary" == docSplit[0] -> {
@@ -168,8 +161,13 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                                 }
                             }
                             catch (versionE: Exception){
-                                val file = File(docId)
-                                filepath = file.path.split(":")[1]
+                                try{
+                                    val file = File(docId)
+                                    filepath = file.path.split(":")[1]
+                                }
+                                catch (e: Exception){
+                                    continue
+                                }
                             }
 
                             // Log.d(TAG, "FilePath $filepath")
