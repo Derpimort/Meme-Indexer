@@ -102,14 +102,18 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                 if (requestCode == DIRECTORY_REQUEST_CODE) {
                     if (this.context != null) {
                         val parentUri = data.data!!
-                        if(scanPaths.size==0){
-                            indexbuilder_path.text = parentUri.path
+                        if(parentUri in scanPaths){
+                            Toast.makeText(context, "Path already added", Toast.LENGTH_SHORT).show()
                         }
                         else{
-                            indexbuilder_path.append("\n"+parentUri.path)
+                            if(scanPaths.size==0){
+                                indexbuilder_path.text = parentUri.path
+                            }
+                            else{
+                                indexbuilder_path.append("\n"+parentUri.path)
+                            }
+                            scanPaths.add(parentUri)
                         }
-                        scanPaths.add(parentUri)
-
                     }
                 }
             }
