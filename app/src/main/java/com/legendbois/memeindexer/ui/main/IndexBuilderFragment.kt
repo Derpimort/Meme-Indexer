@@ -13,9 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenStarted
+import androidx.lifecycle.*
 import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
 import com.legendbois.memeindexer.*
@@ -27,7 +25,9 @@ import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 import com.legendbois.memeindexer.workers.IndexWorker
 import kotlinx.android.synthetic.main.indexbuilder_frag.*
 import kotlinx.android.synthetic.main.popup_files_populated.view.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.Closeable
 import java.io.File
 
@@ -82,17 +82,19 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
                         usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
                         toggleButtonState(false, parentUri.path)
-
-                        lifecycleScope.launch {
+                        memeFileViewModel.viewModelScope.launch(Dispatchers.IO) {
                             whenStarted {
                                 showStartToast()
                                 totalFiles = traverseDirectoryEntries(parentUri)
                             }
-                            toggleButtonState(true, totalFiles = totalFiles)
-                            writeToHistory(parentUri.path, totalFiles)
+                            withContext(Dispatchers.Main){
+                                toggleButtonState(true, totalFiles = totalFiles)
+                                writeToHistory(parentUri.path, totalFiles)
+                            }
                         }.invokeOnCompletion {
                             scheduleIndex()
                         }
+
 
                     }
                 }
@@ -144,13 +146,14 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                         val docId: String = c.getString(0)
                         val name: String = c.getString(1)
                         val mime: String = c.getString(2)
-                        //Log.d(TAG, "New File $docId, $name, $childrenUri")
+                        Log.d(TAG, "New File $docId, $name, $childrenUri")
                         if (imagesRegex.matches(mime)){
                             totalFiles += 1
                             var filepath: String
                             // Tested (on <9.0) Workaround to get filepath, bad practice probably but android devs forced my hand... "Security reasons"\
                             try {
                                 val docSplit = docId.split(":")
+                                Log.d(TAG, "DocSplit $docSplit")
                                 filepath = docSplit[1]
                                 filepath = when {
                                     "primary" == docSplit[0] -> {
@@ -226,7 +229,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             }
 
             alertDialog.create().show()
-            indexbuilder_button.text = getString(R.string.scan)
+            indexbuilder_button?.text = getString(R.string.scan)
         }
         else{
             indexbuilder_progressbar.visibility=View.VISIBLE
