@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -24,6 +26,7 @@ import com.legendbois.memeindexer.workers.IndexWorker
 import kotlinx.android.synthetic.main.indexbuilder_frag.*
 import kotlinx.android.synthetic.main.popup_files_populated.view.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.Closeable
@@ -33,6 +36,7 @@ import java.util.*
 
 class IndexBuilderFragment: Fragment(), View.OnClickListener {
     private var progressNumber: Int = 0
+    private var scanPaths = mutableListOf<Uri>()
     private lateinit var memeFileViewModel: MemeFileViewModel
     private lateinit var usageHistoryViewModel: UsageHistoryViewModel
     private lateinit var rootView: View
@@ -55,16 +59,51 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     ): View {
         rootView = inflater.inflate(R.layout.indexbuilder_frag, container, false)
         val button: Button = rootView.findViewById(R.id.indexbuilder_button)
+        val pathButton: ImageButton = rootView.findViewById(R.id.indexbuilder_path_button)
+        val pathText: TextView = rootView.findViewById(R.id.indexbuilder_path)
 
         button.setOnClickListener(this)
+
+        pathButton.setOnClickListener {
+            addPath()
+        }
+        pathText.setOnClickListener {
+            addPath()
+        }
         return rootView
     }
 
-    override fun onClick(v: View?) {
-        // TODO: Add check for path in editext. Simple function, makes sense.
+    fun addPath(){
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
         intent.addCategory(Intent.CATEGORY_DEFAULT)
         startActivityForResult(Intent.createChooser(intent, "Choose directory"), DIRECTORY_REQUEST_CODE)
+    }
+
+    override fun onClick(v: View?) {
+        if(scanPaths.size < 1){
+            Toast.makeText(context, "Please add a path before trying to scan", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        var totalFiles = 0
+        memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
+        usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
+        toggleButtonState(false)
+        memeFileViewModel.viewModelScope.launch(Dispatchers.IO) {
+            whenStarted {
+                showStartToast()
+                for(currentUri: Uri in scanPaths){
+                    totalFiles += traverseDirectoryEntries(currentUri)
+                    writeToHistory(currentUri.path, totalFiles)
+                }
+            }
+            withContext(Dispatchers.Main){
+                toggleButtonState(true, totalFiles = totalFiles)
+
+            }
+        }.invokeOnCompletion {
+            scheduleIndex()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -74,30 +113,25 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                 if (requestCode == DIRECTORY_REQUEST_CODE) {
                     if (this.context != null) {
                         val parentUri = data.data!!
-                        var totalFiles = 0
-                        memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
-                        usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
-                        toggleButtonState(false, parentUri.path)
-                        memeFileViewModel.viewModelScope.launch(Dispatchers.IO) {
-                            whenStarted {
-                                showStartToast()
-                                totalFiles = traverseDirectoryEntries(parentUri)
-                            }
-                            withContext(Dispatchers.Main){
-                                toggleButtonState(true, totalFiles = totalFiles)
-                                writeToHistory(parentUri.path, totalFiles)
-                            }
-                        }.invokeOnCompletion {
-                            scheduleIndex()
+                        if(parentUri in scanPaths){
+                            Toast.makeText(context, "Path already added", Toast.LENGTH_SHORT).show()
                         }
-
-
+                        else{
+                            if(scanPaths.size==0){
+                                indexbuilder_path.text = parentUri.path
+                            }
+                            else{
+                                indexbuilder_path.append("\n"+parentUri.path)
+                            }
+                            scanPaths.add(parentUri)
+                        }
                     }
                 }
             }
 
         }
     }
+
     //Thanks to https://stackoverflow.com/questions/41096332/issues-traversing-through-directory-hierarchy-with-android-storage-access-framew
     suspend fun traverseDirectoryEntries(rootUri: Uri?): Int{
         var totalFiles = 0
@@ -205,7 +239,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         return totalFiles
     }
 
-    private fun toggleButtonState(value: Boolean, path: String? = "", totalFiles: Int = 0){
+    private fun toggleButtonState(value: Boolean, totalFiles: Int = 0){
         if(value){
             indexbuilder_progressbar.visibility=View.GONE
             val dialogView = layoutInflater.inflate(R.layout.popup_files_populated, null)
@@ -228,6 +262,8 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
             alertDialog.create().show()
             indexbuilder_button?.text = getString(R.string.scan)
+            indexbuilder_path?.text = getString(R.string.add_path_to_scan)
+            scanPaths.clear()
         }
         else{
             indexbuilder_progressbar.visibility=View.VISIBLE
@@ -236,11 +272,6 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         progressNumber = 0
         indexbuilder_button.isEnabled = value
         indexbuilder_button.isClickable = value
-        indexbuilder_path.setText(path)
-        indexbuilder_path.setTextIsSelectable(!value)
-        indexbuilder_path.isFocusableInTouchMode = value
-        indexbuilder_path.isFocusable = value
-
     }
 
     private fun updateProgressText(){
@@ -319,7 +350,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             .build()
         if(this.context != null){
             if(scanNow || !SharedPrefManager.getInstance(requireContext()).scanBool){
-                val workManager = WorkManager.getInstance(this.requireContext().applicationContext)
+                val workManager = WorkManager.getInstance(this.requireContext())
                 val workerRequest = OneTimeWorkRequestBuilder<IndexWorker>()
                     .setConstraints(constraints)
                     .addTag(ConstantsHelper.ONETIME_WORKREQ_TAG)

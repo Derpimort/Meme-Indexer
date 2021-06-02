@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         app:icon="@drawable/ic_palette_black_24dp"
@@ -17,6 +18,13 @@
     <PreferenceCategory
         app:icon="@drawable/ic_image_scan_24px"
         app:title="@string/scan_header">
+        <SeekBarPreference
+            app:defaultValue="8"
+            app:min="1"
+            android:max="20"
+            app:key="@string/scan_num_threads_key"
+            android:title="@string/scan_num_threads_title"
+            app:summary="@string/scan_num_threads_summary" />
 
         <SwitchPreference
             app:defaultValue="true"

@@ -97,7 +97,13 @@ class MainActivity : BaseActivity() {
         }*/
 
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
-        checkDisclaimer(SharedPrefManager.getInstance(this))
+
+        val sharedPrefManager = SharedPrefManager.getInstance(this)
+        // Firstboot will run this
+        if(!sharedPrefManager.disclaimerBool){
+            viewPager.currentItem = 1
+        }
+        checkDisclaimer(sharedPrefManager)
 
     }
 
