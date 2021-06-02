@@ -69,6 +69,11 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        if(scanPaths.size < 1){
+            Toast.makeText(context, "Please add a path before trying to scan", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         var totalFiles = 0
         memeFileViewModel = ViewModelProvider(this).get(MemeFileViewModel::class.java)
         usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
