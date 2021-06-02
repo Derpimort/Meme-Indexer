@@ -21,6 +21,7 @@ import com.google.mlkit.vision.text.TextRecognizer
 import com.legendbois.memeindexer.ConstantsHelper
 import com.legendbois.memeindexer.MainActivity
 import com.legendbois.memeindexer.R
+import com.legendbois.memeindexer.SharedPrefManager
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.MemeFilesDatabase
 import kotlinx.coroutines.delay
@@ -37,7 +38,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
     var concurrentImages: Int = 0
     var deletedImages: Int = 0
 
-    private val maxParallelRequests = 10
+    private var maxParallelRequests = 10
     private val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as
                 NotificationManager
@@ -51,6 +52,8 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
         var rawTotal: Int
         val intialContent = "Preparing Files..."
         val model = TextRecognition.getClient()
+        maxParallelRequests = SharedPrefManager.getInstance(this.applicationContext).scanNumThreads
+
         initializeNotifBuilder()
         val startTime = SystemClock.elapsedRealtime()
 

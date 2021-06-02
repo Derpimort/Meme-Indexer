@@ -52,7 +52,7 @@
 
     <!-- Sync Preferences -->
     <string name="scan_title">Scan periodically</string>
-    <string name="scan_summary_on">Automatically scan selected directories in background</string>
+    <string name="scan_summary_on">Automatically scan selected and populated directories in background</string>
     <string name="scan_summary_off">Only scan selected directories when manually requested</string>
     <string name="scan_key">scan_bool</string>
     <string name="scan_time_key">scan_time</string>
@@ -62,5 +62,8 @@
     <string name="disclaimer">MEME INDEXER IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
     <string name="files_populated_scan_now">Press scan now if you want to start scanning the files right away.</string>
     <string name="add_path_to_scan">Add path to scan</string>
+    <string name="scan_num_threads_key">scan_num_threads</string>
+    <string name="scan_num_threads_title">Scan queue size</string>
+    <string name="scan_num_threads_summary">Keep it low if you experience crashes or high RAM usage when scans are running in the background</string>
 
 </resources>

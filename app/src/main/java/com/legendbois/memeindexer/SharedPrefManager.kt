@@ -42,6 +42,14 @@ class SharedPrefManager private constructor(context: Context){
         editor.apply()
     }
 
+    var scanNumThreads: Int
+    get() = sharedPreferences.getInt(KEY_SCAN_NUM_THREADS, 10)
+    set(value){
+        val editor = sharedPreferences.edit()
+        editor.putInt(KEY_SCAN_NUM_THREADS, value)
+        editor.apply()
+    }
+
     companion object{
         private const val SHARED_PREF_NAME = "meme_indexer_settings"
         //TODO: bad coding, find alternative to get string resource here
@@ -49,6 +57,7 @@ class SharedPrefManager private constructor(context: Context){
         const val KEY_SCAN_BOOL = "scan_bool"
         const val KEY_SCAN_TIME = "scan_time"
         const val KEY_DISCLAIMER_BOOL = "disclaimer"
+        const val KEY_SCAN_NUM_THREADS = "scan_num_threads"
 
         private var mInstance: SharedPrefManager? = null
         private lateinit var sharedPreferences: SharedPreferences
