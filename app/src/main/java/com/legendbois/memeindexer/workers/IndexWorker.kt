@@ -32,7 +32,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
 
     val notificationId = 69420
     val channelId = "Meme Indexer Service"
-    val channelName = "Meme Indexer - Index Progress"
+    val channelName = "Scan Progress"
     var totalFiles: Int = 0
     var progressNumber: Int = 0
     var concurrentImages: Int = 0
