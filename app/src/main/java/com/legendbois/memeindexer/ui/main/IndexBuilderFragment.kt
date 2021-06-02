@@ -350,7 +350,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
             .build()
         if(this.context != null){
             if(scanNow || !SharedPrefManager.getInstance(requireContext()).scanBool){
-                val workManager = WorkManager.getInstance(this.requireContext().applicationContext)
+                val workManager = WorkManager.getInstance(this.requireContext())
                 val workerRequest = OneTimeWorkRequestBuilder<IndexWorker>()
                     .setConstraints(constraints)
                     .addTag(ConstantsHelper.ONETIME_WORKREQ_TAG)
