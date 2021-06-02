@@ -247,6 +247,8 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
 
             alertDialog.create().show()
             indexbuilder_button?.text = getString(R.string.scan)
+            indexbuilder_path?.text = getString(R.string.add_path_to_scan)
+            scanPaths.clear()
         }
         else{
             indexbuilder_progressbar.visibility=View.VISIBLE
