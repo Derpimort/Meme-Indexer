@@ -22,7 +22,7 @@ import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.launch
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
 
     private lateinit var tabs: TabLayout
     private val TAB_TITLES = arrayOf(
@@ -229,4 +229,10 @@ class MainActivity : BaseActivity() {
         }
 
     }
+
+    override fun onMemeShared(filepath: String){
+        MemesHelper.shareOrViewImage(this, filepath)
+        //addUsageHistory(filepath, 2, 1)}
+    }
+
 }

@@ -1,7 +1,7 @@
 package com.legendbois.memeindexer.ui.main
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +33,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     private lateinit var usageHistoryViewModel: UsageHistoryViewModel
     private lateinit var adapter: SearchRV
     private var positiveScrolled: Boolean = false
+    private lateinit var memeCallback: OnMemeClickedListener
     companion object{
         const val TAG = "SearchMemesFragment"
 
@@ -64,9 +65,11 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) {
             requireView().findViewById<SearchView>(R.id.searchmemes_search).clearFocus()
-            memeFileViewModel.searchMemes("%${query.toLowerCase(Locale.ROOT)}%").observe(viewLifecycleOwner, Observer { memes ->
-                adapter.setMemes(memes)
-            })
+            memeFileViewModel.searchMemes("%${query.toLowerCase(Locale.ROOT)}%").observe(
+                viewLifecycleOwner,
+                Observer { memes ->
+                    adapter.setMemes(memes)
+                })
             addUsageHistory(query, 1, 1)
         }
         return true
@@ -74,6 +77,21 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextChange(newText: String?): Boolean {
         return false
+    }
+
+    interface OnMemeClickedListener {
+        fun onMemeShared(filepath: String)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        try{
+            memeCallback = activity as OnMemeClickedListener
+        }
+        catch (e: ClassCastException){
+            throw ClassCastException(activity.toString() + " must implement OnMemeClickedListener")
+        }
     }
 
     fun toggleScrolled(boolean: Boolean){
@@ -99,7 +117,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
             SearchRV(application) { item, share ->
                 when (share) {
                     0 -> imagePopup(item.filepath)
-                    1 -> shareImage(item.filepath)
+                    1 -> memeCallback.onMemeShared(item.filepath)
                     else -> infoPopup(item)
                 }
             }
@@ -109,22 +127,23 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         // Fixed the glitches...TTBOMK,  but now it fuks up the rounded corners of the layout.
         // Kinda fixed the corners with constraint offset, workaround till the below is achieved.
         // TODO: Figure out a way to add the rounded corners to foreground while staying transparent
-        recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 // Can combine into one with && short circuiting but..... this looks cleaner
-                if(newState == RecyclerView.SCROLL_STATE_IDLE){
-                    if(recyclerView.computeVerticalScrollOffset() == 0){
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (recyclerView.computeVerticalScrollOffset() == 0) {
                         toggleScrolled(true)
                     }
                 }
             }
+
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 //Log.d(TAG, "Scrolled: $scrollOffset")
                 // TODO: positiveScroll needed?
-                if(!positiveScrolled || activity?.tabs?.visibility == View.VISIBLE){
-                    if(recyclerView.computeVerticalScrollOffset() > 0){
+                if (!positiveScrolled || activity?.tabs?.visibility == View.VISIBLE) {
+                    if (recyclerView.computeVerticalScrollOffset() > 0) {
                         toggleScrolled(false)
                     }
                 }
@@ -139,11 +158,18 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         //Thanks to https://antonioleiva.com/recyclerview-listener/
         val shAdapter =
             SearchHistoryRV(application) { item ->
-                root.findViewById<SearchView>(R.id.searchmemes_search).setQuery(item.pathOrQuery, true)
+                root.findViewById<SearchView>(R.id.searchmemes_search).setQuery(
+                    item.pathOrQuery,
+                    true
+                )
                 // onQueryTextSubmit(item.pathOrQuery)
             }
         recyclerView.adapter = shAdapter
-        recyclerView.layoutManager = LinearLayoutManager(application, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager = LinearLayoutManager(
+            application,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
         usageHistoryViewModel.getSearchedTerms().observe(viewLifecycleOwner, Observer { actions ->
             shAdapter.setActions(actions)
         })
