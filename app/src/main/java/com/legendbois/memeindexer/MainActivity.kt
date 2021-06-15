@@ -17,6 +17,8 @@ import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.tabs.TabLayout
+import com.legendbois.memeindexer.database.MemeFile
+import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.ui.main.SearchMemesFragment
 import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -233,6 +235,15 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
     override fun onMemeShared(filepath: String){
         MemesHelper.shareOrViewImage(this, filepath)
         //addUsageHistory(filepath, 2, 1)}
+    }
+
+    override fun onMemeClicked(filepath: String) {
+        MemesHelper.imagePopup(this, filepath)
+    }
+
+    override fun onMemeInfoClicked(memefile: MemeFile) {
+        val dialog = MemeInfoDialogFragment.newInstance(memefile)
+        dialog.show(supportFragmentManager, "meme_info")
     }
 
 }

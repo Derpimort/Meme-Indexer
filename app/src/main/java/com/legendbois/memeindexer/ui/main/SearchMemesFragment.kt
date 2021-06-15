@@ -81,6 +81,8 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
 
     interface OnMemeClickedListener {
         fun onMemeShared(filepath: String)
+        fun onMemeClicked(filepath: String)
+        fun onMemeInfoClicked(memefile: MemeFile)
     }
 
     override fun onAttach(context: Context) {
@@ -116,9 +118,12 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         adapter =
             SearchRV(application) { item, share ->
                 when (share) {
-                    0 -> imagePopup(item.filepath)
-                    1 -> memeCallback.onMemeShared(item.filepath)
-                    else -> infoPopup(item)
+                    0 -> memeCallback.onMemeClicked(item.filepath)
+                    1 -> {
+                        memeCallback.onMemeShared(item.filepath)
+                        addUsageHistory(item.filepath, 2, 1)
+                    }
+                    else -> memeCallback.onMemeInfoClicked(item)
                 }
             }
         recyclerView.adapter = adapter
@@ -185,22 +190,5 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
                 )
             )
         }
-    }
-
-    fun shareImage(filepath: String){
-        this.activity?.let {
-            MemesHelper.shareOrViewImage(it, filepath)
-            addUsageHistory(filepath, 2, 1)}
-
-    }
-
-    fun imagePopup(filepath: String){
-        this.activity?.let { MemesHelper.imagePopup(it, filepath) }
-
-    }
-
-    fun infoPopup(memefile: MemeFile){
-        val dialog = MemeInfoDialogFragment.newInstance(memefile)
-        dialog.show(parentFragmentManager, "meme_info")
     }
 }
