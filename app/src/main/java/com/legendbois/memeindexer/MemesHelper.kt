@@ -17,26 +17,15 @@ object MemesHelper {
     const val TAG = "MemesHelper"
     const val legacyUriSdk = Build.VERSION_CODES.M
     fun shareOrViewImage(context: Activity, filepath: String, intentShare: Boolean = true){
-        val memeUri: Uri
-        if(MainActivity.sdkVersion > legacyUriSdk){
-            val memeFile = File(filepath)
-            memeUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", memeFile)
-            // Log.d(TAG, "Using Fileprovider")
-        }
-        else{
-            memeUri = Uri.parse("file://$filepath")
-        }
+        val memeUri: Uri = getMemeUri(context, filepath)
+
         var intentTitle = "Share Meme"
-        val shareIntent = Intent()
+        val shareIntent: Intent
         if (intentShare){
-            shareIntent.action = Intent.ACTION_SEND
-            shareIntent.putExtra(Intent.EXTRA_STREAM, memeUri)
-            shareIntent.type = "image/*"
+            shareIntent = getShareIntent(memeUri)
         }
         else{
-            shareIntent.action = Intent.ACTION_VIEW
-            shareIntent.data = memeUri
-            shareIntent.setDataAndType(memeUri, "image/*")
+            shareIntent = getViewIntent(memeUri)
             intentTitle = "View Meme"
         }
 
@@ -65,6 +54,33 @@ object MemesHelper {
         }
         imageDialog.create()
         imageDialog.show()
+    }
+
+    fun getMemeUri(context: Activity, filepath: String): Uri {
+        if(MainActivity.sdkVersion > legacyUriSdk){
+            val memeFile = File(filepath)
+            return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", memeFile)
+            // Log.d(TAG, "Using Fileprovider")
+        }
+        else{
+            return Uri.parse("file://$filepath")
+        }
+    }
+
+    fun getShareIntent(memeUri: Uri): Intent {
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.putExtra(Intent.EXTRA_STREAM, memeUri)
+        shareIntent.type = "image/*"
+        return shareIntent
+    }
+
+    fun getViewIntent(memeUri: Uri): Intent {
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_VIEW
+        shareIntent.data = memeUri
+        shareIntent.setDataAndType(memeUri, "image/*")
+        return shareIntent
     }
 
 }

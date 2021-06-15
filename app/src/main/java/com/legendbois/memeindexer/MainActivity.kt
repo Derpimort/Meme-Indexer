@@ -17,12 +17,14 @@ import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.tabs.TabLayout
+import com.legendbois.memeindexer.database.MemeFile
+import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.ui.main.SearchMemesFragment
 import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.launch
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
 
     private lateinit var tabs: TabLayout
     private val TAB_TITLES = arrayOf(
@@ -229,4 +231,43 @@ class MainActivity : BaseActivity() {
         }
 
     }
+
+    fun differentCaller(): Boolean{
+        return callingActivity != null && callingActivity!!.packageName != packageName
+    }
+
+    fun shareMemeResult(filepath: String){
+        val memeUri = MemesHelper.getMemeUri(this, filepath)
+        val shareIntent = Intent()
+            .setData(memeUri)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        setResult(RESULT_OK, shareIntent)
+        finish()
+    }
+
+    override fun onMemeShared(filepath: String){
+        if(differentCaller()){
+            shareMemeResult(filepath)
+        }
+        else{
+            MemesHelper.shareOrViewImage(this, filepath)
+        }
+
+    }
+
+    override fun onMemeClicked(filepath: String) {
+        if(differentCaller()){
+            shareMemeResult(filepath)
+        }
+        else{
+            MemesHelper.imagePopup(this, filepath)
+        }
+
+    }
+
+    override fun onMemeInfoClicked(memefile: MemeFile) {
+        val dialog = MemeInfoDialogFragment.newInstance(memefile)
+        dialog.show(supportFragmentManager, "meme_info")
+    }
+
 }
