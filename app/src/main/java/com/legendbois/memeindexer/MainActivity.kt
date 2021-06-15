@@ -233,8 +233,18 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
     }
 
     override fun onMemeShared(filepath: String){
-        MemesHelper.shareOrViewImage(this, filepath)
-        //addUsageHistory(filepath, 2, 1)}
+        if(callingActivity != null && callingActivity!!.packageName != packageName){
+            val memeUri = MemesHelper.getMemeUri(this, filepath)
+            val shareIntent = Intent()
+                .setData(memeUri)
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            setResult(RESULT_OK, shareIntent)
+            finish()
+        }
+        else{
+            MemesHelper.shareOrViewImage(this, filepath)
+        }
+
     }
 
     override fun onMemeClicked(filepath: String) {
