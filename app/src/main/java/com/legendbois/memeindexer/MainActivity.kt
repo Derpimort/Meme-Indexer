@@ -232,14 +232,22 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
 
     }
 
+    fun differentCaller(): Boolean{
+        return callingActivity != null && callingActivity!!.packageName != packageName
+    }
+
+    fun shareMemeResult(filepath: String){
+        val memeUri = MemesHelper.getMemeUri(this, filepath)
+        val shareIntent = Intent()
+            .setData(memeUri)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        setResult(RESULT_OK, shareIntent)
+        finish()
+    }
+
     override fun onMemeShared(filepath: String){
-        if(callingActivity != null && callingActivity!!.packageName != packageName){
-            val memeUri = MemesHelper.getMemeUri(this, filepath)
-            val shareIntent = Intent()
-                .setData(memeUri)
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            setResult(RESULT_OK, shareIntent)
-            finish()
+        if(differentCaller()){
+            shareMemeResult(filepath)
         }
         else{
             MemesHelper.shareOrViewImage(this, filepath)
@@ -248,7 +256,13 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
     }
 
     override fun onMemeClicked(filepath: String) {
-        MemesHelper.imagePopup(this, filepath)
+        if(differentCaller()){
+            shareMemeResult(filepath)
+        }
+        else{
+            MemesHelper.imagePopup(this, filepath)
+        }
+
     }
 
     override fun onMemeInfoClicked(memefile: MemeFile) {
