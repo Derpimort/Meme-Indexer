@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/Derpimort/Meme-Indexer/releases/tag/v1.1.0)
+16 June 2021, 01:53 am IST
+### Complete rollout on playstore
+- **Share meme update**
+  - App now shows up as selector for documents and files
+  - Returns selected image if called from other app, default functions otherwise
+
 ## [1.0.0](https://github.com/Derpimort/Meme-Indexer/releases/tag/v1.0.0)
 03 June 2021, 02:06 am IST
 - **UI/UX Changes**
