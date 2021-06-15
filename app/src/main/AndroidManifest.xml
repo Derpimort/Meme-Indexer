@@ -39,9 +39,27 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter android:label="@string/search_meme">
+                <action android:name="org.openintents.action.PICK_FILE"/>
+                <action android:name="org.openintents.action.PICK_DIRECTORY"/>
+                <action android:name="android.intent.action.PICK"/>
+                <action android:name="android.intent.action.ATTACH_DATA"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:mimeType="image/*"/>
+            </intent-filter>
+            <intent-filter android:label="@string/search_meme">
+                <action android:name="android.intent.action.GET_CONTENT"/>
+                <action android:name="android.intent.action.CHOOSER"/>
+                <action android:name="android.intent.action.OPEN_DOCUMENT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.OPENABLE"/>
+                <data android:mimeType="image/*"/>
+            </intent-filter>
+
+
         </activity>
 
         <meta-data
