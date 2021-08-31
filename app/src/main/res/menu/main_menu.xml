@@ -17,4 +17,9 @@
         android:title="@string/settings"
         app:showAsAction="ifRoom|withText"/>
 
+    <item
+        android:id="@+id/clearhistory_menuitem"
+        android:icon="@drawable/ic_delete_sweep_black_24dp"
+        android:title="@string/clear_history"
+        app:showAsAction="ifRoom|withText"/>
 </menu>

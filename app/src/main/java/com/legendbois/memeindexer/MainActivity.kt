@@ -147,6 +147,10 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
                 startActivity(settingsIntent)
                 true
             }
+            R.id.clearhistory_menuitem ->{
+                clearHistory()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -268,6 +272,10 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
     override fun onMemeInfoClicked(memefile: MemeFile) {
         val dialog = MemeInfoDialogFragment.newInstance(memefile)
         dialog.show(supportFragmentManager, "meme_info")
+    }
+
+    fun clearHistory(){
+
     }
 
 }
