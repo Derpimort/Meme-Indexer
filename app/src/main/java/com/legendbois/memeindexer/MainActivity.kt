@@ -18,6 +18,7 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.tabs.TabLayout
 import com.legendbois.memeindexer.database.MemeFile
+import com.legendbois.memeindexer.dialogs.ClearHistoryDialogFragment
 import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.ui.main.SearchMemesFragment
 import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
@@ -275,7 +276,7 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
     }
 
     fun clearHistory(){
-
+        ClearHistoryDialogFragment().show(supportFragmentManager, "clear_history")
     }
 
 }
