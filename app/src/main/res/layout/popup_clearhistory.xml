@@ -9,9 +9,9 @@
         android:id="@+id/clearhistory_title_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,10 +22,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:singleLine="true"
             android:text="@string/clear_history"
-            android:textAlignment="textStart" />
+            android:textAlignment="textStart"
+            android:textSize="16sp" />
 
         <ImageButton
             android:id="@+id/clearhistory_title_close"
@@ -39,36 +40,67 @@
             app:tint="?attr/colorAccent" />
     </LinearLayout>
 
+    <View
+        android:id="@+id/clearhistory_title_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?attr/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearhistory_title_container" />
+
     <LinearLayout
         android:id="@+id/clearhistory_dropdown_container"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clearhistory_title_container">
+        app:layout_constraintTop_toBottomOf="@+id/clearhistory_title_divider">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:singleLine="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="3"
+            android:lines="3"
+            android:singleLine="false"
             android:text="@string/time_range_to_clear"
             android:textAlignment="textStart" />
 
         <Spinner
             android:id="@+id/clearhistory_dropdown"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
+            android:popupBackground="?attr/colorBackgroundDark"
             android:spinnerMode="dropdown" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/clearhistory_submit_button"
+        style="@style/ButtonBase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/darkTransparent"
+        android:backgroundTintMode="add"
+        android:padding="8dp"
+        android:text="@string/submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearhistory_dropdown_container" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

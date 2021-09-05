@@ -276,7 +276,7 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
     }
 
     fun clearHistory(){
-        ClearHistoryDialogFragment().show(supportFragmentManager, "clear_history")
+        ClearHistoryDialogFragment.newInstance().show(supportFragmentManager, "clear_history")
     }
 
 }

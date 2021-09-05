@@ -13,5 +13,15 @@ object ConstantsHelper {
         "Light" to R.style.AppTheme_Light
     )
 
+    const val ONE_MINUTE_MILLIS: Long = 60*1000
+
+    val TIME_RANGES = mapOf(
+        "Last 10 Minutes" to 10 * ONE_MINUTE_MILLIS,
+        "Last Hour" to 60 * ONE_MINUTE_MILLIS,
+        "Last 24 Hours" to 24 * 60 * ONE_MINUTE_MILLIS,
+        "Last 30 Days" to 30 * 24 * 60 * ONE_MINUTE_MILLIS,
+        "All time" to Long.MAX_VALUE
+    )
+
 
 }
