@@ -1,19 +1,19 @@
 package com.legendbois.memeindexer.dialogs
 
-import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Spinner
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import com.legendbois.memeindexer.ConstantsHelper
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.legendbois.memeindexer.ConstantsHelper.TIME_RANGES
+import com.legendbois.memeindexer.MiscHelper
 import com.legendbois.memeindexer.R
-import java.lang.Long.max
+import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
+import kotlinx.coroutines.launch
 
 class ClearHistoryDialogFragment() : DialogFragment(R.layout.popup_clearhistory) {
 
@@ -32,7 +32,7 @@ class ClearHistoryDialogFragment() : DialogFragment(R.layout.popup_clearhistory)
         view.findViewById<ImageButton>(R.id.clearhistory_title_close).setOnClickListener {
             dismiss()
         }
-
+        val usageHistoryViewModel = ViewModelProvider(this).get(UsageHistoryViewModel::class.java)
         val spinner = view.findViewById<Spinner>(R.id.clearhistory_dropdown)
         val spinnerAdapter = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, TIME_RANGES.keys.toTypedArray())
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -40,8 +40,10 @@ class ClearHistoryDialogFragment() : DialogFragment(R.layout.popup_clearhistory)
 
         view.findViewById<Button>(R.id.clearhistory_submit_button).setOnClickListener {
             val timeRangeKey = spinner.selectedItem.toString()
-            val clearAllAfterTime = TIME_RANGES[timeRangeKey] ?: 0
-            // max(0, System.currentTimeMillis() - clearAllAfterTime)
+
+            lifecycleScope.launch {
+                usageHistoryViewModel.deleteAfterTime(MiscHelper.getPastTimeFromKey(timeRangeKey))
+            }
 
             //Log.d(TAG, "Selected item $timeRangeKey, clear after time $clearAllAfterTime")
         }

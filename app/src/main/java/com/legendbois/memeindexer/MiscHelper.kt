@@ -6,6 +6,7 @@ import android.net.Uri
 import android.widget.Toast
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.max
 
 object MiscHelper {
     private val EMAIL_IDS = arrayOf("jatinsaini580@gmail.com")
@@ -42,5 +43,10 @@ object MiscHelper {
             return targetTime.timeInMillis/1000 - currentTime.timeInMillis/1000
         }
         return 0
+    }
+
+    fun getPastTimeFromKey(timeRangeKey: String): Long{
+        val clearAllAfterTime = ConstantsHelper.TIME_RANGES[timeRangeKey] ?: 0
+        return max(0, System.currentTimeMillis() - clearAllAfterTime)
     }
 }
