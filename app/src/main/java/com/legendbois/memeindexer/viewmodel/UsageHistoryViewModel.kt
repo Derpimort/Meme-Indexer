@@ -64,4 +64,14 @@ class UsageHistoryViewModel(application: Application): AndroidViewModel(applicat
             })
         }
     }
+
+    suspend fun deleteAfterTime(time: Long, actionIds: List<Int> = listOf(0,1,2)): Int {
+        val deletableItems = database.findFilteredActionsAfter(time, actionIds)
+        withContext(Dispatchers.IO) {
+            for(deletable in deletableItems){
+                database.delete(deletable)
+            }
+        }
+        return deletableItems.size
+    }
 }

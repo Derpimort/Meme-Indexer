@@ -9,6 +9,9 @@ interface UsageHistoryDao {
     @Query("SELECT * from usage_history_table where path_or_query LIKE :pathOrQuery")
     fun findPathOrQuery(pathOrQuery: String): List<UsageHistory>
 
+    @Query("SELECT * FROM usage_history_table WHERE modified_at >= :time AND actionId IN (:actionIds)")
+    fun findFilteredActionsAfter(time: Long, actionIds: List<Int>): List<UsageHistory>
+
     @Query("SELECT * from usage_history_table where actionId=2 ORDER BY extra_info DESC LIMIT 50")
     fun getSharedMemes(): LiveData<List<UsageHistory>>
 
