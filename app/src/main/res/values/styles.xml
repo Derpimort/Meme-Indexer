@@ -33,4 +33,9 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <style name="ButtonBase" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">?attr/buttonTextColor</item>
+        <item name="android:colorButtonNormal">@color/darkerTransparent</item>
+    </style>
+
 </resources>
