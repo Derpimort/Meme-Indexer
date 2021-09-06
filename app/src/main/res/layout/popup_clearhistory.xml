@@ -86,6 +86,37 @@
             android:spinnerMode="dropdown" />
     </LinearLayout>
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/clearhistory_checkbox_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:checked="true"
+        android:text="@string/clear_search_terms"
+        android:textColor="?attr/primaryTextColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearhistory_dropdown_container" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/clearhistory_checkbox_shared"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:checked="true"
+        android:text="@string/clear_shared_memes"
+        android:textColor="?attr/primaryTextColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearhistory_checkbox_search" />
+
+
+
+
     <Button
         android:id="@+id/clearhistory_submit_button"
         style="@style/ButtonBase"
@@ -100,7 +131,7 @@
         android:text="@string/submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clearhistory_dropdown_container" />
+        app:layout_constraintTop_toBottomOf="@+id/clearhistory_checkbox_shared" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

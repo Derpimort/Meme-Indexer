@@ -71,5 +71,7 @@
     <string name="clear_history">Clear History</string>
     <string name="time_range_to_clear">Time range:</string>
     <string name="submit">Submit</string>
+    <string name="clear_search_terms">Clear search terms</string>
+    <string name="clear_shared_memes">Clear shared memes</string>
 
 </resources>
