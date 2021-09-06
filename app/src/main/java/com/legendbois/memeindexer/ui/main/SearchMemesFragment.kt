@@ -64,9 +64,9 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) {
             requireView().findViewById<SearchView>(R.id.searchmemes_search).clearFocus()
-            memeFileViewModel.searchMemes("%${query.toLowerCase(Locale.ROOT)}%").observe(
+            memeFileViewModel.searchMemes("%${query.lowercase()}%").observe(
                 viewLifecycleOwner,
-                Observer { memes ->
+                { memes ->
                     adapter.setMemes(memes)
                 })
             addUsageHistory(query, USAGE_HISTORY_ACTIONS.getOrDefault("search", 1), 1)
@@ -174,7 +174,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        usageHistoryViewModel.getSearchedTerms().observe(viewLifecycleOwner, Observer { actions ->
+        usageHistoryViewModel.getSearchedTerms().observe(viewLifecycleOwner, { actions ->
             shAdapter.setActions(actions)
         })
     }

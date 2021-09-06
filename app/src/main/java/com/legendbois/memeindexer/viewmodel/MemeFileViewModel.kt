@@ -14,7 +14,8 @@ class MemeFileViewModel(application: Application): AndroidViewModel(application)
     private val database: MemeFileDao = MemeFilesDatabase.getDatabase(application).memeFileDao
     private val ftsSpecialChar = Regex("[^a-zA-Z0-9]")
     fun searchMemes(text: String): LiveData<List<MemeFile>>{
-        return database.findByText(text)
+        val processedText = text.replace(" ", " NEAR ")
+        return database.findByTextNear(processedText)
     }
 
     fun searchPath(path: String, filename: String):List<Int>{
