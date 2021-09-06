@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Spinner
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -40,9 +41,11 @@ class ClearHistoryDialogFragment() : DialogFragment(R.layout.popup_clearhistory)
 
         view.findViewById<Button>(R.id.clearhistory_submit_button).setOnClickListener {
             val timeRangeKey = spinner.selectedItem.toString()
-
+            val actionsToClear = mutableListOf<Int>()
+            if(view.findViewById<SwitchCompat>(R.id.clearhistory_checkbox_search).isChecked) actionsToClear.add(1)
+            if(view.findViewById<SwitchCompat>(R.id.clearhistory_checkbox_shared).isChecked) actionsToClear.add(2)
             lifecycleScope.launch {
-                usageHistoryViewModel.deleteAfterTime(MiscHelper.getPastTimeFromKey(timeRangeKey))
+                usageHistoryViewModel.deleteAfterTime(MiscHelper.getPastTimeFromKey(timeRangeKey), actionsToClear)
             }
 
             //Log.d(TAG, "Selected item $timeRangeKey, clear after time $clearAllAfterTime")
