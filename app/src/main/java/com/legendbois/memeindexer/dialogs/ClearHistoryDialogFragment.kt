@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.legendbois.memeindexer.ConstantsHelper.TIME_RANGES
+import com.legendbois.memeindexer.ConstantsHelper.USAGE_HISTORY_ACTIONS
 import com.legendbois.memeindexer.MiscHelper
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
@@ -42,8 +43,10 @@ class ClearHistoryDialogFragment() : DialogFragment(R.layout.popup_clearhistory)
         view.findViewById<Button>(R.id.clearhistory_submit_button).setOnClickListener {
             val timeRangeKey = spinner.selectedItem.toString()
             val actionsToClear = mutableListOf<Int>()
-            if(view.findViewById<SwitchCompat>(R.id.clearhistory_checkbox_search).isChecked) actionsToClear.add(1)
-            if(view.findViewById<SwitchCompat>(R.id.clearhistory_checkbox_shared).isChecked) actionsToClear.add(2)
+            if(view.findViewById<SwitchCompat>(R.id.clearhistory_checkbox_search).isChecked)
+                actionsToClear.add(USAGE_HISTORY_ACTIONS.getOrDefault("search", 1))
+            if(view.findViewById<SwitchCompat>(R.id.clearhistory_checkbox_shared).isChecked)
+                actionsToClear.add(USAGE_HISTORY_ACTIONS.getOrDefault("share", 2))
             lifecycleScope.launch {
                 usageHistoryViewModel.deleteAfterTime(MiscHelper.getPastTimeFromKey(timeRangeKey), actionsToClear)
             }

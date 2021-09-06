@@ -25,5 +25,11 @@ object ConstantsHelper {
         "All time" to Long.MAX_VALUE
     )
 
+    val USAGE_HISTORY_ACTIONS = mapOf(
+        "scan" to 0,
+        "search" to 1,
+        "share" to 2
+    )
+
 
 }
