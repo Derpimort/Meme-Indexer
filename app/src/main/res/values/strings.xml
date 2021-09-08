@@ -44,12 +44,17 @@
 
 
     <!-- Preference Titles -->
-    <string name="theme_header">Themes</string>
+    <string name="theme_header">Personalization</string>
     <string name="scan_header">Scan Settings</string>
 
     <!-- Theme Preferences -->
     <string name="theme_title">Application Theme</string>
     <string name="theme_key">current_theme</string>
+
+    <string name="save_history_title">Save history</string>
+    <string name="save_history_summary_on">Remember what you searched and shared locally</string>
+    <string name="save_history_summary_off">No remembering</string>
+    <string name="save_history_key">save_history_bool</string>
 
     <!-- Sync Preferences -->
     <string name="scan_title">Scan periodically</string>
