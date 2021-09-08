@@ -82,4 +82,15 @@ object MemesHelper {
         return shareIntent
     }
 
+    fun processQueryText(text: String): String {
+        //Log.d(TAG, "Processed query text: $processedText")
+        return text
+            .lowercase()
+            .trim(' ')
+            .replace("  ", " ")
+            .replace(" ", "* NEAR ")
+            .plus("*")
+    }
+
+
 }

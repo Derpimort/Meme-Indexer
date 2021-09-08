@@ -3,6 +3,7 @@ package com.legendbois.memeindexer.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import com.legendbois.memeindexer.MemesHelper.processQueryText
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.MemeFileDao
 import com.legendbois.memeindexer.database.MemeFilesDatabase
@@ -14,7 +15,7 @@ class MemeFileViewModel(application: Application): AndroidViewModel(application)
     private val database: MemeFileDao = MemeFilesDatabase.getDatabase(application).memeFileDao
     private val ftsSpecialChar = Regex("[^a-zA-Z0-9]")
     fun searchMemes(text: String): LiveData<List<MemeFile>>{
-        val processedText = text.replace(" ", " NEAR ")
+        val processedText = processQueryText(text)
         return database.findByTextNear(processedText)
     }
 
