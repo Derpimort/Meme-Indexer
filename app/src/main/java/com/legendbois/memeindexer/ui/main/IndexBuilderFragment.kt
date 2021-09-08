@@ -290,7 +290,8 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                             actionId = USAGE_HISTORY_ACTIONS.getOrDefault("scan", 0),
                             pathOrQuery = path,
                             extraInfo = extraInfo
-                        )
+                        ),
+                        override = true
                     )
                 }
             }
