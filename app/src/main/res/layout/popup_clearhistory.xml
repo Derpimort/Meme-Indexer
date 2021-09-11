@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorBackgroundLight">
+
+    <LinearLayout
+        android:id="@+id/clearhistory_title_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/clearhistory_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_weight="3"
+            android:singleLine="true"
+            android:text="@string/clear_history"
+            android:textAlignment="textStart"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/clearhistory_title_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:contentDescription="@string/close_info_dialog"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="?attr/colorAccent" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/clearhistory_title_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?attr/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearhistory_title_container" />
+
+    <LinearLayout
+        android:id="@+id/clearhistory_dropdown_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearhistory_title_divider">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="3"
+            android:lines="3"
+            android:singleLine="false"
+            android:text="@string/time_range_to_clear"
+            android:textAlignment="textStart" />
+
+        <Spinner
+            android:id="@+id/clearhistory_dropdown"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:popupBackground="?attr/colorBackgroundDark"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/clearhistory_checkbox_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:checked="true"
+        android:text="@string/clear_search_terms"
+        android:textColor="?attr/primaryTextColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearhistory_dropdown_container" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/clearhistory_checkbox_shared"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:checked="true"
+        android:text="@string/clear_shared_memes"
+        android:textColor="?attr/primaryTextColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearhistory_checkbox_search" />
+
+
+
+
+    <Button
+        android:id="@+id/clearhistory_submit_button"
+        style="@style/ButtonBase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/darkTransparent"
+        android:backgroundTintMode="add"
+        android:padding="8dp"
+        android:text="@string/submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearhistory_checkbox_shared" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

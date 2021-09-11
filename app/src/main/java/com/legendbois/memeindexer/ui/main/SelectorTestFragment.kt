@@ -17,6 +17,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.legendbois.memeindexer.R
 import kotlinx.android.synthetic.main.test_imageview.*
 
@@ -57,15 +58,15 @@ class SelectorTestFragment: Fragment(), View.OnClickListener {
     }
 
     private fun getImageText(imageUri: Uri) {
-        val image: InputImage = InputImage.fromFilePath(activity!!.applicationContext, imageUri)
-        val model = TextRecognition.getClient()
+        val image: InputImage = InputImage.fromFilePath(requireActivity().applicationContext, imageUri)
+        val model = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
         val labeler = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS)
         model.process(image)
             .addOnSuccessListener { visionText ->
                 test_image_text.text= visionText.text
             }
             .addOnFailureListener { e ->
-                Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity().applicationContext, e.message, Toast.LENGTH_SHORT).show()
             }
         labeler.process(image)
             .addOnSuccessListener { labels ->
@@ -74,14 +75,11 @@ class SelectorTestFragment: Fragment(), View.OnClickListener {
                     texts.add("${label.index}. ${label.text}\nConfidence: ${label.confidence}")
                     Log.d("MemeIndexer","${label.index}. ${label.text}\nConfidence: ${label.confidence}")
                 }
-                val adapter = ArrayAdapter(activity!!.applicationContext, R.layout.simple_list, texts.toList())
+                val adapter = ArrayAdapter(requireActivity().applicationContext, R.layout.simple_list, texts.toList())
                 test_image_describe_list.adapter=adapter
             }
             .addOnFailureListener { e ->
-                Toast.makeText(activity!!.applicationContext, e.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity().applicationContext, e.message, Toast.LENGTH_SHORT).show()
             }
     }
 }
-
-
-

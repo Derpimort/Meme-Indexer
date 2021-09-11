@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.work.*
 import com.legendbois.memeindexer.*
+import com.legendbois.memeindexer.ConstantsHelper.USAGE_HISTORY_ACTIONS
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
@@ -106,6 +107,7 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
         }
     }
 
+    //TODO: Handle this deprecation
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
@@ -285,10 +287,11 @@ class IndexBuilderFragment: Fragment(), View.OnClickListener {
                 whenStarted {
                     usageHistoryViewModel.insert(
                         UsageHistory(
-                            actionId = 0,
+                            actionId = USAGE_HISTORY_ACTIONS.getOrDefault("scan", 0),
                             pathOrQuery = path,
                             extraInfo = extraInfo
-                        )
+                        ),
+                        override = true
                     )
                 }
             }

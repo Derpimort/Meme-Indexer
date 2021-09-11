@@ -13,13 +13,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.legendbois.memeindexer.MemesHelper
+import com.legendbois.memeindexer.ConstantsHelper.USAGE_HISTORY_ACTIONS
 import com.legendbois.memeindexer.R
 import com.legendbois.memeindexer.adapters.SearchHistoryRV
 import com.legendbois.memeindexer.adapters.SearchRV
 import com.legendbois.memeindexer.database.MemeFile
 import com.legendbois.memeindexer.database.UsageHistory
-import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.viewmodel.MemeFileViewModel
 import com.legendbois.memeindexer.viewmodel.UsageHistoryViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -65,12 +64,12 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) {
             requireView().findViewById<SearchView>(R.id.searchmemes_search).clearFocus()
-            memeFileViewModel.searchMemes("%${query.toLowerCase(Locale.ROOT)}%").observe(
+            memeFileViewModel.searchMemes(query).observe(
                 viewLifecycleOwner,
-                Observer { memes ->
+                { memes ->
                     adapter.setMemes(memes)
                 })
-            addUsageHistory(query, 1, 1)
+            addUsageHistory(query, USAGE_HISTORY_ACTIONS.getOrDefault("search", 1), 1)
         }
         return true
     }
@@ -121,7 +120,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
                     0 -> memeCallback.onMemeClicked(item.filepath)
                     1 -> {
                         memeCallback.onMemeShared(item.filepath)
-                        addUsageHistory(item.filepath, 2, 1)
+                        addUsageHistory(item.filepath, USAGE_HISTORY_ACTIONS.getOrDefault("share", 2), 1)
                     }
                     else -> memeCallback.onMemeInfoClicked(item)
                 }
@@ -175,7 +174,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        usageHistoryViewModel.getSearchedTerms().observe(viewLifecycleOwner, Observer { actions ->
+        usageHistoryViewModel.getSearchedTerms().observe(viewLifecycleOwner, { actions ->
             shAdapter.setActions(actions)
         })
     }

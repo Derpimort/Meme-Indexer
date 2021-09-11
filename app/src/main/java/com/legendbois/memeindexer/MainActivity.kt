@@ -1,10 +1,8 @@
 package com.legendbois.memeindexer
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,11 +16,11 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.tabs.TabLayout
 import com.legendbois.memeindexer.database.MemeFile
+import com.legendbois.memeindexer.dialogs.ClearHistoryDialogFragment
 import com.legendbois.memeindexer.dialogs.MemeInfoDialogFragment
 import com.legendbois.memeindexer.ui.main.SearchMemesFragment
 import com.legendbois.memeindexer.ui.main.SectionsPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
 
@@ -147,6 +145,10 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
                 startActivity(settingsIntent)
                 true
             }
+            R.id.clearhistory_menuitem ->{
+                clearHistory()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -268,6 +270,10 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
     override fun onMemeInfoClicked(memefile: MemeFile) {
         val dialog = MemeInfoDialogFragment.newInstance(memefile)
         dialog.show(supportFragmentManager, "meme_info")
+    }
+
+    fun clearHistory(){
+        ClearHistoryDialogFragment.newInstance().show(supportFragmentManager, "clear_history")
     }
 
 }

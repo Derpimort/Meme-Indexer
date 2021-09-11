@@ -6,6 +6,8 @@
     <color name="transparent">#00000000</color>
     <color name="ic_launcher_background">#cb202d</color>
     <color name="colorHyperlink">#2196F3</color>
+    <color name="darkTransparent">#10000000</color>
+    <color name="darkerTransparent">#40000000</color>
 
     <!-- Legacy Theme -->
     <color name="colorPrimary">#C90000</color>

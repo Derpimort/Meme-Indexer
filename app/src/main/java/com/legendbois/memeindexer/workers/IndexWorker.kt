@@ -18,6 +18,7 @@ import androidx.work.WorkerParameters
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.legendbois.memeindexer.ConstantsHelper
 import com.legendbois.memeindexer.MainActivity
 import com.legendbois.memeindexer.R
@@ -51,7 +52,7 @@ class IndexWorker(context: Context, parameters: WorkerParameters) :
         totalFiles = memeFileDatabase.getUnindexedRowCount()
         var rawTotal: Int
         val intialContent = "Preparing Files..."
-        val model = TextRecognition.getClient()
+        val model = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
         maxParallelRequests = SharedPrefManager.getInstance(this.applicationContext).scanNumThreads
 
         initializeNotifBuilder()

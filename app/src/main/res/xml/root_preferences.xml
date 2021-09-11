@@ -12,6 +12,12 @@
             app:key="@string/theme_key"
             app:title="@string/theme_title"
             app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+            app:defaultValue="true"
+            app:key="@string/save_history_key"
+            app:summaryOff="@string/save_history_summary_off"
+            app:summaryOn="@string/save_history_summary_on"
+            app:title="@string/save_history_title" />
 
     </PreferenceCategory>
 

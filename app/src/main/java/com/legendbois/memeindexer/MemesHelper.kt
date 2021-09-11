@@ -57,13 +57,12 @@ object MemesHelper {
     }
 
     fun getMemeUri(context: Activity, filepath: String): Uri {
-        if(MainActivity.sdkVersion > legacyUriSdk){
+        return if(MainActivity.sdkVersion > legacyUriSdk){
             val memeFile = File(filepath)
-            return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", memeFile)
+            FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", memeFile)
             // Log.d(TAG, "Using Fileprovider")
-        }
-        else{
-            return Uri.parse("file://$filepath")
+        } else{
+            Uri.parse("file://$filepath")
         }
     }
 
@@ -82,5 +81,16 @@ object MemesHelper {
         shareIntent.setDataAndType(memeUri, "image/*")
         return shareIntent
     }
+
+    fun processQueryText(text: String): String {
+        //Log.d(TAG, "Processed query text: $processedText")
+        return text
+            .lowercase()
+            .trim(' ')
+            .replace("  ", " ")
+            .replace(" ", "* NEAR ")
+            .plus("*")
+    }
+
 
 }

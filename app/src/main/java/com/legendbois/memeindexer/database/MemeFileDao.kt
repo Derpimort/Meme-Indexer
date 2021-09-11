@@ -21,6 +21,9 @@ interface MemeFileDao {
     @Query("Select rowid, filepath, filename, ocrtext from meme_file_table where ocrtext LIKE :text")
     fun findByText(text: String): LiveData<List<MemeFile>>
 
+    @Query("Select rowid, filepath, filename, ocrtext from meme_file_table where ocrtext MATCH :text")
+    fun findByTextNear(text: String): LiveData<List<MemeFile>>
+
     @Query("Select rowid from (SELECT rowid, filepath FROM meme_file_table WHERE filename MATCH :filename) WHERE filepath=:searchpath")
     fun findPath(searchpath: String, filename: String): List<Int>
 

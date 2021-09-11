@@ -49,10 +49,10 @@ class MemeInfoDialogFragment : DialogFragment() {
                 "OCRtext: ${arguments?.getString(ARG_OCRTEXT)}")*/
 
         if(arguments!=null) {
-            val rowid = arguments!!.getInt(ARG_ROWID)
-            val filename = arguments!!.getString(ARG_NAME)
-            val filepath = arguments!!.getString(ARG_PATH)
-            val ocrtext = arguments!!.getString(ARG_OCRTEXT)
+            val rowid = requireArguments().getInt(ARG_ROWID)
+            val filename = requireArguments().getString(ARG_NAME)
+            val filepath = requireArguments().getString(ARG_PATH)
+            val ocrtext = requireArguments().getString(ARG_OCRTEXT)
             return activity?.let { activity ->
                 val builder = AlertDialog.Builder(activity, R.style.AlertDialogBase)
                 val inflater = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

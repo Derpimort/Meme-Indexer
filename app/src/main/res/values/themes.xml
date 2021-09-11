@@ -14,7 +14,9 @@
     </style>
 
     <style name="AppTheme.Legacy" parent="BaseAppTheme">
+
         <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:itemBackground">@color/colorBackground</item>
         <item name="android:editTextColor">@color/primary_text</item>
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textColorHint">@color/colorPrimaryTextHint</item>
@@ -50,6 +52,7 @@
 
     <style name="AppTheme.Dark" parent="BaseAppTheme">
         <item name="android:windowBackground">@color/colorDarkBackground</item>
+        <item name="android:itemBackground">@color/colorDarkBackground</item>
         <item name="android:editTextColor">@color/dark_primary_text</item>
         <item name="android:textColor">@color/dark_primary_text</item>
         <item name="android:textColorHint">@color/colorDarkPrimaryTextHint</item>
@@ -82,6 +85,7 @@
 
     <style name="AppTheme.Light" parent="BaseAppTheme">
         <item name="android:windowBackground">@color/colorLightBackground</item>
+        <item name="android:itemBackground">@color/colorLightBackground</item>
         <item name="android:editTextColor">@color/light_primary_text</item>
         <item name="android:textColor">@color/light_primary_text</item>
         <item name="android:textColorHint">@color/colorLightPrimaryTextHint</item>
