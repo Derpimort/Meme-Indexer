@@ -151,6 +151,18 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
                 clearHistory()
                 true
             }
+            R.id.multiselect_menuitem ->{
+                if(multiSelectMode){
+                    shareMemes()
+                    multiSelectMode = false
+                    cleanupSelectedMemes()
+
+                }
+                else{
+                    multiSelectMode = true
+                }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

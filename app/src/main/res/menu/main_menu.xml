@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/multiselect_menuitem"
+        android:icon="@drawable/ic_add_check_black_24dp"
+        android:title="@string/multiselect_mode"
+        app:showAsAction="ifRoom|withText"/>
+    <item
         android:id="@+id/feedback_menuitem"
         android:icon="@drawable/ic_email_24px"
         android:title="@string/feedback"
