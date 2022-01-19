@@ -22,11 +22,8 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
     : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment = when(position) {
-        // TODO: Eliminate useless fragments or find a use for them
             0 -> SearchMemesFragment.newInstance()
             1 -> IndexBuilderFragment.newInstance()
-            //1 -> PlaceholderFragment.newInstance(position + 1)
-            //2 -> SelectorTestFragment.newInstance()
             else -> HistoryFragment.newInstance()
     }
 
