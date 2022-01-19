@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import androidx.core.content.FileProvider
 import com.github.chrisbanes.photoview.PhotoView
+import com.legendbois.memeindexer.database.MemeFile
 import java.io.File
 
 object MemesHelper {
@@ -80,6 +81,19 @@ object MemesHelper {
         shareIntent.action = Intent.ACTION_VIEW
         shareIntent.data = memeUri
         shareIntent.setDataAndType(memeUri, "image/*")
+        return shareIntent
+    }
+
+    fun shareMemesIntent(context: Activity, selectedMemes: MutableMap<Int, MemeFile>): Intent{
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND_MULTIPLE
+        shareIntent.type = "image/*"
+        val files: ArrayList<Uri> = arrayListOf()
+        for(meme in selectedMemes.values){
+            files.add(getMemeUri(context, meme.filepath))
+        }
+        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files)
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         return shareIntent
     }
 

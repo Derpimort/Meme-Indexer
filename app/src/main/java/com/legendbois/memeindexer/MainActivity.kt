@@ -31,6 +31,8 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
         R.string.tab_text_3,
         R.string.tab_text_4
     )
+    var multiSelectMode: Boolean = false
+    var selectedMemes: MutableMap<Int, MemeFile> = mutableMapOf()
 
     companion object{
         val sdkVersion = Build.VERSION.SDK_INT
@@ -238,13 +240,28 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
         return callingActivity != null && callingActivity!!.packageName != packageName
     }
 
+    fun sendDifferentCallerIntent(intent: Intent){
+        setResult(RESULT_OK, intent)
+        finish()
+    }
+
     fun shareMemeResult(filepath: String){
         val memeUri = MemesHelper.getMemeUri(this, filepath)
         val shareIntent = Intent()
             .setData(memeUri)
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        setResult(RESULT_OK, shareIntent)
-        finish()
+
+        sendDifferentCallerIntent(shareIntent)
+    }
+
+    fun shareMemes(){
+        val shareIntent = MemesHelper.shareMemesIntent(this, selectedMemes)
+        if(differentCaller()){
+            sendDifferentCallerIntent(shareIntent)
+        }
+        else{
+            startActivity(Intent.createChooser(shareIntent, "Share memes"))
+        }
     }
 
     override fun onMemeShared(filepath: String){
@@ -257,13 +274,25 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
 
     }
 
-    override fun onMemeClicked(filepath: String) {
-        if(differentCaller()){
-            shareMemeResult(filepath)
+    override fun onMemeClicked(memefile: MemeFile) {
+        if(multiSelectMode){
+            memefile.memeIsSelected = !memefile.memeIsSelected
+            if(memefile.memeIsSelected){
+                selectedMemes[memefile.rowid] = memefile
+            }
+            else{
+                selectedMemes.remove(memefile.rowid)
+            }
         }
         else{
-            MemesHelper.imagePopup(this, filepath)
+            if(differentCaller()){
+                shareMemeResult(memefile.filepath)
+            }
+            else{
+                MemesHelper.imagePopup(this, memefile.filepath)
+            }
         }
+
 
     }
 
@@ -276,4 +305,10 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
         ClearHistoryDialogFragment.newInstance().show(supportFragmentManager, "clear_history")
     }
 
+    fun cleanupSelectedMemes(){
+        for(meme in selectedMemes.values){
+            meme.memeIsSelected = false
+        }
+        selectedMemes.clear()
+    }
 }
