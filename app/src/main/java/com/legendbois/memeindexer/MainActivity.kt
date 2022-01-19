@@ -52,6 +52,7 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
         viewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageSelected(pos: Int) {
                 updateToolbarText(TAB_TITLES[pos])
+                multiSelectModeSet(false)
             }
 
             override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {
@@ -300,6 +301,9 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
             }
             else{
                 selectedMemes.remove(memefile.position)
+            }
+            if(selectedMemes.isEmpty()){
+                multiSelectModeSet(false)
             }
         }
         else{
