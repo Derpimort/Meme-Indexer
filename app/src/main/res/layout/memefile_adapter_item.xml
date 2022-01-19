@@ -25,6 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -43,9 +44,9 @@
                 android:layout_weight="1"
                 android:background="@drawable/bottom_selected"
                 android:src="@drawable/ic_info_black"
-                android:tint="?attr/colorAccent"
                 app:srcCompat="@android:drawable/ic_dialog_info"
-                tools:srcCompat="@android:drawable/ic_menu_info_details" />
+                tools:srcCompat="@android:drawable/ic_menu_info_details"
+                app:tint="?attr/colorAccent" />
 
             <View
                 android:id="@+id/divider"
@@ -62,10 +63,21 @@
                 android:layout_weight="1"
                 android:background="@drawable/bottom_selected"
                 android:src="@drawable/ic_share_black"
-                android:tint="?attr/colorAccent"
                 app:srcCompat="?attr/actionModeShareDrawable"
-                tools:srcCompat="?attr/actionModeShareDrawable" />
+                tools:srcCompat="?attr/actionModeShareDrawable"
+                app:tint="?attr/colorAccent" />
         </LinearLayout>
+        <ImageView
+            android:id="@+id/recycler_item_image_selected"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="@id/recycler_item_image"
+            app:layout_constraintStart_toStartOf="@id/recycler_item_image"
+            app:layout_constraintTop_toTopOf="@id/recycler_item_image"
+            android:src="@drawable/ic_check_circle_black_24dp"
+            android:visibility="gone"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
