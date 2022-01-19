@@ -45,10 +45,7 @@ class SearchRV internal constructor(
                 true -> View.VISIBLE
                 false -> View.GONE
             }
-//            if(memefile.memeIsSelected){
-//                selectedImage.bringToFront()
-//            }
-
+            memefile.position = position
 
         }
     }

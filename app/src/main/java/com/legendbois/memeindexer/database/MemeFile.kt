@@ -12,4 +12,5 @@ data class MemeFile (
     @ColumnInfo(name = "ocrtext") var ocrtext: String? = ConstantsHelper.defaultText
     ){
     @Transient var memeIsSelected: Boolean = false
+    @Transient var position: Int = 0
 }
