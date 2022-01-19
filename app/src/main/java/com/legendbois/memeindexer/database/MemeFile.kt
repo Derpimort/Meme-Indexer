@@ -10,4 +10,7 @@ data class MemeFile (
     @ColumnInfo(name = "filepath") val filepath: String,
     @ColumnInfo(name = "filename") val filename: String,
     @ColumnInfo(name = "ocrtext") var ocrtext: String? = ConstantsHelper.defaultText
-    )
+    ){
+    @Transient var memeIsSelected: Boolean = false
+    @Transient var position: Int = 0
+}

@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.tabs.TabLayout
@@ -31,6 +32,8 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
         R.string.tab_text_3,
         R.string.tab_text_4
     )
+    var multiSelectMode: Boolean = false
+    var selectedMemes: MutableMap<Int, MemeFile> = mutableMapOf()
 
     companion object{
         val sdkVersion = Build.VERSION.SDK_INT
@@ -49,6 +52,7 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
         viewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageSelected(pos: Int) {
                 updateToolbarText(TAB_TITLES[pos])
+                multiSelectModeSet(false)
             }
 
             override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {
@@ -59,7 +63,7 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
         tabs = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
         setupTabIcons()
-
+        setupFab()
         if (!PermissionHelper.hasPermissions(this)) {
             PermissionHelper.getPermissions(this)
 
@@ -149,6 +153,16 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
                 clearHistory()
                 true
             }
+            R.id.multiselect_menuitem ->{
+                if(multiSelectMode){
+                    shareMemes()
+                    multiSelectModeSet(false)
+                }
+                else{
+                    multiSelectModeSet()
+                }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -157,6 +171,13 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
         tabs.getTabAt(0)!!.setIcon(R.drawable.ic_image_search_24px)
         tabs.getTabAt(1)!!.setIcon(R.drawable.ic_image_scan_24px)
         tabs.getTabAt(2)!!.setIcon(R.drawable.ic_history_24px)
+    }
+
+    fun setupFab(){
+        fab.setOnClickListener {
+            shareMemes()
+            multiSelectModeSet(false)
+        }
     }
 
     fun updateToolbarText(text: Int){
@@ -238,13 +259,31 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
         return callingActivity != null && callingActivity!!.packageName != packageName
     }
 
+    fun sendDifferentCallerIntent(intent: Intent){
+        setResult(RESULT_OK, intent)
+        finish()
+    }
+
     fun shareMemeResult(filepath: String){
         val memeUri = MemesHelper.getMemeUri(this, filepath)
         val shareIntent = Intent()
             .setData(memeUri)
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        setResult(RESULT_OK, shareIntent)
-        finish()
+
+        sendDifferentCallerIntent(shareIntent)
+    }
+
+    fun shareMemes(){
+        if(!selectedMemes.isEmpty()){
+            val shareIntent = MemesHelper.shareMemesIntent(this, selectedMemes)
+            if(differentCaller()){
+                sendDifferentCallerIntent(shareIntent)
+            }
+            else{
+                startActivity(Intent.createChooser(shareIntent, "Share memes"))
+            }
+        }
+
     }
 
     override fun onMemeShared(filepath: String){
@@ -257,13 +296,28 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
 
     }
 
-    override fun onMemeClicked(filepath: String) {
-        if(differentCaller()){
-            shareMemeResult(filepath)
+    override fun onMemeClicked(memefile: MemeFile) {
+        if(multiSelectMode){
+            memefile.memeIsSelected = !memefile.memeIsSelected
+            if(memefile.memeIsSelected){
+                selectedMemes[memefile.position] = memefile
+            }
+            else{
+                selectedMemes.remove(memefile.position)
+            }
+            if(selectedMemes.isEmpty()){
+                multiSelectModeSet(false)
+            }
         }
         else{
-            MemesHelper.imagePopup(this, filepath)
+            if(differentCaller()){
+                shareMemeResult(memefile.filepath)
+            }
+            else{
+                MemesHelper.imagePopup(this, memefile.filepath)
+            }
         }
+
 
     }
 
@@ -272,8 +326,35 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
         dialog.show(supportFragmentManager, "meme_info")
     }
 
+    override fun onMemeLongClicked(memefile: MemeFile) {
+        multiSelectModeSet()
+        this.onMemeClicked(memefile)
+    }
+
     fun clearHistory(){
         ClearHistoryDialogFragment.newInstance().show(supportFragmentManager, "clear_history")
     }
 
+    fun cleanupSelectedMemes(){
+        val adapter = findViewById<RecyclerView>(R.id.searchmemes_recyclerview)?.adapter
+        for((position, meme) in selectedMemes){
+            meme.memeIsSelected = false
+            adapter?.notifyItemChanged(position)
+        }
+        selectedMemes.clear()
+    }
+
+    fun multiSelectModeSet(value: Boolean = true){
+        if(value){
+            multiSelectMode = true
+            fab.visibility = View.VISIBLE
+
+        }
+        else{
+            fab.visibility = View.GONE
+            multiSelectMode = false
+            cleanupSelectedMemes()
+        }
+
+    }
 }

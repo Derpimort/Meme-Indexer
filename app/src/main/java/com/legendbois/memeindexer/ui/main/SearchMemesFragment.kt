@@ -80,8 +80,9 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
 
     interface OnMemeClickedListener {
         fun onMemeShared(filepath: String)
-        fun onMemeClicked(filepath: String)
+        fun onMemeClicked(memefile: MemeFile)
         fun onMemeInfoClicked(memefile: MemeFile)
+        fun onMemeLongClicked(memefile: MemeFile)
     }
 
     override fun onAttach(context: Context) {
@@ -117,14 +118,17 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         adapter =
             SearchRV(application) { item, share ->
                 when (share) {
-                    0 -> memeCallback.onMemeClicked(item.filepath)
+                    0 -> memeCallback.onMemeClicked(item)
                     1 -> {
                         memeCallback.onMemeShared(item.filepath)
                         addUsageHistory(item.filepath, USAGE_HISTORY_ACTIONS.getOrDefault("share", 2), 1)
                     }
+                    3 -> memeCallback.onMemeLongClicked(item)
                     else -> memeCallback.onMemeInfoClicked(item)
                 }
             }
+
+
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 

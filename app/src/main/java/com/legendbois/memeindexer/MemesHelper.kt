@@ -11,6 +11,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageView
 import androidx.core.content.FileProvider
+import com.github.chrisbanes.photoview.PhotoView
+import com.legendbois.memeindexer.database.MemeFile
 import java.io.File
 
 object MemesHelper {
@@ -38,7 +40,7 @@ object MemesHelper {
         val imageDialog = AlertDialog.Builder(context, R.style.AlertDialogBase)
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val layout = inflater.inflate(R.layout.popup_image, null)
-        val image = layout.findViewById<ImageView>(R.id.popup_image_meme)
+        val image = layout.findViewById<PhotoView>(R.id.popup_image_meme)
         image.setImageBitmap(BitmapFactory.decodeFile(filepath))
         imageDialog.setView(layout)
         imageDialog.setPositiveButton(
@@ -79,6 +81,20 @@ object MemesHelper {
         shareIntent.action = Intent.ACTION_VIEW
         shareIntent.data = memeUri
         shareIntent.setDataAndType(memeUri, "image/*")
+        return shareIntent
+    }
+
+    fun shareMemesIntent(context: Activity, selectedMemes: MutableMap<Int, MemeFile>): Intent{
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND_MULTIPLE
+        shareIntent.type = "image/*"
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        val files: ArrayList<Uri> = arrayListOf()
+        for(meme in selectedMemes.values){
+            files.add(getMemeUri(context, meme.filepath))
+        }
+        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files)
         return shareIntent
     }
 
