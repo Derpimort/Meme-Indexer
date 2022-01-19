@@ -39,6 +39,13 @@ class SearchRV internal constructor(
                 listener(memefile, 0)
                 notifyItemChanged(position)
             }
+            image.isLongClickable = true
+            image.setOnLongClickListener {
+                listener(memefile, 3)
+                notifyItemChanged(position)
+                true
+
+            }
             button.setOnClickListener { listener(memefile, 1) }
             infoButton.setOnClickListener { listener(memefile, 2) }
             selectedImage.visibility = when(memefile.memeIsSelected){

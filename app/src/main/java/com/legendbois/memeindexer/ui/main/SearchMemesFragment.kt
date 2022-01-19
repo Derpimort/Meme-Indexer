@@ -82,6 +82,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
         fun onMemeShared(filepath: String)
         fun onMemeClicked(memefile: MemeFile)
         fun onMemeInfoClicked(memefile: MemeFile)
+        fun onMemeLongClicked(memefile: MemeFile)
     }
 
     override fun onAttach(context: Context) {
@@ -122,6 +123,7 @@ class SearchMemesFragment: Fragment(), SearchView.OnQueryTextListener {
                         memeCallback.onMemeShared(item.filepath)
                         addUsageHistory(item.filepath, USAGE_HISTORY_ACTIONS.getOrDefault("share", 2), 1)
                     }
+                    3 -> memeCallback.onMemeLongClicked(item)
                     else -> memeCallback.onMemeInfoClicked(item)
                 }
             }

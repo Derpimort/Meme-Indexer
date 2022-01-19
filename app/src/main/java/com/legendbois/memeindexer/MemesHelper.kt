@@ -88,12 +88,13 @@ object MemesHelper {
         val shareIntent = Intent()
         shareIntent.action = Intent.ACTION_SEND_MULTIPLE
         shareIntent.type = "image/*"
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
         val files: ArrayList<Uri> = arrayListOf()
         for(meme in selectedMemes.values){
             files.add(getMemeUri(context, meme.filepath))
         }
         shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files)
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         return shareIntent
     }
 
