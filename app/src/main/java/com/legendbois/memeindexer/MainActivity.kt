@@ -274,13 +274,16 @@ class MainActivity : BaseActivity(), SearchMemesFragment.OnMemeClickedListener {
     }
 
     fun shareMemes(){
-        val shareIntent = MemesHelper.shareMemesIntent(this, selectedMemes)
-        if(differentCaller()){
-            sendDifferentCallerIntent(shareIntent)
+        if(!selectedMemes.isEmpty()){
+            val shareIntent = MemesHelper.shareMemesIntent(this, selectedMemes)
+            if(differentCaller()){
+                sendDifferentCallerIntent(shareIntent)
+            }
+            else{
+                startActivity(Intent.createChooser(shareIntent, "Share memes"))
+            }
         }
-        else{
-            startActivity(Intent.createChooser(shareIntent, "Share memes"))
-        }
+
     }
 
     override fun onMemeShared(filepath: String){
