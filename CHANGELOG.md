@@ -1,4 +1,25 @@
 # Changelog
+## [1.2.0](https://github.com/Derpimort/Meme-Indexer/releases/tag/v1.2.0)
+20 January 2022, 12:22 am IST
+### Multiselect & Usage History Control
+#### UI/UX changes
+- Clear history
+  - menu item
+  - popup
+  - preference item for persistence
+- Base button style
+- Select multiple memes for share
+  - Long press
+  - Mode toggle from menu
+- Photoview for popup zoom
+- Menu item background color in themes
+
+#### Fixes & Misc
+- Gradle & deps version
+- Multi word search improved with MATCH & NEAR
+- Repo changes
+- Placeholder frags removed
+- Privacy policy added
 
 ## [1.1.0](https://github.com/Derpimort/Meme-Indexer/releases/tag/v1.1.0)
 16 June 2021, 01:53 am IST
