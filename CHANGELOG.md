@@ -1,4 +1,15 @@
 # Changelog
+## [1.2.1](https://github.com/Derpimort/Meme-Indexer/releases/tag/v1.2.1)
+13 June 2022, 12:03 am IST
+### Multiselect & Usage History Control [FIXED]
+#### UI/UX changes
+- Clear history icon color fix
+- Multiselect button placement
+
+#### Fixes & Misc
+- Playstore requirement for target API 30
+- Gradle & deps version
+
 ## [1.2.0](https://github.com/Derpimort/Meme-Indexer/releases/tag/v1.2.0)
 20 January 2022, 12:22 am IST
 ### Multiselect & Usage History Control
